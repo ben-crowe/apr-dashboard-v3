@@ -218,6 +218,33 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
     }
   }, [jobDetails, VALCRE_SYNC_FIELDS]);
 
+  // FIX 1 (2026-06-23) — Property Type / Property Subtype live on THIS panel, not LoeQuoteSection's
+  // autosave map, so they previously never refreshed the ClickUp card on edit. Wire them to ALSO fire
+  // the card update (debounced, by jobId — update-clickup-task rebuilds the whole card from the DB).
+  // Mirrors LoeQuoteSection.pushCardUpdate: self-guards on a saved clickup_task_id (never creates).
+  const clickupPushTimer = useRef<NodeJS.Timeout | null>(null);
+  const pushCardUpdate = useCallback(() => {
+    const taskId = (jobDetails as any)?.clickupTaskId || (job as any)?.clickupTaskId
+      || (job as any)?.clickup_task_id;
+    if (!taskId) return; // no card yet — nothing to update
+    if (clickupPushTimer.current) clearTimeout(clickupPushTimer.current);
+    clickupPushTimer.current = setTimeout(async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        const { data: result, error } = await supabase.functions.invoke('update-clickup-task', {
+          body: { jobId: job.id, userId: user?.id },
+        });
+        if (error || !result?.success) {
+          console.error('ClickUp card update failed:', error || result?.error);
+        } else {
+          console.log('✅ ClickUp card updated (property panel):', result.taskId);
+        }
+      } catch (e) {
+        console.error('ClickUp card push error:', e);
+      }
+    }, 1500);
+  }, [job, jobDetails]);
+
   // Handle field blur with debouncing
   const handleBlur = useCallback((fieldName: string, value: any) => {
     // Clear existing timer
@@ -525,6 +552,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   const v = value === '__clear__' ? '' : value;
                   onUpdateJob?.({ propertyType: v });
                   autoSaveField('propertyType', v);
+                  pushCardUpdate(); // FIX 1: refresh ClickUp card on Property Type change
                 }}
               >
                 <SelectTrigger className={srcTriggerCls(job.propertyType)} style={srcTint(job.propertyType) || { paddingLeft: 0, paddingRight: 0 }}>
@@ -558,6 +586,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   const v = value === '__clear__' ? '' : value;
                   onUpdateDetails?.({ propertySubtype: v });   // persists to job_property_info (DB-verified, unchanged)
                   syncDetailFieldToValcre('propertySubtype', v); // wired 2026-06-15 (2nd batch) → native Property.SecondaryType
+                  pushCardUpdate(); // FIX 1: refresh ClickUp card on Property Subtype change
                 }}
               >
                 <SelectTrigger className={srcTriggerCls(jobDetails?.propertySubtype)} style={srcTint(jobDetails?.propertySubtype) || { paddingLeft: 0, paddingRight: 0 }}>

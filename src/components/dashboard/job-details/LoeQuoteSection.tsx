@@ -426,12 +426,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     // path (comma-joined string → option-ID array, same shape as valueScenarios). Was on the old do-not-wire list.
     'approachesToValue'];
 
-  // Fields that ALSO push to the ClickUp card (additive to Valcre sync — Ben-confirmed 2026-06-04).
-  // These are EXACTLY the Stage-2 LOE-QUOTE fields that update-clickup-task renders into the card
-  // (per QA's tests/MAPPING-dashboard-to-clickup.md Stage-2 + docs/FIELD-ROUTING-dashboard-clickup-loe.md).
-  // update-clickup-task re-reads job_loe_details FRESH from the DB and rebuilds the section, so we only
-  // need to fire it (by jobId) after the field persists — no per-field value payload. Internal-only
-  // tracking fields (retainerPaidDate / paymentAmount-paid / paymentPaidDate) are NOT-on-card → excluded.
+  // ON-CHANGE SYNC GATE REMOVED 2026-06-23 (Ben) — the old 9-field whitelist (CLICKUP_CARD_FIELDS)
+  // made every OTHER field create-only: editing it later never refreshed the ClickUp card, so the
+  // card went stale/blank. The whitelist was a redundant gate — update-clickup-task re-reads
+  // job_loe_details FRESH from the DB and rebuilds the WHOLE card section by jobId, so ANY persisted
+  // field change can safely fire it (no per-field value payload). pushCardUpdate() self-guards on a
+  // saved clickup_task_id (never creates), so firing on every autosave is safe. The constant is kept
+  // for reference (it documents which fields the card explicitly renders), but is no longer the gate.
   const CLICKUP_CARD_FIELDS = ['propertyRightsAppraised', 'scopeOfWork', 'reportType', 'appraisalFee',
     'retainerAmount', 'deliveryDate', 'appraiserComments', 'deliveryComments', 'paymentComments'];
 
@@ -873,11 +874,11 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         // Persisted to Supabase — baseline 'saved' (grey check). Upgraded to 'synced'/'sync-failed' below.
         setFieldStates(prev => ({ ...prev, [fieldName]: 'saved' }));
 
-        // Additive ClickUp-card push: if this is a card-routed field, refresh the existing card
-        // (debounced, reuses saved clickup_task_id — never creates). Independent of the Valcre sync below.
-        if (CLICKUP_CARD_FIELDS.includes(fieldName)) {
-          pushCardUpdate();
-        }
+        // Additive ClickUp-card push: ANY persisted field change refreshes the existing card
+        // (debounced, reuses saved clickup_task_id — never creates). update-clickup-task rebuilds the
+        // WHOLE card from the DB by jobId, so we fire it on every autosave (gate removed 2026-06-23).
+        // Independent of the Valcre sync below.
+        pushCardUpdate();
 
         // Check if this field should also sync to Valcre
         const shouldSyncToValcre = VALCRE_SYNC_FIELDS.includes(fieldName) &&

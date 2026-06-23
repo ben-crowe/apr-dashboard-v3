@@ -1,0 +1,52 @@
+START ORDER: read this whole passover first, then shoot. (No SS12 — recapture off the live V3 site.)
+
+SKILLS — load these now (run each as a slash command):
+  /agent-screenshot   ← apply the contract IN FULL (declare each shot, look before handoff); do NOT restate it.
+  /cli-browser-auto   ← drive the live V3 site
+  /cli-tldraw-tools   ← place the shots on the board
+  /tmux-comms         ← report back to qa (below)
+
+WHY: round 2 of the V4 image library = the LIVE V3 GROUND TRUTH half. Batch 1 captured the V4
+builder panels; this batch captures the live, in-production V3 surfaces so the library shows BOTH
+sides of the V3→V4 transition off the same visuals. These are the screens that already work today.
+
+SITE: https://apr-dashboard-v3.vercel.app  (the CLIENT prod build — V4 flag OFF, the real live app,
+open/no-login). Use ONE unique --session for all shots. Navigate via the app's own nav (dashboard →
+a job → its sections; intake form; Asset Studio cog). Before EACH shot: snapshot-confirm the surface
+actually rendered (its heading/fields present — remember batch 1's lesson: the snapshot-probe lies,
+the PIXELS are the truth, so READ the picture) — a blank/loading frame proves nothing, re-take it.
+
+⚑ STUB / EMPTY-DATA RULE: this is a live app — some screens may have thin or no demo data (e.g. an
+empty job list, an unsigned LOE). Capture the CURRENT real state, NOTE what's empty vs populated,
+NEVER fake a filled screen. If a screen genuinely needs a job to exist and none does, shoot the empty
+state + say so — that's honest ground truth, not a fail.
+
+THE SHOTS (native PNGs → ~/Development/KM-Exp/data/screenshots/, names below):
+  1. v3-01-intake.png      — CLIENT INTAKE (Section 1): the submission form, fields visible
+                             (filled if you can, else the empty form). The front door of the app.
+  2. v3-02-dashboard.png   — DASHBOARD / JOB LIST: the job-list rows (or the empty-list state if no
+                             demo jobs). The operator's home screen.
+  3. v3-03-jobdetail.png   — JOB DETAIL: a job's header + its Section 1–2 accordion/fields. Open a
+                             real job if one exists; else shoot the empty/no-job state and note it.
+  4. v3-04-loe-quote.png   — LOE / QUOTE (Section 2): the LOE Quote section within a job.
+  5. v3-05-loe-sign.png    — LOE SIGNING PAGE: the e-sign / DocuSeal signing surface (or its entry
+                             point / sent-state if no live envelope). Note which state you caught.
+  6. v3-06-asset-studio.png — ASSET STUDIO: the Studio (library rail + sequence + preview). Reached
+                             via the cog (the one we KEPT on the job view). The big visual feature.
+  7. v3-07-darkmode.png    — APP SHELL / DARK MODE: the dark-mode state of the shell (toggle visible).
+
+AFTER capturing — READ each PNG yourself vs its CLAIM (the contract). Populated vs empty = note it.
+
+BOARD (you place it — qa does NOT):
+  - tldraw-init ~/Development/KM-Exp/data/screenshots/v3-screens-library-batch2.tldr
+  - tldraw-image-insert all shots, each --alt = its CLAIM + populated/empty state, laid out non-overlapping.
+  - CONFIRM-EMBEDDED the RELIABLE way (NOT tldraw-get — empty props = false fail):
+    grep -c 'data:image' <board.tldr> == <N shots> AND/OR tldraw-image-extract → N real PNGs, none 0-byte.
+
+REPORT-BACK (mandatory): message qa (the requester) via the wrapper —
+  ~/.claude/scripts/utils/tmux-msg.sh dev-1 "DONE: <PNG paths + board path + in WORDS what each shot is OF + populated/empty + grep-count confirmed>"
+  (or "STUCK: <plain question>"). Keep co-arch (dev-2) posted on progress as you go. Never let the
+  result sit unsent. Do NOT open Ben's viewer-1.
+
+ON AMBIGUITY: no AskUserQuestion / multi-choice. Pick best per intent, report
+  "Picked: <one line>. Proceeding." If blocked → "STUCK: <question>".

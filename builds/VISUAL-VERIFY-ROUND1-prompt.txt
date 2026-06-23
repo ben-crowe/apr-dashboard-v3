@@ -1,0 +1,44 @@
+START ORDER: read this whole passover first, then shoot. (No SS12 — pure recapture loop.)
+
+SKILLS — load these now (run each as a slash command):
+  /agent-screenshot   ← apply the contract IN FULL (declare each shot, LOOK at the result before handoff); do NOT restate it.
+  /cli-browser-auto   ← drive the APR app
+  /cli-tldraw-tools   ← place the shots on the board
+  /tmux-comms         ← report back to qa (below)
+
+WHY: round 1 of a REPEATABLE visual-verification loop (qa is the requester/verifier). Prove the APR
+app renders 3 varied states. Keep it clean — we run this loop again.
+
+APP: http://localhost:8086 — use ONE unique --session for all three (default session HIJACKS KM-Exp).
+Before EACH shot: confirm the target actually rendered via snapshot (H1 / rows / dark bg present) BEFORE
+shooting. A blank/loading frame proves nothing — re-take it.
+
+THE THREE SHOTS (save native PNGs to ~/Development/KM-Exp/data/screenshots/):
+  SHOT 1 → test1-joblist.png
+     SUBJECT: /dashboard job-list view.
+     CLAIM: the list renders multiple job rows (several VAL… rows visible).
+  SHOT 2 → test2-jobdetail-header.png
+     SUBJECT: job-detail header for VAL261065 (click into it).
+     CLAIM: the H1 job title AND the Asset Studio cog are both present in the header.
+  SHOT 3 → test3-darkmode.png
+     SUBJECT: the app AFTER clicking the theme toggle (moon/sun icon in the top ribbon).
+     CLAIM: the app actually switched to DARK (dark background, light text) — toggle, confirm via
+     snapshot the background went dark, THEN shoot.
+
+AFTER capturing — READ each PNG yourself, compare to its CLAIM (the contract; not optional).
+
+BOARD (agent places it — this is the lane fix, qa does NOT place):
+  - tldraw-init ~/Development/KM-Exp/data/screenshots/visual-verify-round1.tldr
+  - tldraw-image-insert all 3 PNGs onto it, each with an --alt naming its CLAIM, laid out so they don't overlap.
+  - CONFIRM-EMBEDDED (the REAL check — do NOT use tldraw-get, its empty props give a FALSE FAIL):
+    verify with `grep -c 'data:image' <board.tldr>` == N (one blob per shot) AND/OR
+    `tldraw-image-extract <board> --out <dir>` yields N PNGs, none 0-byte. A curl/insert "ok" is NOT
+    proof the shots are embedded — this grep/extract count is. (Round-1 lesson: tldraw-get reported
+    w=h=None / empty props = a false fail; only the data:image count gave the true 3.)
+
+REPORT-BACK (mandatory): message qa (the requester) via the wrapper —
+  ~/.claude/scripts/utils/tmux-msg.sh dev-1 "DONE: <3 PNG paths + board path + in WORDS what each shot is OF and that tldraw-get confirms all 3 embedded>"
+  (or "STUCK: <plain question>"). Never let the result sit unsent. Do NOT open Ben's viewer-1.
+
+ON AMBIGUITY: no AskUserQuestion / multi-choice. Pick best per intent, report
+  "Picked: <one line>. Proceeding." If blocked → "STUCK: <question>".

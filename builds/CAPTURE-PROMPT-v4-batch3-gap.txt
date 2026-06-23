@@ -1,0 +1,99 @@
+START ORDER: read this whole passover first, then shoot. (No SS12 — recapture off the live V4 site.)
+
+SKILLS — load these now (run each as a slash command):
+  /agent-screenshot   ← apply the contract IN FULL (declare each shot, LOOK at the pixels before handoff); do NOT restate it.
+  /cli-browser-auto   ← drive the live V4 site
+  /cli-tldraw-tools   ← place the shots on the ONE consolidated board
+  /tmux-comms         ← report back to qa (below)
+
+WHY: batch 3 = THE GAP TO END-TO-END for the V4-only image library. Batch 1 covered the 10 builder
+panels; this batch captures the V4 surfaces that complete the picture — the field editors, the
+calculator surfaces, the job→report integration with real data, and the V3/V4 gate behaving. After
+this, the V4 app is imaged end to end.
+
+SITE: https://apr-v4.vercel.app  (the deployed V4 project — flag ON, full V4 renders, Supabase env is
+set so the 20 real jobs load). Use ONE unique --session. EXCEPTION: the gate-OFF shot is taken off
+the CLIENT prod https://apr-dashboard-v3.vercel.app (flag OFF) — that's the flag BEHAVING (the V4
+route 404s on the client build), NOT a V3 screen shoot.
+
+⛔ HARD RAIL: NEVER flip the shared `.env.local` to expose V4 in Ben's live client app. Shoot V4 ONLY
+off the deployed apr-v4.vercel.app project (flag already ON). No local flag-flip on the shared env.
+
+★★★ FILL THE FIELDS FIRST — shoot the app FUNCTIONING WITH DATA, not empty forms (Ben's core ask) ★★★
+The empty panels from batch 1 are NOT good enough — Ben wants every shot to show the app WORKING with
+real data in the fields. The app has a built-in TEST-DATA workflow for exactly this:
+  1. On apr-v4.vercel.app go to /test-input (the Test Data Dashboard / "TDD" page).
+  2. Click the button labeled "Load Data" (runs loadDataSet1User) — it loads the full test dataset
+     (testDataSet1) into every field.
+  3. ⛔⛔ CRITICAL BUTTON CHOICE — there are TWO adjacent "View Report" buttons. Click the RIGHT one:
+       ✅ CLICK the PLAIN "View Report" button — its tooltip/title reads
+          "Load user-inputs, run calc engine, then navigate to apr-v4". This one loads testDataSet1 +
+          runs the calc engine + navigates in ONE click, so the builder lands POPULATED.
+       ❌ DO NOT click "View Report (No Data)" — it just navigates with NO data and every panel comes
+          back EMPTY. That decoy is the EXACT empty-panel failure Ben is furious about. Do not touch it.
+  4. The builder opens on /apr-v4 with data preserved (Zustand store). NOW shoot the panels — they
+     show real values, computed results, the app functioning.
+This load-data-first workflow is the DEFAULT for EVERY shot where fields can hold data (the builder
+panels, the editors, the preview) — run it so data actually shows.
+
+GOAL (Ben's words): each shot should SHOW the app WORKING — what the surface IS and HOW it works —
+with SOME real data in it. NOT every field filled. The dataset won't populate everything, and that's
+fine: a panel with PARTIAL data, or one that just clearly conveys its function, is a PASS. ⛔ Do NOT
+loop re-taking to chase 100% fill. Just load the data once (right button), shoot what shows, and note
+honestly what's populated vs thin. Partial > perfect — the point is "show what it is + how it works."
+
+Before EACH shot: snapshot-confirm the surface actually rendered (heading/fields present) — and
+remember batch 1's lesson: the snapshot-probe LIES (it reported 'done' while pixels still said
+'Loading'). The PIXELS are the truth — READ the picture before you trust it. Blank/loading = re-take.
+
+⚑ STUB / EMPTY-DATA RULE: a not-built or empty surface = a STATUS shot of its real current state —
+capture what's there, NOTE it's stub/empty, NEVER fake completeness.
+
+THE SHOTS (native PNGs → ~/Development/KM-Exp/data/screenshots/, names below):
+  1. v4-11-editor-text.png    — FIELD EDITOR (text): open a TEXT field in the builder → its EditPanel
+                                (the text edit state). [built]
+  2. v4-12-editor-image.png   — FIELD EDITOR (image): open an IMAGE field → its EditPanel image state
+                                (upload/replace controls). [built]
+  3. v4-13-editor-calc.png    — FIELD EDITOR (calculated): open a CALCULATED field → the
+                                CalculatedField EditPanel + the CalcInputPanel (the calc inputs). If
+                                they're two distinct surfaces, get both in frame or note it. [built]
+  4. v4-14-calculator-demo.png — CALCULATOR SURFACE: /calculator-demo (CalculatorDemoPage). If /preview
+                                and /standalone render distinctly, note it / add a sub-shot; else one
+                                shot of the demo is fine. [built/partial]
+  5. v4-15-jobreport.png      — JOB→REPORT INTEGRATION: navigate dashboard → open one of the 20 real
+                                jobs → its /dashboard/job/:jobId/report route. Show the JOB DATA
+                                LOADED into the report (real field values from the job, not empty).
+                                This is the proof the integration works. [built, persist wired]
+  6. v4-16-gate-off.png       — V3/V4 GATE — OFF state: on the CLIENT prod
+                                (apr-dashboard-v3.vercel.app) hit /apr-v4 → it should 404 / NotFound
+                                (the flag gating it correctly). Shoot that NotFound state. [flag behaving]
+  7. v4-17-gate-on.png        — V3/V4 GATE — ON state: on apr-v4.vercel.app hit /apr-v4 → the V4
+                                builder renders (same route, flag ON). The OFF/ON pair = the gate proof.
+
+  8-12. RE-SHOOT POPULATED — the batch-1 panels that came back EMPTY, now WITH the test data loaded
+        (step from the FILL-THE-FIELDS workflow above). One shot each, showing real values:
+          8.  v4-18-income-filled.png       — INCOME panel populated (table + computed result).
+          9.  v4-19-sales-filled.png        — SALES panel populated (real comparable rows).
+          10. v4-20-site-filled.png         — SITE panel populated.
+          11. v4-21-improvements-filled.png — IMPROVEMENTS panel populated.
+          12. v4-22-recon-filled.png        — RECONCILIATION populated (a real final value, not $0).
+        (COST stays a status/stub shot from batch 1 — no test-data path; don't fake it. If loading the
+        dataset DOES populate Cost, grab it too as v4-23-cost-filled.png and note it built after all.)
+
+AFTER capturing — READ each PNG yourself vs its CLAIM (the contract). Note honestly what's populated
+vs thin. Some data showing + the surface's function clear = PASS; don't re-loop chasing full fill.
+
+BOARD — ⛔ THE ONE CONSOLIDATED BOARD (this is the exact thing Ben blew up about — get it right):
+  - Place these onto the SINGLE consolidated board you're building — NOT a new per-batch board.
+    Ben's gripe was fragmented boards + thumbnails too small to read.
+  - Group them with the rest (by section / panel) and place each image LARGE ENOUGH TO ACTUALLY READ.
+  - CONFIRM-EMBEDDED the RELIABLE way (NOT tldraw-get — empty props = false fail):
+    grep -c 'data:image' <board.tldr> == total-shots-on-board AND/OR tldraw-image-extract → real PNGs, none 0-byte.
+
+REPORT-BACK (mandatory): message qa (the requester) via the wrapper —
+  ~/.claude/scripts/utils/tmux-msg.sh dev-1 "DONE: <PNG paths + the ONE board path + in WORDS what each shot is OF + real-data/empty + grep-count confirmed>"
+  (or "STUCK: <plain question>"). Keep co-arch (dev-2) posted on progress as you go. qa verifies off
+  the raw PNGs + hands Ben the ONE consolidated board link. Do NOT open Ben's viewer-1.
+
+ON AMBIGUITY: no AskUserQuestion / multi-choice. Pick best per intent, report
+  "Picked: <one line>. Proceeding." If blocked → "STUCK: <question>".

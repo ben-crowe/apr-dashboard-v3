@@ -1,0 +1,46 @@
+START ORDER: read this whole passover first, then shoot. (No SS12 — recapture off the live V4 site.)
+
+SKILLS — load these now (run each as a slash command):
+  /agent-screenshot   ← apply the contract IN FULL (declare each shot, look before handoff); do NOT restate it.
+  /cli-browser-auto   ← drive the live V4 site
+  /cli-tldraw-tools   ← place the shots on the board
+  /tmux-comms         ← report back to qa (below)
+
+WHY: round 1 of the V4 image library (qa = requester/verifier). Capture the V4 BUILDER PANELS off
+the LIVE deployed site so all three of us communicate about each part off the same visuals.
+
+SITE: https://apr-v4.vercel.app/apr-v4  (deployed V4-lit — the builder renders here). Use ONE unique
+--session for all 10. Navigate tab-to-tab via the section nav (HOME / INCOME / SALES / COST / SITE /
+IMPROVEMENTS / RECONCILIATION / IMAGE MGT buttons). Before EACH shot: snapshot-confirm the panel
+actually rendered (its heading/fields present) — a blank/loading frame proves nothing, re-take it.
+
+⚑ STUB RULE: a not-built panel = a STATUS shot of its CURRENT state (empty/stub is fine) — capture
+what's really there, NOTE it's not-built, NEVER fake completeness or skip it.
+
+THE 10 SHOTS (native PNGs → ~/Development/KM-Exp/data/screenshots/, names below):
+  1. v4-01-shell.png      — builder loads: "APR V4" title + the section nav showing all tabs.        [built]
+  2. v4-02-home.png       — HOME tab: cover/home panel renders its fields.                            [built]
+  3. v4-03-income.png     — INCOME tab: income table AND a COMPUTED result value (real numbers,       [built+validated]
+                            not empty — this is the validated approach).
+  4. v4-04-sales.png      — SALES tab renders.                                                        [PARTIAL — thin data, note it]
+  5. v4-05-cost.png       — COST tab renders.                                                         [NOT-STARTED — likely stub; status shot, mark not-built]
+  6. v4-06-site.png       — SITE tab renders its section.                                             [partial]
+  7. v4-07-improvements.png — IMPROVEMENTS tab renders.                                               [partial]
+  8. v4-08-recon.png      — RECONCILIATION tab renders.                                               [partial]
+  9. v4-09-imagemgt.png   — IMAGE MGT tab renders.                                                    [partial]
+  10. v4-10-preview.png    — LIVE PREVIEW: split-screen shows the report HTML next to the builder.    [built]
+
+AFTER capturing — READ each PNG yourself vs its CLAIM (the contract).
+
+BOARD (you place it — qa does NOT):
+  - tldraw-init ~/Development/KM-Exp/data/screenshots/v4-builder-library-batch1.tldr
+  - tldraw-image-insert all 10, each --alt = its CLAIM + status, laid out non-overlapping.
+  - CONFIRM-EMBEDDED the RELIABLE way (NOT tldraw-get — empty props = false fail):
+    grep -c 'data:image' <board.tldr> == 10  AND/OR tldraw-image-extract → 10 real PNGs, none 0-byte.
+
+REPORT-BACK (mandatory): message qa (the requester) via the wrapper —
+  ~/.claude/scripts/utils/tmux-msg.sh dev-1 "DONE: <10 PNG paths + board path + in WORDS what each shot is OF + its status + grep-count==10 confirmed>"
+  (or "STUCK: <plain question>"). Never let the result sit unsent. Do NOT open Ben's viewer-1.
+
+ON AMBIGUITY: no AskUserQuestion / multi-choice. Pick best per intent, report
+  "Picked: <one line>. Proceeding." If blocked → "STUCK: <question>".

@@ -1,0 +1,72 @@
+START ORDER: read this whole passover first, then re-confirm against live code BEFORE any edit.
+
+SKILLS — load these now (run each as a slash command):
+  /search-2phase      ← SS12 search FIRST (see STEP 0) — prior decisions exist, do not re-derive
+  /cli-browser-auto   ← open the LIVE V3 app to confirm each field/dropdown (source of truth)
+  /frontend-design    ← the React/TSX + registry edits
+  /tmux-comms         ← report back to co-arch (dev-2) below
+
+STEP 0 — SEARCH FIRST (SS12, before ANY reconfirm or edit): run /search-2phase scoped to
+  "APR field registry dropdown reconciliation, 4-file-sync, intake/loe fields". There are EXISTING
+  reconciliation docs — DROPDOWN-RECONCILIATION-FINDINGS-2026-06-17, REGISTRY-CROSS-CHECK-FINDINGS-
+  2026-06-17, VALTA-MASTER-DELTA — that likely ALREADY resolve the property-subtype canonical list and
+  carry prior dropdown decisions. ⛔ Do NOT re-derive or contradict a documented decision; if the
+  search resolves property-subtype, use it (your "STUCK" becomes "already documented"). Surface what
+  the search settled before you touch code.
+
+WHY (priority #1, fields-first): make the V4 report-builder's V3-ORIGIN tabs — client-intake (S1) +
+loe-prep (S2) — match the CURRENT V3 app's field names + dropdowns NEAR-EXACTLY. The V3 app is the
+SOURCE OF TRUTH (Ben). This makes V4 playable standalone + makes the eventual V3→V4 data handoff clean
+(the V3 data flows into these mirrored fields via useLoadJobIntoReport). This is NOT the calc work and
+NOT the V3→V4 wiring — fields only.
+
+SCOPING INPUT (a MAP, not the final word): ~/Development/APR-Dashboard-v3/docs/Architecture/V3-V4-FIELD-ALIGNMENT-DELTA.md
+  ⛔ Every row in that delta is a SCOPING claim from a prior code read. You MUST RE-CONFIRM each row
+     against BOTH (a) the live `src/features/report-builder/schema/fieldRegistry.ts` (sections
+     `client-intake` + `loe-prep`) AND (b) the live V3 app (open it, read the actual options) BEFORE
+     editing — line refs + option lists drift. Build off live truth, not the delta's snapshot.
+
+THE FIXES (V4 ← V3) — confirm each, then apply:
+  A. DROPDOWNS wrong/missing options (per delta §A; confirm V3's live list first):
+     - report-type → replace V4's options with V3's (Comprehensive / Summary / Restricted / Form / Letter).
+     - property-type → add the ~10 missing to match V3's full ~16.
+     - property-subtype → reconcile to V3 (⚑ confirm the canonical list w/ Ben/Valcre before locking — if
+       unclear, report "STUCK: property-subtype canonical list?" rather than guessing).
+     - intended/authorized-use, valuation-premises, asset-condition → CONVERT from plain TEXT to a
+       DROPDOWN and add V3's options.
+     - tenancy → ADD the field + options. ⛔ KEEP the `Unkown` spelling (sic) — it's load-bearing for
+       Valcre per the registry audit; do NOT "fix" it.
+  B. ADD missing V4 client-intake fields: property city, property province, property postal.
+  C. LABEL-only aligns (cosmetic, per delta §C): Organization→Company Name, Client/Property Address→
+     Street Address, Client Postal Code→Postal Code, Notes→Additional Information, Contact First
+     Name→First Name/Department. (Match V3's labels.)
+  ⛔ D. DO NOT TOUCH the V4-only loe-prep fields (assignment details, scope, ~20 appraiser fields,
+     report boilerplate, valuation-type/appraisal-status) — those are V4 report additions, NOT V3-sync.
+
+EXECUTING AGENT: typescript-pro (the work is fieldRegistry.ts type-safety + the TSX EditPanel; co-arch
+  deploys this prompt to typescript-pro after qa's gate).
+
+⛔ HARD CONSTRAINTS:
+  - 4-FILE-SYNC on every registry change (project rule) — the EXACT four files (don't hunt):
+      1. src/features/report-builder/schema/fieldRegistry.ts
+      2. src/features/report-builder/data/TestDataSet1.ts
+      3. public/Report-MF-template.html
+      4. src/features/report-builder/components/EditPanel/EditPanel.tsx
+    All four must stay consistent. A new field or dropdown that updates only the registry = a broken slice.
+  - NO WORKAROUNDS (project rule): fix the registry/components properly — no aliases, no commented-out
+    fields, no band-aids. One canonical location per field.
+  - kebab-case field ids (template-token constraint) — any new id must match its {{placeholder}}.
+
+ACCEPTANCE:
+  - `npx tsc --noEmit` clean.
+  - Each V3-origin field's name + dropdown options in V4 match the LIVE V3 app (paste a few before/after).
+  - New fields (city/province/postal, tenancy) present + 4-file-synced.
+  - The 3 text→dropdown conversions done with V3's options.
+  - Report which fieldRegistry rows + which other 3 sync files you touched.
+
+REPORT-BACK (mandatory): when DONE or STUCK, message co-arch via the wrapper —
+  ~/.claude/scripts/utils/tmux-msg.sh dev-2 "DONE: <fields touched + 4-file-sync confirmed + tsc clean + before/after samples>"
+  (or "STUCK: <plain question>"). Never let the result sit unsent.
+
+ON AMBIGUITY: no AskUserQuestion / multi-choice. Pick best per intent + the V3 source of truth, report
+  "Picked: <one line>. Proceeding." If genuinely blocked (e.g. the subtype list) → "STUCK: <question>".

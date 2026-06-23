@@ -194,6 +194,33 @@ const FIELD_SYNONYMS: Record<string, Record<string, string>> = {
     // Vacant Land / Improved Development Land intentionally unmapped pending client taxonomy
     // confirmation — safe-skip (a wrong value is worse than blank).
   },
+  // FIX 1 (2026-06-23) — Property Subtype: bridge the dashboard's hyphen/space spelling to the client
+  // mirror's exact option labels (Apartment / Townhouse / Mixed Use / Shopping Centre). The dashboard
+  // emits 'Mixed-Use' (hyphen); the client option is 'Mixed Use' (space) → the fuzzy matcher would drop
+  // it silently. 'Townhouse' already matches exactly (listed for clarity). Dashboard-only subtypes with
+  // no client equivalent (Low/Mid/High-Rise, Garden, Walk-Up) are intentionally left unmapped → safe-skip.
+  'Property Subtype': {
+    'mixed-use': 'Mixed Use',
+    'mixed use': 'Mixed Use',
+    'townhouse': 'Townhouse',
+    'apartment': 'Apartment',
+    'shopping centre': 'Shopping Centre',
+    'shopping center': 'Shopping Centre',
+  },
+  // FIX 1 (2026-06-23) — Status of Improvements: the client mirror field uses the SAME two-value option
+  // set as State of Improvements (docs/VALTA-FIELD-SPEC.md: 'Existing Property' | 'Proposed'). Map each
+  // dashboard cascade key (loeCascade.ts STATUS_TO_SCENARIOS) to the client's exact option so the
+  // drop_down encoder doesn't silently drop on no-match. 'Improved - *' → Existing Property; 'Proposed - *'
+  // → Proposed (matches the State-of-Improvements philosophy above).
+  'Status of Improvements': {
+    'improved - completed': 'Existing Property',
+    'improved - renovated': 'Existing Property',
+    'improved - under renovation': 'Existing Property',
+    'improved - proposed renovation': 'Existing Property',
+    'proposed - vacant land': 'Proposed',
+    'proposed - improved land (demolition required)': 'Proposed',
+    'proposed - under construction': 'Proposed',
+  },
 }
 
 // Apply a field's synonym table to one source value (returns the canonical label, or the value unchanged).

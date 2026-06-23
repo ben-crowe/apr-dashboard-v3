@@ -1,0 +1,16 @@
+curl 'https://frontdoor-prod-us-west-2-3.clickup.com/customFields/v2/field/0e01ad77-525f-4b4d-8e66-9e3e1c563bb5' \
+  -X 'PUT' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InNiVkFxWkNGdVJBPSJ9.eyJ1c2VyIjoxMDc5MTgzOCwidmFsaWRhdGVkIjp0cnVlLCJ3c19rZXkiOiI2MTE5MjMxMDMiLCJzZXNzaW9uX3Rva2VuIjp0cnVlLCJ3b3Jrc3BhY2VzIjpbeyJ0eXBlIjoicGFzc3dvcmQifV0sIndvcmtzcGFjZV9pZCI6ODU1NTU2MSwiaWF0IjoxNzgxODc5Mjg2LCJleHAiOjE3ODIwNTIwODZ9.ZrmoeB29Aq3dROyUfkIoDqIk5yOW-cpORgxriumOK-Y' \
+  -H 'Referer: https://app.clickup.com/8555561/v/l/li/901709622357' \
+  -H 'sec-ch-ua: "Google Chrome";v="149", "Chromium";v="149", "Not)A;Brand";v="24"' \
+  -H 'X-Build-Git-Sha-Short: b4f290b' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'X-CSRF: 1' \
+  -H 'build-version: 4.12.6' \
+  -H 'X-Workspace-ID: 8555561' \
+  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36' \
+  -H 'Accept: application/json, text/plain, */*' \
+  -H 'Content-Type: application/json' \
+  -H 'sessionId: ms2lhyak6' \
+  --data-raw '{"id":"0e01ad77-525f-4b4d-8e66-9e3e1c563bb5","name":"Property Name","type":"short_text","type_config":{},"userid":"10791838","date_created":"1781815732175","hide_from_guests":false,"team_id":"8555561","deleted":false,"date_deleted":null,"required":false,"required_on_subtasks":false,"private":false,"pinned":false,"default_value":null,"subcategories":[{"id":"901709622357","name":"APR Test - Valta Mirror","personal_list":false,"subcategory_access":true,"archived":false,"entity":"subcategory","applied_objects":null}],"values_set":null,"description":"","deleted_by":null,"linked_subcategory":null,"permission_level":null,"type_id":15,"automation_count":0,"members":[],"groups":[],"entity":{"type":"subcategory","id":"901709622357"},"position":2}'

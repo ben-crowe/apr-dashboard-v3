@@ -1,0 +1,37 @@
+START ORDER: read this whole passover first, then shoot. (No SS12 needed — pure recapture, no code build.)
+
+SKILLS — load these now (run each as a slash command, don't just acknowledge):
+  /agent-screenshot   ← the screenshot contract (apply it IN FULL — declare each shot, eyeball before handback; it's all in the skill, do not restate it)
+  /cli-browser-auto   ← drive the local app to the right view
+  /tmux-comms         ← how you report back to me (below)
+
+WHY: the verification board holds STALE shots — they still show the old "Report Builder"
+     button that has since been REMOVED. Ben needs fresh, correct proof of the CURRENT state.
+
+TASK — two shots proving the current job-detail page:
+  SHOT A (close-up, legible): the page-top header.
+    CLAIM: Asset Studio cog PRESENT at far right of the job title, and NO "Report Builder"
+    button anywhere beside it.
+  SHOT B (full page, top-to-bottom): the whole job-detail view.
+    CLAIM: no V4 entry button and no extra V4 sections — local now matches deployed.
+
+RECIPE (don't invent it):
+  1. local app is running: http://localhost:8086/dashboard (V4 flag is now FALSE, so it
+     renders like prod — that IS the point of the shot).
+  2. agent-browser --session <UNIQUE-NAME> open the dashboard, click into job VAL261065,
+     and CONFIRM via snapshot that the H1 job title + "Asset Studio" are present BEFORE you
+     shoot (a blank/loading shot proves nothing — re-take it).
+  3. SHOT A: agent-browser --session <UNIQUE> screenshot ~/Development/KM-Exp/data/screenshots/current-state-headerCloseup.png
+     SHOT B: agent-browser --session <UNIQUE> screenshot --full ~/Development/KM-Exp/data/screenshots/current-state-fullpage.png
+  4. close the session. (Never save to /tmp.)
+
+CONSTRAINTS:
+  - You OWN capturing + declaring. Do NOT place them on the board — qa owns board placement.
+  - Take EXACTLY these two shots. If another would add value, propose it in one line, wait.
+
+REPORT-BACK (mandatory): when DONE or STUCK, message me (co-arch, deployer) via the wrapper —
+  ~/.claude/scripts/utils/tmux-msg.sh dev-2 "DONE: <both shot paths + your verbal declaration of what each shot is OF and where the subject sits in it>"
+  (or "STUCK: <plain question>"). Never let the result sit unsent.
+
+ON AMBIGUITY: no AskUserQuestion / multi-choice. Pick best per intent, report
+  "Picked: <one line>. Proceeding." If blocked → "STUCK: <question>".

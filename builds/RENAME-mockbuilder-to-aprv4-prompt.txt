@@ -1,0 +1,45 @@
+START ORDER: read this whole passover first, then edit. (No SS12 — small mechanical rename.)
+
+SKILLS — load these now (run each as a slash command):
+  /frontend-design   ← the React/TSX edits
+  /tmux-comms        ← report back to co-arch (below)
+
+WHY: Ben wants V4 to have its own named home + deployed site. This is the CODE half — rename the
+route /mock-builder → /apr-v4 and the user-visible title → "APR V4". (co-arch handles the Vercel
+deploy separately.)
+
+TASK — rename ROUTE + TITLE ONLY (minimal scope — qa-gated):
+  1. ROUTE DEF — src/App.tsx:64: change `path="/mock-builder"` → `path="/apr-v4"`.
+     ⛔ PRESERVE the `isV4Enabled() && (...)` gate wrapping it — /apr-v4 MUST stay flag-gated so the
+        client prod build (flag OFF) still 404s it. Do NOT remove or move the gate.
+  2. ALL live navigate() calls — src/features/test-input/TestInputDashboard.tsx: change every
+     `navigate("/mock-builder")` → `navigate("/apr-v4")` (the live "View Report" buttons — lines
+     ~1021, ~1236, ~1258). Update the nearby comments/title that say "mock-builder" → "apr-v4" too
+     (lines ~1020, ~1257, ~1283) so nothing dangles. Miss one = a 404 on a working button.
+  3. USER-VISIBLE TITLE — EXACT line (pinpointed, do not hunt):
+     src/features/report-builder/components/ReportBuilderLayout.tsx:53 →
+       `<span className="font-semibold">Report Builder</span>`
+     Change the inner text "Report Builder" → "APR V4" (that span ONLY). This is the page heading.
+     ⛔ FENCE: do NOT touch the "Report Builder" strings at src/pages/StyleGuide.tsx:780 and :785 —
+        those are style-guide DOC text, not the page title. Leave them. Change ONLY line 53 above.
+  4. DOC refs — src/features/report-builder/README.md lines ~9, ~181: `/mock-builder` → `/apr-v4`.
+
+⛔ DO NOT (hard fences):
+  - Do NOT rename the component symbol `MockReportBuilder` — it's imported + used by
+    src/pages/JobReportBuilder.tsx (the job→report integration). Renaming the symbol = blast radius
+    for zero user benefit. Route + title only.
+  - Do NOT touch the isV4Enabled gate logic or featureFlags.
+  - Do NOT touch .env.local or any V4-flag value.
+
+ACCEPTANCE:
+  - `npx tsc --noEmit` clean.
+  - grep confirms ZERO remaining `/mock-builder` refs in src/ (all → /apr-v4).
+  - The isV4Enabled() gate still wraps the renamed route (paste the line).
+  - Report the exact files + lines you touched.
+
+REPORT-BACK (mandatory): when DONE or STUCK, message co-arch via the wrapper —
+  ~/.claude/scripts/utils/tmux-msg.sh dev-2 "DONE: <files+lines touched + the gated route line + tsc clean + grep-zero-mockbuilder>"
+  (or "STUCK: <plain question>"). Never let the result sit unsent.
+
+ON AMBIGUITY: no AskUserQuestion / multi-choice. Pick best per intent, report
+  "Picked: <one line>. Proceeding." If blocked → "STUCK: <question>".

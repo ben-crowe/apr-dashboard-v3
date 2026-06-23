@@ -209,16 +209,21 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       toast.error('Create a Valcre job first');
       return;
     }
+    // FIX 2 (2026-06-23) — short-circuit: if this job already has a stored SharePoint folder URL, just
+    // open it (mirror the open-state button below) and skip the invoke entirely. Never re-create a set.
+    const storedUrl = (job as any)?.sharepointFolderUrl;
+    if (storedUrl) {
+      window.open(storedUrl, '_blank');
+      return;
+    }
     setIsCreatingAssetFolders(true);
     try {
-      const jn = jobDetails.jobNumber.toString();
-      const yy = parseInt(jn.replace(/\D/g, '').slice(0, 2), 10);
-      const year = Number.isFinite(yy) ? 2000 + yy : new Date().getFullYear();
-      const propertyDescription = [(job as any)?.propertyName, (job as any)?.propertyAddress]
-        .filter(Boolean)
-        .join(', ');
+      // FIX 2 (2026-06-23) — send ONLY { jobId } so the edge fn composes the folder name the ONE
+      // canonical way (jobFolderInputs, space-join). The old client-side comma-join built a DIFFERENT
+      // name than the server's, so ensureFolder's GET-by-path missed the client's existing folder and
+      // created a DUPLICATE set. Byte-identical name (+ the server's jobNumber prefix-match) = connect.
       const { data, error } = await supabase.functions.invoke('create-job-folders', {
-        body: { jobNumber: jn, propertyDescription, year },
+        body: { jobId: job.id },
       });
       if (error) throw error;
       if (data?.configured === false) {

@@ -184,6 +184,7 @@ export const JOB_SUBFOLDERS = [
 export interface JobFolderArgs {
   year: string | number;     // {YEAR} segment under 2.Jobs
   parentFolderName: string;  // "{JOB#} - {Property Description + Street + City + Province}"
+  jobNumber?: string;        // FIX 2 (2026-06-23): the bare VAL number, for prefix-match dedupe (see below)
 }
 
 export interface JobFolderResult {
@@ -212,8 +213,23 @@ export async function createJobFolders(args: JobFolderArgs): Promise<JobFolderRe
   await ensureFolder(driveId, '', '2.Jobs');
   await ensureFolder(driveId, '2.Jobs', year);
 
-  const parentPath = `2.Jobs/${year}/${args.parentFolderName}`;
-  const parent = await ensureFolder(driveId, `2.Jobs/${year}`, args.parentFolderName);
+  // FIX 2 (2026-06-23) — prefix-match dedupe. The button used to compose the parent name client-side
+  // with a different join (comma) than the canonical server builder (space), so the exact-path GET in
+  // ensureFolder missed the client's existing folder and created a DUPLICATE set. Even with the name now
+  // composed one canonical way, the client's live folder can carry a slightly different description tail.
+  // So: if a folder under 2.Jobs/{YEAR} already starts with "{jobNumber} - ", CONNECT to THAT one
+  // (whatever its tail) instead of creating a parallel "{jobNumber} - {our description}". Only when no
+  // "{jobNumber} - *" exists do we fall through to creating with our composed name.
+  let parentFolderName = args.parentFolderName;
+  if (args.jobNumber) {
+    const prefix = `${args.jobNumber} - `;
+    const siblings = await listFolderNames(driveId, `2.Jobs/${year}`);
+    const existingMatch = siblings.find((n) => n.startsWith(prefix));
+    if (existingMatch) parentFolderName = existingMatch; // attach to the client's existing folder, no dup
+  }
+
+  const parentPath = `2.Jobs/${year}/${parentFolderName}`;
+  const parent = await ensureFolder(driveId, `2.Jobs/${year}`, parentFolderName);
 
   const subfolders: { name: string; id: string; created: boolean; webUrl?: string }[] = [];
   for (const name of JOB_SUBFOLDERS) {

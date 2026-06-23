@@ -65,7 +65,7 @@ serve(async (req) => {
     const parentFolderName = `${jobNumber} - ${propertyDescription}`;
     const resolvedYear = year ?? new Date().getUTCFullYear();
 
-    const result = await createJobFolders({ year: resolvedYear, parentFolderName });
+    const result = await createJobFolders({ year: resolvedYear, parentFolderName, jobNumber });
     const { siteId } = await resolveSharePointIds();
 
     return json({

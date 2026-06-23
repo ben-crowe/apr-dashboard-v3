@@ -84,3 +84,18 @@ Create-only (set once at card create): Client / Property / Contact fields + link
 2. **Add synonyms / reconcile options** — `FIELD_SYNONYMS` entries for Property Subtype ('Mixed-Use'→'Mixed Use' etc.) and Status of Improvements; reconcile Subtype option labels to the client mirror. File: `clickup-fields.ts` (`FIELD_SYNONYMS`, `encodeForField`).
 3. **Backfill stale cards** — after (1)+(2), re-trigger an update on existing jobs to overwrite frozen Status/Interest/date values.
 4. **Also clean up** the dead on-change keys flagged in §3 above (scopeOfWork/appraisalFee/retainerAmount/paymentComments fire but land nothing) — resolved naturally by fixing the mapping or removing them.
+
+---
+
+## FUTURE / PLANNED — Directional (per-field) two-way sync (Ben direction, 2026-06-23)
+
+**The idea:** some ClickUp fields are meant for the CLIENT'S TEAM to fill/adjust IN ClickUp (the workflow set — Phase Owner, Work Phase, Client Info Received, Invoice Paid, TTSZ Done, Template Saved, Photos Saved, Comps Provided, Notes, Task Type, Inspection Date). If the team edits those in ClickUp, the values should flow back to the dashboard — an ease-of-use win since the team is already working the task.
+
+**The rule (refined by Ben 2026-06-23) — THREE buckets, by whether the field exists on both sides:**
+1. **ClickUp-only fields (no dashboard counterpart)** — e.g. most of the 12 workflow fields (Phase Owner, Work Phase, Client Info Received, Invoice Paid, TTSZ Done, Template Saved, Photos Saved, Comps Provided, Notes, Task Type, Inspection Date). **Default = DO NOT sync.** No dashboard home, so they stay ClickUp-only and the team manages them there. No work, no decision — unless we deliberately ADD a dashboard field for one (then it becomes bucket 2).
+2. **Fields on BOTH dashboard and ClickUp** — one-way dashboard→ClickUp **guaranteed** (this is the current fix). These are the natural candidates for two-way-back.
+3. **Two-way back (ClickUp→dashboard)** — a "where straightforward" enhancement on bucket-2 fields only. Do the easy ones; skip awkward/hard-to-sync-back ones (revisit later). NOT for bucket-1.
+
+**Why it's safe + cheap:** the current fix only pushes shared dashboard-owned fields; it touches nothing ClickUp-only. The back-direction is an additive enhancement on shared fields. New work for the "up" direction = a ClickUp webhook listener → Supabase update + an update-loop guard (standard pattern), applied only to the easy shared fields.
+
+**Status: PLANNED — bucket 3 (two-way-back on shared fields) is the optional follow-on; bucket 1 stays unsynced by default. Needs a PRD when scheduled. Not scheduled.**

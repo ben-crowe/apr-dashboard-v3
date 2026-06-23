@@ -207,19 +207,34 @@ const FIELD_SYNONYMS: Record<string, Record<string, string>> = {
     'shopping centre': 'Shopping Centre',
     'shopping center': 'Shopping Centre',
   },
-  // FIX 1 (2026-06-23) — Status of Improvements: the client mirror field uses the SAME two-value option
-  // set as State of Improvements (docs/VALTA-FIELD-SPEC.md: 'Existing Property' | 'Proposed'). Map each
-  // dashboard cascade key (loeCascade.ts STATUS_TO_SCENARIOS) to the client's exact option so the
-  // drop_down encoder doesn't silently drop on no-match. 'Improved - *' → Existing Property; 'Proposed - *'
-  // → Proposed (matches the State-of-Improvements philosophy above).
+  // FIX 2 (2026-06-23) — Status of Improvements: CORRECTED. The earlier two-value mapping
+  // ('Existing Property' | 'Proposed') was WRONG — that target set does not exist on this dropdown.
+  // Live OpenCLI readback proved the field's real option set is the GRANULAR seven-value list
+  // (docs/VALTA-FIELD-SPEC.md L73): 'Existing - Completed | Existing - Renovated |
+  // Existing - Under Renovation | Existing - To Be Renovated | Proposed - Vacant Land |
+  // Proposed - Improved Land (Demolition Required) | Proposed - Under Construction'.
+  // The dashboard cascade (loeCascade.ts STATUS_TO_SCENARIOS) uses an 'Improved - *' prefix; ClickUp
+  // uses 'Existing - *'. So we only need to bridge the prefix (Improved → Existing) — the suffix already
+  // matches the client option verbatim. 'Proposed - *' keys are already identical to ClickUp options.
   'Status of Improvements': {
-    'improved - completed': 'Existing Property',
-    'improved - renovated': 'Existing Property',
-    'improved - under renovation': 'Existing Property',
-    'improved - proposed renovation': 'Existing Property',
-    'proposed - vacant land': 'Proposed',
-    'proposed - improved land (demolition required)': 'Proposed',
-    'proposed - under construction': 'Proposed',
+    'improved - completed': 'Existing - Completed',
+    'improved - renovated': 'Existing - Renovated',
+    'improved - under renovation': 'Existing - Under Renovation',
+    'improved - proposed renovation': 'Existing - To Be Renovated',
+    'proposed - vacant land': 'Proposed - Vacant Land',
+    'proposed - improved land (demolition required)': 'Proposed - Improved Land (Demolition Required)',
+    'proposed - under construction': 'Proposed - Under Construction',
+  },
+  // FIX 2 (2026-06-23) — Property Type: the dashboard stores 'Self-Storage' (hyphen) but the LIVE client
+  // mirror option is 'Self Storage' (space) — confirmed by reading the field's type_config.options off the
+  // running list. The strict matcher misses on the hyphen and silently skips → Property Type synced blank.
+  // Live option set (verbatim): Multifamily | Self Storage | Retail | Industrial | Land | Office | Hotel |
+  // Senior | Other. Bridge the dashboard spelling to the exact live label. (Other dashboard property types
+  // that already match a live option verbatim need no synonym — left to the exact matcher.)
+  'Property Type': {
+    'self-storage': 'Self Storage',
+    'self storage': 'Self Storage',
+    'seniors': 'Senior',
   },
 }
 

@@ -2,6 +2,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 import { createClient } from 'jsr:@supabase/supabase-js@2'
 import { jobFolderInputs } from '../_shared/graph.ts'
+import { fetchListFields, buildHubCustomFields, applyTaskFields } from '../_shared/clickup-fields.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -39,33 +40,28 @@ interface DocuSealWebhookPayload {
   };
 }
 
-// Helper function to format timestamp for ClickUp
-const formatTimestamp = (dateStr: string): string => {
-  const date = new Date(dateStr)
-
-  // Format as YY.MM.DD / H:MM AM/PM
-  const year = String(date.getFullYear()).slice(-2)
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-
-  let hours = date.getHours()
-  const minutes = String(date.getMinutes()).padStart(2, '0')
-  const ampm = hours >= 12 ? 'PM' : 'AM'
-  hours = hours % 12 || 12
-
-  return `${year}.${month}.${day} / ${hours}:${minutes} ${ampm}`
-}
-
-// Update ClickUp task with LOE status (Stage 2.5 & 3)
-async function updateClickUpLOEStatus(
+// Push the LOE Sent / LOE Signed DATE custom fields onto the ClickUp task.
+//
+// FIX B/C/D (2026-06-23, fullstack-dev): the old version rewrote the task DESCRIPTION with a
+// "▸ LOE Sent / ▸ LOE Signed" text line. That was wrong on three counts:
+//   - The dedicated LOE Sent / LOE Signed DATE custom fields were left EMPTY (they were never pushed)
+//     — the timestamp only ever landed in the description text (Fix B).
+//   - Writing the plain `description` field alongside `markdown_description` on the PUT flattened the
+//     "[Quick Link](url)" markdown links in the body to plain text (Fix C).
+//   - The "LOE Signed: <date> by <name>" line duplicated data the dedicated field now owns (Fix D).
+//
+// The fix: stop touching the description entirely. Resolve the LOE Sent / LOE Signed custom fields
+// byName against the task's OWN list (works on BC test list now + Valta after replication) and push
+// the timestamp via the per-field endpoint. buildHubCustomFields encodes date fields as unix-ms and
+// set-replaces, so it's idempotent. The freshly-written loe_sent_at / signed_at are read from the DB
+// row we just updated (passed in via the `job` object).
+async function pushClickUpLOEDateFields(
   taskId: string,
-  eventType: 'sent' | 'signed',
-  timestamp: string,
-  signerName?: string
+  job: any
 ): Promise<void> {
-  console.log(`Updating ClickUp task ${taskId} with LOE ${eventType} status`)
+  console.log(`Pushing LOE date custom fields to ClickUp task ${taskId}`)
 
-  // Fetch existing task
+  // Discover the task's list so we can resolve fields byName on whichever list it lives on.
   const getTaskResponse = await fetch(`https://api.clickup.com/api/v2/task/${taskId}`, {
     method: 'GET',
     headers: {
@@ -79,89 +75,25 @@ async function updateClickUpLOEStatus(
   }
 
   const existingTask = await getTaskResponse.json()
-  const existingDescription = existingTask.markdown_description || existingTask.description || ''
-
-  // Format the timestamp
-  const formattedTime = formatTimestamp(timestamp)
-
-  let updatedDescription = existingDescription
-
-  if (eventType === 'sent') {
-    // Stage 2.5: Replace blank LOE Sent line with actual timestamp
-    const sentLine = `▸ LOE Sent:   ${formattedTime}`
-
-    // Replace blank LOE Sent line (handle both with and without leading spaces)
-    if (existingDescription.includes('▸ LOE Sent:')) {
-      // Match: "▸ LOE Sent:" or "  ▸ LOE Sent:" followed by optional whitespace and newline
-      updatedDescription = existingDescription.replace(
-        /^\s*▸ LOE Sent:\s*$/m,
-        sentLine
-      )
-    } else {
-      // Fallback: Insert after form submission date line if not found
-      if (existingDescription.includes('New Client Request Received:') || existingDescription.includes('FORM SUBMITTED:') || existingDescription.includes('REQUEST RECEIVED:') || existingDescription.includes('RECEIVED DATE:')) {
-        updatedDescription = existingDescription.replace(
-          /(New Client Request Received:.*?\n|FORM SUBMITTED:.*?\n|REQUEST RECEIVED:.*?\n|RECEIVED DATE:.*?\n)/,
-          `$1${sentLine}\n`
-        )
-      } else {
-        // Fallback: add at top
-        updatedDescription = `${sentLine}\n\n${existingDescription}`
-      }
-    }
-  } else if (eventType === 'signed') {
-    // Stage 3: Replace blank LOE Signed line with actual timestamp and signer name
-    const signedLine = `▸ LOE Signed: ${formattedTime} by ${signerName || 'Client'}`
-
-    // Replace blank LOE Signed line (handle both with and without leading spaces)
-    if (existingDescription.includes('▸ LOE Signed:')) {
-      // Match: "▸ LOE Signed:" or "  ▸ LOE Signed:" followed by optional whitespace and newline
-      updatedDescription = existingDescription.replace(
-        /^\s*▸ LOE Signed:\s*$/m,
-        signedLine
-      )
-    } else {
-      // Fallback: Insert after "LOE Sent" line if not found
-      if (existingDescription.includes('▸ LOE Sent:')) {
-        // Match "LOE Sent:" line (with or without leading spaces) and insert after it
-        updatedDescription = existingDescription.replace(
-          /(^\s*▸ LOE Sent:.*?\n)/m,
-          `$1${signedLine}\n`
-        )
-      } else {
-        // If no "LOE Sent" line, add both after form submission date
-        const sentLine = `▸ LOE Sent:   ${formattedTime}`
-        if (existingDescription.includes('New Client Request Received:') || existingDescription.includes('FORM SUBMITTED:') || existingDescription.includes('REQUEST RECEIVED:') || existingDescription.includes('RECEIVED DATE:')) {
-          updatedDescription = existingDescription.replace(
-            /(New Client Request Received:.*?\n|FORM SUBMITTED:.*?\n|REQUEST RECEIVED:.*?\n|RECEIVED DATE:.*?\n)/,
-            `$1${sentLine}\n${signedLine}\n`
-          )
-        } else {
-          updatedDescription = `${signedLine}\n\n${existingDescription}`
-        }
-      }
-    }
+  const listId = existingTask?.list?.id
+  if (!listId) {
+    console.log('ℹ️ No list id on task — skipping LOE date field push')
+    return
   }
 
-  // Update task
-  const updateResponse = await fetch(`https://api.clickup.com/api/v2/task/${taskId}`, {
-    method: 'PUT',
-    headers: {
-      'Authorization': CLICKUP_API_TOKEN,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      description: updatedDescription, // Plain description (fallback)
-      markdown_description: updatedDescription // Markdown description (preferred)
-    })
-  })
+  const listFields = await fetchListFields(CLICKUP_API_TOKEN, listId)
+  // Build the full hub field set from the fresh job row, then narrow to ONLY the two LOE date
+  // fields — we don't want the webhook to re-touch every field on a sign event, just the dates.
+  const allFields = buildHubCustomFields(job, listFields)
+  const loeDateFields = allFields.filter(f => f.name === 'LOE Sent' || f.name === 'LOE Signed')
 
-  if (!updateResponse.ok) {
-    const errorText = await updateResponse.text()
-    throw new Error(`Failed to update ClickUp task: ${updateResponse.status} - ${errorText}`)
+  if (!loeDateFields.length) {
+    console.log('ℹ️ No LOE Sent/Signed columns on list', listId, '— nothing to push')
+    return
   }
 
-  console.log(`✅ ClickUp task updated with LOE ${eventType} status`)
+  const result = await applyTaskFields(CLICKUP_API_TOKEN, taskId, loeDateFields)
+  console.log(`✅ LOE date fields pushed: set=${result.set} verified=${result.verified}/${result.total}`)
 }
 
 Deno.serve(async (req) => {
@@ -248,17 +180,21 @@ Deno.serve(async (req) => {
         console.error('Error updating loe_sent_at:', updateError)
       }
 
-      // Update ClickUp task with LOE Sent timestamp
+      // Push the LOE Sent DATE custom field onto the ClickUp task (Fix B). Re-fetch the FRESH job row
+      // so buildHubCustomFields sees the just-written loe_sent_at. No description rewrite (Fix C/D).
       if (loeDetails.clickup_task_id) {
         try {
-          await updateClickUpLOEStatus(
-            loeDetails.clickup_task_id,
-            'sent',
-            payload.data.created_at || new Date().toISOString()
-          )
+          const { data: job } = await supabase
+            .from('job_submissions')
+            .select('*, job_loe_details(*), job_property_info(*)')
+            .eq('id', loeDetails.job_id)
+            .single()
+          if (job) {
+            await pushClickUpLOEDateFields(loeDetails.clickup_task_id, job)
+          }
         } catch (clickupError) {
-          console.error('Failed to update ClickUp:', clickupError)
-          // Don't fail the webhook - DocuSeal update is more important
+          console.error('Failed to push LOE Sent field to ClickUp:', clickupError)
+          // Don't fail the webhook - DB update is more important
         }
       }
 
@@ -482,20 +418,22 @@ Deno.serve(async (req) => {
         console.error('QBO Trigger-1 error (non-fatal):', qboError)
       }
 
-      // Extract signer name from submitters
-      const signerName = payload.data.submitters?.[0]?.name || 'Client'
-
-      // Update ClickUp task with LOE Signed timestamp
+      // Push the LOE Signed DATE custom field onto the ClickUp task (Fix B). Re-fetch the FRESH job
+      // row so buildHubCustomFields sees the just-written signed_at. No description rewrite (Fix C/D) —
+      // the dedicated LOE Signed field is the clean home for the timestamp; the signer name stays on
+      // the signed document + job_files record, not duplicated into the card body.
       if (loeDetails.clickup_task_id) {
         try {
-          await updateClickUpLOEStatus(
-            loeDetails.clickup_task_id,
-            'signed',
-            payload.data.completed_at || new Date().toISOString(),
-            signerName
-          )
+          const { data: job } = await supabase
+            .from('job_submissions')
+            .select('*, job_loe_details(*), job_property_info(*)')
+            .eq('id', jobId)
+            .single()
+          if (job) {
+            await pushClickUpLOEDateFields(loeDetails.clickup_task_id, job)
+          }
         } catch (clickupError) {
-          console.error('Failed to update ClickUp:', clickupError)
+          console.error('Failed to push LOE Signed field to ClickUp:', clickupError)
           // Don't fail the webhook
         }
       }
@@ -509,7 +447,7 @@ Deno.serve(async (req) => {
           success: true,
           jobId: jobId,
           status: 'loe_signed',
-          signerName: signerName
+          signerName: payload.data.submitters?.[0]?.name || 'Client'
         }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },

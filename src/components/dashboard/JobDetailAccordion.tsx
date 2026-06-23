@@ -91,8 +91,8 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         reportFormat: 'Comprehensive',
         assignmentType: 'Single Property',
         analysisLevel: 'Detailed',
-        appraisalFee: 6500,
-        retainerAmount: '1500',
+        appraisalFee: 5000, // FIX 3 (2026-06-23): clean flat default (was 6500)
+        retainerAmount: '', // FIX 3 (2026-06-23): no dollar amount — contract standard is 100% on signing (was '1500')
         effectiveDate: '2026-06-15',
         requestDate: '2026-06-09',
         deliveryDate: '2026-07-10',

@@ -713,6 +713,16 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               // Coerce blank → null.
               payment_paid_date: nullIfEmptyDate(jobDetails?.paymentPaidDate),
               retainer_paid_date: nullIfEmptyDate(jobDetails?.retainerPaidDate),
+              // FIX 4 (2026-06-23) — effective_date / request_date / signed_date were MISSING from this
+              // bulk "save all LOE details" write, so a value set by Fill Test Data (which calls
+              // onUpdateDetails directly, not the per-field input/autoSaveField path) never reached the
+              // DB through the Create-Valcre flow. The columns stayed null → Effective Date and Client
+              // Requested Date rendered blank on reload (the date <input> reads jobDetails.effectiveDate /
+              // .requestDate, which hydrate from these columns). Same DATE-column "" → null coercion as
+              // the two above (else 22007 aborts the whole save).
+              effective_date: nullIfEmptyDate(jobDetails?.effectiveDate),
+              request_date: nullIfEmptyDate(jobDetails?.requestDate),
+              signed_date: nullIfEmptyDate(jobDetails?.signedDate),
               updated_at: new Date().toISOString()
             })
             .eq('job_id', job.id);

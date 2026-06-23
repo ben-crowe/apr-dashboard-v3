@@ -12,6 +12,7 @@ import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, Secti
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MultiSelect } from "@/components/ui/multi-select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { SectionProps } from "./types";
@@ -2488,11 +2489,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         <SectionGroup title="Property Information Request">
           <TwoColumnFields>
             <CompactField label="Client Documents">
-              {/* Registry ListClientDocuments (field-registry-v6.html:948) — Select multiple. Options verbatim (11). */}
-              <MultiSelect
-                value={(jobDetails as any).clientDocuments || ''}
-                onChange={values => handleMultiSelectChange(values, 'clientDocuments')}
-                options={[
+              {/* Registry ListClientDocuments (field-registry-v6.html:948) — multi-value, 11 options verbatim.
+                  FIX 5 (2026-06-23): rendered as a Shadcn Checkbox GROUP (was a MultiSelect dropdown) — pure
+                  presentation swap. SAME data shape: value stays the comma-joined string in
+                  jobDetails.clientDocuments, each toggle rebuilds the selected array and routes through the
+                  unchanged handleMultiSelectChange → DB client_documents + Valcre mapping all untouched. */}
+              {(() => {
+                const CLIENT_DOCUMENT_OPTIONS = [
                   'Previous Appraisal',
                   'Property Details',
                   'Proforma',
@@ -2504,8 +2507,34 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   'Purchase & Sale Agreement',
                   'Environmental Reports',
                   'Property Condition Reports',
-                ]}
-              />
+                ];
+                const selected = String((jobDetails as any).clientDocuments || '')
+                  .split(',').map(v => v.trim()).filter(Boolean);
+                const toggle = (opt: string, checked: boolean) => {
+                  const next = checked
+                    ? [...selected, opt].filter((v, i, a) => a.indexOf(v) === i)
+                    : selected.filter(v => v !== opt);
+                  handleMultiSelectChange(next, 'clientDocuments');
+                };
+                return (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                    {CLIENT_DOCUMENT_OPTIONS.map(opt => {
+                      const id = `clientDoc-${opt.replace(/[^a-zA-Z0-9]+/g, '-')}`;
+                      const checked = selected.includes(opt);
+                      return (
+                        <label key={opt} htmlFor={id} className="flex items-center gap-2 text-sm cursor-pointer select-none">
+                          <Checkbox
+                            id={id}
+                            checked={checked}
+                            onCheckedChange={(c) => toggle(opt, c === true)}
+                          />
+                          <span>{opt}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
             </CompactField>
             <CompactField label="Previously Appraised">
               <Select value={(jobDetails as any).previouslyAppraised || ''} onValueChange={value => handleSelectChange(value, 'previouslyAppraised')}>

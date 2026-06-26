@@ -1,10 +1,13 @@
 import React from "react";
-import { Settings } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Settings, FileText } from "lucide-react";
 import JobDetailAccordion from "./JobDetailAccordion"; // Use the correct clean version
 import JobDetailHeader from "./job-details/JobDetailHeader";
 import JobDetailSkeleton from "./job-details/JobDetailSkeleton";
 import JobNotFound from "./job-details/JobNotFound";
+import { Button } from "@/components/ui/button";
 import { useJobDetail } from "@/hooks/useJobDetail";
+import { isV4Enabled } from "@/lib/featureFlags";
 import { formatJobNumber } from "@/utils/formatters";
 
 interface JobDetailViewProps {
@@ -13,6 +16,7 @@ interface JobDetailViewProps {
 }
 
 const JobDetailView: React.FC<JobDetailViewProps> = ({ jobId, onBack }) => {
+  const navigate = useNavigate();
   const {
     job,
     jobDetails,
@@ -22,6 +26,27 @@ const JobDetailView: React.FC<JobDetailViewProps> = ({ jobId, onBack }) => {
     handleUpdateJob,
     refetchJobData,
   } = useJobDetail(jobId);
+
+  // FIX 5a — "Create Report": persist this job's intake to the EXISTING row, then open V4.
+  // enabled-when-filled = the LOE required set (first/last/email/property-address) — mirrors
+  // the existing LOE gate, NOT the wider Valcre gate.
+  const canCreateReport = !!(
+    job?.clientFirstName &&
+    job?.clientLastName &&
+    job?.clientEmail &&
+    job?.propertyAddress
+  );
+
+  // SAVE→PULL ordering (gate finding): useLoadJobIntoReport reads SAVED job_submissions rows,
+  // so persist the current intake to the EXISTING row FIRST (await), THEN navigate so the
+  // bridge pulls fresh-not-stale. handleUpdateJob does update().eq('id', job.id) — UPDATE-by-id,
+  // never INSERT (no duplicate job row). Passing the whole `job` re-persists the on-screen
+  // intake (a `{}` call would risk an empty PostgREST update).
+  const handleCreateReport = async () => {
+    if (!job || !jobId) return;
+    await handleUpdateJob(job);
+    navigate(`/dashboard/job/${jobId}/report`);
+  };
 
   if (isLoading) {
     return <JobDetailSkeleton onBack={onBack} />;
@@ -41,6 +66,26 @@ const JobDetailView: React.FC<JobDetailViewProps> = ({ jobId, onBack }) => {
             {formatJobNumber(job.jobNumber, job)}
           </h1>
           <div className="flex items-center gap-3 flex-none">
+            {/* Create Report — FIX 5a. Visible only when V4 is enabled (the report route is
+                registered ONLY under isV4Enabled(); with V4 off the nav would redirect to the
+                dashboard, so we don't show a dead button). Disabled until the LOE-required intake
+                fields are present (enabled-when-filled). */}
+            {isV4Enabled() && (
+              <Button
+                type="button"
+                size="sm"
+                onClick={handleCreateReport}
+                disabled={!canCreateReport}
+                title={
+                  canCreateReport
+                    ? "Save this job's intake and open the report builder"
+                    : "Fill client first name, last name, email, and property address to enable"
+                }
+              >
+                <FileText className="h-4 w-4" />
+                Create Report
+              </Button>
+            )}
             {/* Asset Studio — quiet configure-affordance at the PAGE TOP (under the ribbon, far right),
                 deliberately OFF the LOE action row so it never reads as a peer of the produce buttons.
                 Opens the Studio (mounted in LoeQuoteSection) via a decoupled window event. */}

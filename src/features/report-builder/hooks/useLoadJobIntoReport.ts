@@ -291,13 +291,17 @@ export function useLoadJobIntoReport(jobId?: string) {
       try {
         console.log('useLoadJobIntoReport: Loading job data for:', jobId);
 
-        // Initialize the report builder store first if empty
+        // Initialize the report builder store first if empty. AWAIT it fully — initializeMockData
+        // is async (it fetches the 31K template over the network before it set()s sections +
+        // previewHtml). The old fire-and-forget call + fixed 100ms delay RACED the populate below:
+        // initializeMockData's blank set({sections, previewHtml}) could land AFTER the populate and
+        // the (also un-awaited) generatePreview, so the report rendered raw {{placeholders}} even
+        // though the store eventually held the 24 values. Awaiting makes it strictly sequential
+        // (init → populate → preview). (FIX5-PREVIEW race fix.)
         const currentSections = useReportBuilderStore.getState().sections;
         if (currentSections.length === 0) {
           console.log('useLoadJobIntoReport: Initializing store with mock data first');
-          initializeMockData();
-          // Small delay to ensure store is initialized
-          await new Promise(resolve => setTimeout(resolve, 100));
+          await initializeMockData();
         }
 
         // Fetch job submission data
@@ -356,9 +360,11 @@ export function useLoadJobIntoReport(jobId?: string) {
 
         console.log(`useLoadJobIntoReport: Successfully populated ${fieldsUpdated} fields from job data`);
 
-        // Regenerate preview after loading data
+        // Regenerate preview AFTER all writes settle — AWAIT it so this single, final preview
+        // reflects the populated values and nothing blank can land after it. One owner, one
+        // preview, in order (init → populate → preview). (FIX5-PREVIEW race fix.)
         const generatePreview = useReportBuilderStore.getState().generatePreview;
-        generatePreview();
+        await generatePreview();
 
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error loading job data';

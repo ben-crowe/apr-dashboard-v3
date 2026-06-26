@@ -29,6 +29,16 @@ export default function MockReportBuilder({ jobId }: MockReportBuilderProps) {
   }, [effectiveJobId, setCurrentJobId]);
 
   useEffect(() => {
+    // FIX5-MERGE — single-owner guard (render-race fix). When a jobId is present,
+    // useLoadJobIntoReport OWNS the full sequence: init (if empty) → populate the mapped fields →
+    // ONE generatePreview() after the writes settle. This mount effect's cache-clear +
+    // setTimeout(100) init/generatePreview RACES that async populate — the timeout fires mid-fetch
+    // on the still-blank store and stomps the populated values, rendering an EMPTY report. So for
+    // the jobId path BAIL ENTIRELY and let the hook be the sole owner.
+    // The no-jobId standalone path (/mock-builder) falls through and still initializes mock data —
+    // BOTH paths preserved (do not over-gate on effectiveJobId, which is never undefined).
+    if (jobId) return;
+
     const store = useReportBuilderStore.getState();
     const currentPreviewHtml = store.previewHtml;
     const activeTestMode = store.activeTestMode;

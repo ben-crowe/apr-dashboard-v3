@@ -218,11 +218,15 @@ const fieldMappings: JobDataMapping[] = [
   // V4 Slice 3 — Section-2 valuation cascade → report builder (LABELS/headings, all-sync).
   // Same scenarios as V3, one source of truth. Raw passthrough — NO lossy transform
   // (the property-type typeMap collapse above is the anti-pattern; do not repeat it).
-  // ONE cascade field remains intentionally NOT mapped (cite-or-drop, verified against the DB):
-  //   • 'Status of Improvements' — exists on job_loe_details but has NO report field id in
-  //     fieldRegistry.ts → no home to map to (registry/template add needed, ui-designer's lane).
   // ('Tenancy' IS mapped below — its source is job_property_info.tenancy, which this hook already
   //  fetches as propertyData; the earlier "no source" note checked only loe/submissions, not property_info.)
+  {
+    // Status of Improvements → report 'status-of-improvements'. FIX 4 wired this previously-missing
+    // mapping. Registry home: 'status-of-improvements' in fieldRegistry.ts (it DOES exist — the prior
+    // "no report field id" note was stale). Source = job_loe_details.status_of_improvements.
+    fieldId: 'status-of-improvements',
+    getValue: (_job, loe) => loe?.status_of_improvements,
+  },
   {
     // Value scenario label(s), e.g. "As Stabilized" / "As-Is, As If Complete & Stabilized".
     fieldId: 'value-scenarios',

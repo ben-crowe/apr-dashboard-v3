@@ -1076,7 +1076,7 @@ export default function EditPanel() {
                   SECTION IMAGES
                 </div>
                 <p className="text-xs text-gray-300 mb-4 px-2">
-                  Images for this section (managed in S3 IMAGE MGT)
+                  Images for this section (managed in S3 Client Documents)
                 </p>
                 <div className="grid grid-cols-2 gap-4 pl-2">
                   {relatedImages.map(renderField)}

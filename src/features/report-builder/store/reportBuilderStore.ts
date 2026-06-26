@@ -238,9 +238,11 @@ const buildImageMgtSection = (): ReportSection => {
   });
 
   return {
+    // id "image-mgt" retained (referenced by SectionSidebar/ReportBuilderLayout/registry) —
+    // only the stale display labels purged to match the UI's current "Client Documents" (FIX 4).
     id: "image-mgt",
-    name: "Section 3: Image Management",
-    shortName: "S3 - IMAGE MGT",
+    name: "Section 3: Client Documents",
+    shortName: "Client Documents",
     fields: [],
     subsections: Object.values(subsections),
   };

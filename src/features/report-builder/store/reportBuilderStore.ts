@@ -6816,15 +6816,17 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       "client-last-name",
       String(testDataSet1["client-last-name"] || ""),
     );
-    updateField(
-      "client-full-name",
-      String(testDataSet1["client-full-name"] || ""),
-    );
+    // client-full-name is a calculated field — derive from first + last, never independently entered
+    const clientFullName = [
+      String(testDataSet1["client-first-name"] || ""),
+      String(testDataSet1["client-last-name"] || ""),
+    ]
+      .filter(Boolean)
+      .join(" ");
+    updateField("client-full-name", clientFullName);
     updateField(
       "client-name",
-      String(
-        testDataSet1["client-name"] || testDataSet1["client-full-name"] || "",
-      ),
+      String(testDataSet1["client-name"] || clientFullName),
     );
     updateField("client-title", String(testDataSet1["client-title"] || ""));
     updateField(

@@ -204,8 +204,9 @@ export const fieldRegistry: FieldDefinition[] = [
     section: "client-intake",
     subsection: "client-info-intake",
     type: "text",
-    inputSource: "user-input",
+    inputSource: "calculated",
     required: false,
+    calculationFormula: 'client-first-name + " " + client-last-name',
   },
   // Template aliases - these map to other fields but template uses these IDs
   {

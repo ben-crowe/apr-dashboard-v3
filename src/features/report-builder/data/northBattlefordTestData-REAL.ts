@@ -33,7 +33,7 @@ export const northBattlefordRealData: Record<string, string | number | string[]>
 
   // Client Info Subsection
   'client-contact-name': 'Kenneth Engler',
-  'client-company': '102109845 Saskatchewan Ltd.',
+  'client-company-name': '102109845 Saskatchewan Ltd.',
   'client-organization-address': '1901, 1088 - 6th Ave SW',
   'client-city': 'Calgary',
   'client-province': 'AB',
@@ -821,7 +821,7 @@ export const fieldToSectionMap: Record<string, string> = {
   'report-date': 'cover',
   'file-number': 'cover',
   'client-contact-name': 'cover',
-  'client-company': 'cover',
+  'client-company-name': 'cover',
   'client-organization-address': 'cover',
   'client-city': 'cover',
   'client-province': 'cover',

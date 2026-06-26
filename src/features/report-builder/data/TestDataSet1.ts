@@ -153,7 +153,6 @@ export const testDataSet1: Record<string, string | number | string[]> = {
   "client-province": "Alberta",
   "client-city-state-zip": "Calgary, AB T3E 6L1",
   "client-company-name": "102109845 Saskatchewan Ltd.",
-  "client-company": "102109845 Saskatchewan Ltd.",
   "client-full-name": "Kenneth Engler",
   "client-name": "Kenneth Engler",
   "client-first-name": "Kenneth",

@@ -402,7 +402,7 @@ const getMockData = (): ReportSection[] => [
             value: "",
             isEditable: true,
             inputType: "user-input",
-            mapsTo: "client-company",
+            mapsTo: "client-company-name",
           },
           {
             id: "intake-client-address",
@@ -794,8 +794,8 @@ const getMockData = (): ReportSection[] => [
             inputType: "user-input",
           },
           {
-            id: "client-company",
-            label: "Client Company",
+            id: "client-company-name",
+            label: "Organization",
             type: "text",
             value: "",
             isEditable: true,
@@ -6824,14 +6824,6 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       "client-name",
       String(
         testDataSet1["client-name"] || testDataSet1["client-full-name"] || "",
-      ),
-    );
-    updateField(
-      "client-company",
-      String(
-        testDataSet1["client-company"] ||
-          testDataSet1["client-company-name"] ||
-          "",
       ),
     );
     updateField("client-title", String(testDataSet1["client-title"] || ""));

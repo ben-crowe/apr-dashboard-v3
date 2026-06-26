@@ -149,7 +149,7 @@ const HOME_SUBSECTION_TITLES: Record<string, string> = {
 // Layout configuration for Cover section field groupings
 const COVER_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
   'client-info': [
-    { fields: ['client-contact-name', 'client-company'], widths: ['50%', '50%'] },
+    { fields: ['client-contact-name', 'client-company-name'], widths: ['50%', '50%'] },
     { fields: ['client-organization-address'], widths: ['100%'] },
     { fields: ['client-city', 'client-province', 'client-postal'], widths: ['40%', '30%', '30%'] },
   ],

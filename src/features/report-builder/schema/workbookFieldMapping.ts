@@ -58,7 +58,7 @@ export const coverMappings: FieldMapping[] = [
 
 export const clientMappings: FieldMapping[] = [
   { valcreId: 'ClientName', registryId: 'client-contact-name', type: 'text', section: 'cover', description: 'Client contact name' },
-  { valcreId: 'ClientCompany', registryId: 'client-company', type: 'text', section: 'cover', description: 'Client company name' },
+  { valcreId: 'ClientCompany', registryId: 'client-company-name', type: 'text', section: 'cover', description: 'Client company name' },
   { valcreId: 'ClientTitle', registryId: 'client-title', type: 'text', section: 'cover', description: 'Client title' },
   { valcreId: 'ClientAddress1', registryId: 'client-organization-address', type: 'text', section: 'cover', description: 'Client address line 1' },
   { valcreId: 'ClientCity', registryId: 'client-city', type: 'text', section: 'cover', description: 'Client city' },

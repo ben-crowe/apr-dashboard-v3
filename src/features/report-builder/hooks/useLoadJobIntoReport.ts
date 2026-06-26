@@ -360,6 +360,21 @@ export function useLoadJobIntoReport(jobId?: string) {
 
         console.log(`useLoadJobIntoReport: Successfully populated ${fieldsUpdated} fields from job data`);
 
+        // FIX5-PREVIEW-2 — derive the calculated full-name fields from the first/last just
+        // populated. The bridge maps first/last but NOT full-name, and FIX 2 made full-name a
+        // derived, never-independently-entered field (mirrors loadDataSet1User). Without this,
+        // {{client-full-name}} / {{contact-full-name}} render raw. Done AFTER the populate and
+        // BEFORE the single generatePreview, so the derived values land in this one preview.
+        const deriveFullName = (first?: string | null, last?: string | null) =>
+          [first, last].filter(Boolean).join(' ');
+        const clientFullName = deriveFullName(jobData.client_first_name, jobData.client_last_name);
+        if (clientFullName) updateFieldValue('client-full-name', clientFullName);
+        const contactFullName = deriveFullName(
+          jobData.property_contact_first_name,
+          jobData.property_contact_last_name,
+        );
+        if (contactFullName) updateFieldValue('contact-full-name', contactFullName);
+
         // Regenerate preview AFTER all writes settle — AWAIT it so this single, final preview
         // reflects the populated values and nothing blank can land after it. One owner, one
         // preview, in order (init → populate → preview). (FIX5-PREVIEW race fix.)

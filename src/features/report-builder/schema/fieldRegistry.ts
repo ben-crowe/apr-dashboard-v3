@@ -167,6 +167,11 @@ export const fieldRegistry: FieldDefinition[] = [
     inputSource: "user-input",
     required: false,
   },
+  // NAME-ALIGN (FIX 3): label "Street Address" = the street COMPONENT of the client org address
+  // (grouped with client-city/client-province). Id "client-organization-address" denotes WHICH
+  // address; useLoadJobIntoReport bridges client_address (street) -> this id. Cross-section field
+  // (qa bridge lane) — capture instance here is canonical ("bridge wins"); the cover instance
+  // (section: cover) is reconciled to match. Id retained, both instances kept consistent.
   {
     id: "client-organization-address",
     storeId: "client-organization-address",
@@ -290,6 +295,10 @@ export const fieldRegistry: FieldDefinition[] = [
       "Other",
     ],
   },
+  // NAME-ALIGN (FIX 3): id/label "authorized-use"/"Authorized Use" is an INTENTIONAL divergence
+  // from its V3 source. useLoadJobIntoReport bridges job.intended_use -> authorized-use. Label is
+  // deliberately NOT "Intended Use" — that label belongs to the distinct report field
+  // 'report-intendeduse' (see below); renaming here would collide. Id retained (template/hook bridge).
   {
     id: "authorized-use",
     storeId: "authorized-use",
@@ -396,10 +405,14 @@ export const fieldRegistry: FieldDefinition[] = [
 
   // Property Contact Subsection
   // The on-site contact for property access and inspections (may be tenant, manager, or owner)
+  // NAME-ALIGN (FIX 3): contact-* ids INTENTIONALLY drop the V3 source prefix
+  // (property_contact_first_name/last_name/phone/email). useLoadJobIntoReport bridges
+  // property_contact_* -> contact-*. The "property-contact-intake" subsection already scopes
+  // these as the property contact, so labels stay short. Ids retained.
   {
     id: "contact-first-name",
     storeId: "contact-first-name",
-    label: "First Name/Department",
+    label: "Contact First Name/Department",
     section: "client-intake",
     subsection: "property-contact-intake",
     type: "text",

@@ -8582,6 +8582,28 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       );
     };
 
+    // FIX 5b — smart gap-fill helpers. Read a field's CURRENT live value so the loader can
+    // SKIP fields that already hold a real value (e.g. real V3 data the bridge pulled) and fill
+    // ONLY the blanks. An empty job still receives the full sample (every blank gets filled).
+    const getCurrentValue = (fieldId: string): unknown => {
+      for (const section of get().sections) {
+        const f = section.fields.find((x) => x.id === fieldId);
+        if (f) return f.value;
+        for (const sub of section.subsections ?? []) {
+          const sf = sub.fields.find((x) => x.id === fieldId);
+          if (sf) return sf.value;
+        }
+      }
+      return undefined;
+    };
+    const isFilled = (v: unknown): boolean => {
+      if (v === null || v === undefined) return false;
+      if (typeof v === "string") return v.trim() !== "";
+      if (Array.isArray(v)) return v.length > 0;
+      return true; // numbers / other real values
+    };
+    let skippedFilledCount = 0;
+
     // Batch all updates - don't trigger preview generation for each update
     const updates: Array<{
       fieldId: string;
@@ -8618,12 +8640,20 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
         });
       }
 
-      // Load if field exists AND is NOT calculated (calc engine will compute calculated fields)
+      // Load if field exists AND is NOT calculated (calc engine will compute calculated fields).
+      // FIX 5b gap-fill: SKIP if the field already holds a real value — never clobber real V3 data.
       if (exists && (!fieldDef || !isCalculated)) {
-        updates.push({ fieldId: storeFieldId, value });
-        mappedCount++;
+        if (isFilled(getCurrentValue(storeFieldId))) {
+          skippedFilledCount++; // real value present → preserve it (gap-fill)
+        } else {
+          updates.push({ fieldId: storeFieldId, value });
+          mappedCount++;
+        }
       }
     });
+    console.log(
+      `[loadDataSet1User] gap-fill: filled ${mappedCount} blank field(s), preserved ${skippedFilledCount} existing real value(s)`,
+    );
 
     // Apply all updates at once (without triggering preview generation)
     const currentSections = get().sections;

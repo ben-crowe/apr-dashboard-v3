@@ -1,0 +1,164 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S-Tab Field Audit — APR review</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2318181b'/><text x='16' y='22' font-family='system-ui,sans-serif' font-size='16' font-weight='700' fill='%23e4e4e7' text-anchor='middle'>SA</text></svg>">
+<style>
+  :root{
+    --radius:8px; --shadow:0 1px 2px rgba(0,0,0,.05);
+    --text:#18181b; --text-2:#52525b; --text-3:#a1a1aa; --text-4:#d4d4d8;
+    --bg:#f4f4f5; --card:#fff; --border:#e4e4e7; --border-focus:#a1a1aa; --hover:rgba(0,0,0,.04);
+    --green:#22c55e; --red:#ef4444; --amber:#d97706; --blue:#2563eb;
+    --green-bg:#dcfce7; --red-bg:#fee2e2; --amber-bg:#fef3c7; --blue-bg:#dbeafe; --zinc-bg:#e4e4e7;
+    --green-tx:#166534; --red-tx:#991b1b; --amber-tx:#92400e; --blue-tx:#1e40af; --zinc-tx:#3f3f46;
+  }
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:14px;color:var(--text);background:var(--bg);padding:24px 32px;line-height:1.5;margin:0;}
+  .wrap{max-width:1080px;margin:0 auto;}
+  .hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:6px;}
+  .hdr h1{font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;}
+  .hdr .sub{font-size:12px;color:var(--text-3);margin-top:3px;}
+  .status{font-size:11px;font-weight:600;color:var(--green-tx);background:var(--green-bg);border:1px solid var(--green);padding:4px 10px;border-radius:999px;white-space:nowrap;}
+  .note{font-size:12.5px;color:var(--text-2);background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin:14px 0 4px;box-shadow:var(--shadow);}
+  .note b{color:var(--text);}
+  /* filter bar */
+  .filters{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 6px;align-items:center;}
+  .flabel{font-size:11px;color:var(--text-3);margin-right:2px;text-transform:uppercase;letter-spacing:.04em;}
+  .chip{font:600 11.5px/1 system-ui;padding:6px 12px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--text-2);cursor:pointer;transition:all .12s;}
+  .chip:hover{border-color:var(--border-focus);color:var(--text);}
+  .chip.active{background:var(--text);border-color:var(--text);color:var(--bg);}
+  /* section */
+  section{margin:22px 0;}
+  .sh{display:flex;align-items:baseline;gap:10px;margin:0 0 10px;}
+  .sh h2{font-size:14px;font-weight:700;margin:0;letter-spacing:-.01em;}
+  .sh .cnt{font-size:11px;color:var(--text-3);}
+  .sh .why{font-size:12px;color:var(--text-2);}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+  th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-3);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);font-weight:600;background:#fafafa;}
+  td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;font-size:13px;}
+  tr:last-child td{border-bottom:none;}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:#f4f4f5;padding:1.5px 5px;border-radius:4px;color:#3f3f46;}
+  .arrow{color:var(--text-3);padding:0 3px;}
+  .tag{display:inline-block;font:600 10.5px/1 system-ui;padding:4px 9px;border-radius:999px;white-space:nowrap;}
+  .t-collapse{background:var(--red-bg);color:var(--red-tx);}
+  .t-keep{background:var(--green-bg);color:var(--green-tx);}
+  .t-map{background:var(--amber-bg);color:var(--amber-tx);}
+  .t-name{background:var(--blue-bg);color:var(--blue-tx);}
+  .t-wired{background:var(--green-bg);color:var(--green-tx);}
+  .t-static{background:var(--zinc-bg);color:var(--zinc-tx);}
+  .warn{border-left:3px solid var(--green);}
+  .warn td:first-child{position:relative;}
+  .foot{font-size:11px;color:var(--text-3);margin-top:26px;padding-top:12px;border-top:1px solid var(--border);}
+  .foot a{color:var(--text-2);}
+  .hide{display:none;}
+</style>
+
+<div class="wrap">
+  <div class="hdr">
+    <div>
+      <h1>S-Tab Field Audit — review</h1>
+      <div class="sub">S1 Client Intake · S2 LOE Prep · S3 Client Documents — name matches vs V3 source, real wiring, and the de-dup plan. Companion to the field registry.</div>
+    </div>
+    <span class="status">QA-PASSED · fixes in progress</span>
+  </div>
+
+  <div class="note"><b>Two data paths — don't conflate.</b> A real live V3→V4 pull exists (Supabase → report fields, keyed on a real job). The test-input workbench "Load Data" button does <b>not</b> use it — it loads a static fixture. So a field can be correctly wired yet still be filled from test data on the bench.</div>
+  <div class="note warn" style="border-left:3px solid var(--green);padding-left:14px;"><b>The load-bearing rule.</b> A field with the same id in two <b>different</b> sections is intentional — enter once in S1/S2, surface as a "Managed in S1" reference in the report. <b>Keep both, reconcile — never delete.</b> Only same-section duplicates get collapsed. An earlier draft got this backwards; deleting them would break the value flow.</div>
+
+  <div class="filters">
+    <span class="flabel">Show</span>
+    <button class="chip active" data-f="all">All</button>
+    <button class="chip" data-f="collapse">Collapse duplicate</button>
+    <button class="chip" data-f="keep">Keep &amp; reconcile</button>
+    <button class="chip" data-f="name">Name-align</button>
+    <button class="chip" data-f="map">Map the gap</button>
+    <button class="chip" data-f="wired">Wiring status</button>
+  </div>
+
+  <div id="body"></div>
+
+  <div class="foot">
+    Source audit: docs/Features/07-Report-Builder/S-TAB-FIELD-AUDIT.md · QA-passed off the code, 2026-06-25 · Registry: field-registry-v6.html · Dup-id rule: REGISTRY-DUP-ID-RULE.md<br>
+    Action tags reflect the QA-passed fix spec. The React Specialist is building these fixes; this page is the review view.
+  </div>
+</div>
+
+<script>
+const SECTIONS = [
+  {
+    id:'wired', title:'Wiring status', cnt:'3 tabs',
+    why:'Verified by direct read — which S-tabs actually reach the report.',
+    cols:['S-tab','Registry section','Status','Detail'],
+    rows:[
+      ['S1 Client Intake','client-intake','<span class="tag t-wired">Wired</span>','Real V3 client mappings exist in the live pull hook. Workbench fills from a fixture.'],
+      ['S2 LOE Prep','loe-prep','<span class="tag t-wired">Wired</span>','Real V3 mappings — report type, property rights, scope, value scenarios, approaches, tenancy.'],
+      ['S3 Client Documents','—','<span class="tag t-static">Intentionally static</span>','UI-only placeholder card, no registry fields. Confirmed — not a bug.'],
+    ]
+  },
+  {
+    id:'name', title:'Name mismatches', cnt:'4',
+    why:'Registry id / label ≠ the V3 source name — the reason fields looked "missing" and got duplicated.',
+    cols:['Registry field','V3 source','Issue'],
+    rows:[
+      ['<code>client-company-name</code>','<code>client_organization</code>','Label "Company Name" ≠ source "organization". <span class="tag t-name">Name-align → Company Name</span>'],
+      ['<code>client-organization-address</code>','<code>client_address</code>','Label "organization address" ≠ source "client_address". <span class="tag t-name">Name-align</span>'],
+      ['<code>authorized-use</code>','<code>intended_use</code>','id "authorized-use" ≠ source "intended use". <span class="tag t-name">Name-align</span>'],
+      ['<code>contact-first / last / phone / email</code>','<code>property_contact_*</code>','Renamed from source (contact- vs property_contact_). <span class="tag t-name">Name-align</span>'],
+    ]
+  },
+  {
+    id:'collapse', title:'Duplicates to collapse', cnt:'4',
+    why:'Same concept, multiple registry fields — same-section only. Collapse to one canonical.',
+    cols:['Concept','Duplicate fields','Fix'],
+    rows:[
+      ['Company name','<code>client-company-name</code> · <code>client-company</code> · <code>company-name</code>','<span class="tag t-collapse">Collapse to one</span> — canonical on "organization" per V3'],
+      ['Client full name','<code>client-full-name</code> (computed) beside first/last','<span class="tag t-collapse">Drop dupe</span> — V3 has no full-name source; it\'s derived'],
+      ['Contact full name','<code>contact-full-name</code> (computed) beside contact first/last','<span class="tag t-collapse">Drop dupe</span> — same as above'],
+      ['Changelog drift','Header comment claims <code>client-company</code> was "Deleted" — it still exists','<span class="tag t-collapse">Reconcile</span> comment ↔ reality'],
+    ]
+  },
+  {
+    id:'keep', title:'Cross-section fields — KEEP, do not delete', cnt:'5', warn:true,
+    why:'Same id across different sections = the enter-once / reference-everywhere pattern. Reconcile labels, keep both.',
+    cols:['Field id','Capture instance','Reference instance','Verdict'],
+    rows:[
+      ['<code>client-organization-address</code>','client-intake','cover ("managed in S1")','<span class="tag t-keep">Keep — reconciled</span>'],
+      ['<code>client-city</code>','client-intake','cover','<span class="tag t-keep">Keep</span>'],
+      ['<code>client-province</code>','client-intake','cover','<span class="tag t-keep">Keep</span>'],
+      ['<code>client-title</code>','client-intake','cover','<span class="tag t-keep">Keep</span>'],
+      ['<code>interest-appraised</code>','loe-prep','exec / contract-analysis','<span class="tag t-keep">Keep</span>'],
+    ]
+  },
+  {
+    id:'map', title:'Wiring gaps', cnt:'2',
+    why:'The registry home exists — the mapping or label is what\'s missing.',
+    cols:['Item','Detail','Fix'],
+    rows:[
+      ['Status of Improvements','Exists in the registry AND on the job record, but not mapped in the live pull hook.','<span class="tag t-map">Map the gap</span> — add the mapping'],
+      ['Stale store label','"S3 - IMAGE MGT" still in the store vs the UI\'s "Client Documents".','<span class="tag t-map">Rename</span> in the store'],
+    ]
+  },
+];
+
+const bodyEl = document.getElementById('body');
+function render(filter){
+  bodyEl.innerHTML = '';
+  SECTIONS.forEach(s=>{
+    if(filter!=='all' && filter!==s.id) return;
+    const sec = document.createElement('section');
+    sec.innerHTML =
+      '<div class="sh"><h2>'+s.title+'</h2><span class="cnt">'+s.cnt+'</span><span class="why">'+s.why+'</span></div>'+
+      '<table><thead><tr>'+s.cols.map(c=>'<th>'+c+'</th>').join('')+'</tr></thead><tbody>'+
+      s.rows.map(r=>'<tr'+(s.warn?' class="warn"':'')+'>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+
+      '</tbody></table>';
+    bodyEl.appendChild(sec);
+  });
+}
+document.querySelectorAll('.chip').forEach(c=>{
+  c.onclick=()=>{
+    document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+    c.classList.add('active');
+    render(c.dataset.f);
+  };
+});
+render('all');
+</script>

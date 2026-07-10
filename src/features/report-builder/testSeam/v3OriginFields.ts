@@ -75,9 +75,21 @@ const V3_ORIGIN_S2 = [
   'appraiser-comments',
 ] as const;
 
+// TWIN-DISCONNECT FIX (2026-07): the bridge was repointed to the ids the report template
+// actually reads. These must be V3-origin so Fill-V3 fills them AND the transition diff COMPARES
+// them (not expected-differ'd) — otherwise the diff would go green on an unchecked field, the same
+// blind spot that caused this defect. They also get stripped from TestDataSet1 (Fill-V4 no longer
+// fills them). NOT in client-intake/loe-prep sections — this is an explicit id list, so that's fine.
+const V3_ORIGIN_TEMPLATE_REPOINTED = [
+  'subject-name', // <- was property-name; template reads {{subject-name}}
+  'subject-street', // <- was property-address; template reads {{subject-street}}
+  'client-city-state-zip', // <- composed; template reads the combined "City, PROV Postal"
+] as const;
+
 export const V3_ORIGIN_FIELD_IDS: readonly string[] = [
   ...V3_ORIGIN_S1,
   ...V3_ORIGIN_S2,
+  ...V3_ORIGIN_TEMPLATE_REPOINTED,
 ];
 
 const V3_ORIGIN_SET = new Set<string>(V3_ORIGIN_FIELD_IDS);

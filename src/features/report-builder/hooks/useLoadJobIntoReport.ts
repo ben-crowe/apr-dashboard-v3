@@ -21,6 +21,9 @@ export interface JobData {
   client_phone: string;
   client_organization?: string;
   client_address?: string;
+  client_city?: string;
+  client_province?: string;
+  client_postal_code?: string;
   property_name?: string;
   property_address: string;
   property_type?: string;
@@ -159,14 +162,35 @@ export const fieldMappings: JobDataMapping[] = [
     fieldId: 'client-postal',
     getValue: (job) => parseAddress(job.client_address).postal,
   },
-
-  // Property Information (canonical IDs from client-intake section)
   {
+    // TWIN-DISCONNECT FIX: the report template's "Prepared For" block reads the COMBINED
+    // {{client-city-state-zip}} ("City, PROV Postal") — the split client-city/province/postal ids
+    // carry NO template tokens. Compose from the POPULATED DB columns (job_submissions.client_city
+    // / client_province / client_postal_code — written by the intake form + the seed), NOT
+    // parseAddress(client_address) — client_address holds only the street, so parsing it yields empty.
+    fieldId: 'client-city-state-zip',
+    getValue: (job) => {
+      const cityProv = [job.client_city, job.client_province].filter(Boolean).join(', ');
+      return [cityProv, job.client_postal_code].filter(Boolean).join(' ') || undefined;
+    },
+  },
+
+  // Property Information — TWIN-DISCONNECT FIX: the template reads the canonical subject-* ids
+  // ({{subject-name}}, {{subject-street}}), NOT property-name/property-address. Repointed here so
+  // Create Report fills the ids the report actually renders (Ben: map into the template-wired ids).
+  {
+    fieldId: 'subject-name',
+    getValue: (job, _loe, property) => property?.property_name || job.property_name,
+  },
+  {
+    // Twin (co-arch ruling = fill both): the template ALSO reads {{property-name}} (3 tokens) for
+    // the same subject concept. Fill BOTH existing template-wired ids from the same source so all
+    // tokens render — no 31K-line template edit. property-name is V3-origin, so it stays compared.
     fieldId: 'property-name',
     getValue: (job, _loe, property) => property?.property_name || job.property_name,
   },
   {
-    fieldId: 'property-address',
+    fieldId: 'subject-street',
     getValue: (job) => parseAddress(job.property_address).street,
   },
   {

@@ -148,7 +148,6 @@ export const testDataSet1: Record<string, string | number | string[]> = {
   "cap-rate-range": "0%",
   ceilings: "Textured drywall;",
   city: "North Battleford",
-  "client-city-state-zip": "Calgary, AB T3E 6L1",
   "client-name": "Kenneth Engler",
   "property-type": "Multifamily",
   // Slice-4b assignment-details (10 bucket-C fields) — values mirror a valid V3 fill
@@ -1853,7 +1852,6 @@ export const testDataSet1: Record<string, string | number | string[]> = {
   "subject-market": "North Battleford",
   "subject-marketing":
     "The property would be marketed through commercial real estate brokerages specializing in multifamily investments, with exposure to regional and national investors.",
-  "subject-name": "North Battleford Apartments",
   "subject-nra": 10204,
   "subject-occupancy-current": "100.0%",
   "subject-occupancystabilized": 0.9616451233842538,
@@ -2006,7 +2004,6 @@ export const testDataSet1: Record<string, string | number | string[]> = {
   "subject-st": "SK",
   "subject-state": "Saskatchewan",
   "subject-stories": 2,
-  "subject-street": "1101, 1121 109 St",
   "subject-streetname": "1121 109 St",
   "subject-streetnumber": "1101,",
   "subject-submarket": "North Battleford",

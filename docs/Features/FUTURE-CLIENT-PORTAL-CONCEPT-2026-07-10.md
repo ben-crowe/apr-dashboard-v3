@@ -21,4 +21,13 @@ tags: [apr, client-portal, future-feature, submission-form, valta-website]
 - `client_profiles` already exists in the database (CRM rows) — the account concept has a data home to grow from.
 - The no-login rule on the APR dashboard app is UNCHANGED by this — the portal is a separate client-facing surface with its own auth, not a login on our internal dashboard.
 
+**CONFIRMED DRIFT — live website form vs our V3 testing form (Ben pasted the live page, 2026-07-10; feeds qa's check):**
+- Website collects **"Client Organization Address" as ONE combined field**; our form splits address / city / province / postal.
+- Website property section shows **Property Name (required) + Property Address only** — no property city/province/postal split visible.
+- Website appears to **LACK Property Subtype and Tenancy** — both present in our V3 form (and both matter downstream: they feed the loeCascade).
+- **Dropdown option drift:** website "Intended Use" shows options like "Financing/Refinancing" vs our V3 list ("First Mortgage Financing", ...). Label drift: "Asset Current Condition" vs "Asset Condition".
+- Website upload cap: **10MB/file** (uploads to Supabase — distinct from the SharePoint single-PUT limit; both fine, just different).
+- Website adds a THIRD path our form doesn't have: "Quick Submit — No Account Required" (auto-creates the account + emails access) — portal-concept adjacent.
+- Website carries the required-documents list (Property Details/Prior Appraisal, Proforma, Unit Mix or Rent Roll, Operating Expenses, Drawings/Plans, tour contact) — matches our S3 client-supplied categories.
+
 **Standing suspicion to verify FIRST (pre-portal):** the live Valta-site form may have DRIFTED from our testing submission form (field set / options). The written standalone check exists (fill valta.ca/request-appraisal/intake in test mode → confirm every field lands in the dashboard) — queued for qa after the current build chunk. Any improvements flow one way: our testing form is the canonical source, website form updates become versioned releases of it (Ben's rule, 2026-07-10).

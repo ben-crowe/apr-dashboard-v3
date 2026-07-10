@@ -13,6 +13,11 @@
   .wrap{max-width:1000px;margin:0 auto;}
   h1{font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px;}
   .sub{font-size:12.5px;color:var(--text-3);margin-bottom:14px;}
+  .stats{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 4px;}
+  .stat{flex:1;min-width:120px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;box-shadow:var(--shadow);}
+  .stat .n{font-size:22px;font-weight:700;letter-spacing:-.03em;line-height:1;}
+  .stat .l{font-size:11px;color:var(--text-3);margin-top:4px;}
+  .stat.hl{background:#18181b;}.stat.hl .n{color:#fafafa;}.stat.hl .l{color:#a1a1aa;}
   .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--text-2);margin:10px 0 6px;}
   .legend span{display:inline-flex;align-items:center;gap:6px;}
   .dot{width:10px;height:10px;border-radius:3px;display:inline-block;}
@@ -41,6 +46,7 @@
 <div class="wrap">
   <h1>V3 Submission Form → S1 / S2 / S3</h1>
   <div class="sub">Left = the field on your V3 submission form. Right = where it lands on V4. Every V3 field is now accounted for: it maps to S1/S2, lives in another V4 tab, is a job-management field (not for the report), or is a genuine report gap.</div>
+  <div class="stats" id="stats"></div>
   <div class="legend">
     <span><i class="dot d-green"></i> Maps to S1/S2 — same name</span>
     <span><i class="dot d-blue"></i> Maps — label differs</span>
@@ -139,6 +145,18 @@ const EXTRAS=[
   ['valuation-type / appraisal-status / desktop-report','Report config flags','z'],
  ]],
 ];
+// --- count summary ---
+const S1_COUNT=36, S2_COUNT=58;
+let c={g:0,b:0,o:0,m:0,q:0,total:0};
+DATA.forEach(([,rows])=>rows.forEach(r=>{c[r[2]]++;c.total++;}));
+const maps=c.g+c.b;
+document.getElementById('stats').innerHTML=
+ '<div class="stat hl"><div class="n">'+(S1_COUNT+S2_COUNT)+'</div><div class="l">Fields on the V4 app now (S1 '+S1_COUNT+' + S2 '+S2_COUNT+')</div></div>'+
+ '<div class="stat"><div class="n">'+c.total+'</div><div class="l">V3 form fields total</div></div>'+
+ '<div class="stat"><div class="n">'+maps+'</div><div class="l">Map into S1 / S2</div></div>'+
+ '<div class="stat"><div class="n">'+c.o+'</div><div class="l">In another V4 tab</div></div>'+
+ '<div class="stat"><div class="n">'+c.m+'</div><div class="l">V3 Mgt — not for report</div></div>'+
+ '<div class="stat"><div class="n">'+c.q+'</div><div class="l">Report gaps</div></div>';
 const cls={g:'green',b:'blue',o:'teal',m:'zinc',q:'amber'};
 const tag={g:'<span class="tag t-green">Maps</span>',b:'<span class="tag t-blue">Label differs</span>',o:'<span class="tag t-teal">Other tab</span>',m:'<span class="tag t-zinc">V3 Mgt</span>',q:'<span class="tag t-amber">Report gap</span>'};
 const body=document.getElementById('body');

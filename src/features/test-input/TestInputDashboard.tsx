@@ -13,6 +13,7 @@ import { testDataSet1 } from "@/features/report-builder/data/TestDataSet1";
 import { composeReportFields } from "@/features/report-builder/testSeam/composeReportFields";
 import { V3_ORIGIN_FIELD_IDS, isV3OriginField } from "@/features/report-builder/testSeam/v3OriginFields";
 import { ClientDocumentsSection } from "@/features/client-documents/ClientDocumentsSection";
+import { useLoadJobIntoReport } from "@/features/report-builder/hooks/useLoadJobIntoReport";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -54,6 +55,13 @@ const TestInputDashboard: React.FC = () => {
     generatePreview,
     currentJobId,
   } = useReportBuilderStore();
+
+  // When Create Report lands here with a job (currentJobId set), pull that saved job's data into
+  // the S1/S2 tabs — the same inbound bridge the report render uses. Fires ONLY when currentJobId
+  // CHANGES (effect dep), so a pure Fill-V3/Fill-V4 button press does not re-fire it; with no job
+  // (standalone fill) currentJobId is null and the hook early-returns (no-op). The S3 tab reuses
+  // this same currentJobId.
+  useLoadJobIntoReport(currentJobId ?? undefined);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(),
   );

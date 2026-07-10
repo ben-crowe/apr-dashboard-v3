@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useJobDetail } from "@/hooks/useJobDetail";
 import { isV4Enabled } from "@/lib/featureFlags";
 import { formatJobNumber } from "@/utils/formatters";
+import { useReportBuilderStore } from "@/features/report-builder/store/reportBuilderStore";
 
 interface JobDetailViewProps {
   jobId: string;
@@ -17,6 +18,7 @@ interface JobDetailViewProps {
 
 const JobDetailView: React.FC<JobDetailViewProps> = ({ jobId, onBack }) => {
   const navigate = useNavigate();
+  const setCurrentJobId = useReportBuilderStore((s) => s.setCurrentJobId);
   const {
     job,
     jobDetails,
@@ -45,7 +47,14 @@ const JobDetailView: React.FC<JobDetailViewProps> = ({ jobId, onBack }) => {
   const handleCreateReport = async () => {
     if (!job || !jobId) return;
     await handleUpdateJob(job);
-    navigate(`/dashboard/job/${jobId}/report`);
+    // Ben's flow (2026-07): Create Report lands on the TEST-INPUT tab view with THIS job's data
+    // visible in S1/S2/S3, so the mapping is SEEN; the report render is a separate step from there
+    // via "View Report" (-> /apr-v4, renders from the populated store). setCurrentJobId is the
+    // reused mechanism — TestInputDashboard's useLoadJobIntoReport(currentJobId) pulls the saved
+    // row into the tabs (same currentJobId the S3 tab uses). The /dashboard/job/:jobId/report route
+    // still exists (MockReportBuilder bridge) and is unchanged.
+    setCurrentJobId(jobId);
+    navigate('/test-input');
   };
 
   if (isLoading) {

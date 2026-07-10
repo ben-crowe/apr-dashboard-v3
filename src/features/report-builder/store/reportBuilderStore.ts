@@ -8533,10 +8533,18 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     console.log("=== DIRECT TO TEMPLATE COMPLETE - Navigate to preview ===");
   },
 
-  loadDataSet1User: async () => {
+  loadDataSet1User: async (options) => {
     console.log(
       "=== LOAD DATASET1 USER: Loading user inputs, running calc ===",
     );
+
+    // INV-2 runtime guard (chunk 2). When Fill-V4 passes the V3-origin id-set, exclude those
+    // store-ids so Fill-V4 provably writes ZERO values into V3-origin fields — independent of
+    // the TestDataSet1 strip (INV-1). No-arg (every existing caller) = null = behavior unchanged.
+    const excludeSet =
+      options?.excludeFieldIds && options.excludeFieldIds.length > 0
+        ? new Set(options.excludeFieldIds)
+        : null;
 
     // Ensure sections are initialized
     let sections = get().sections;
@@ -8625,6 +8633,12 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     let sampleFieldChecks: any[] = [];
     Object.entries(testDataSet1).forEach(([fieldId, value]) => {
       const storeFieldId = testDataFieldMapping[fieldId] || fieldId;
+
+      // INV-2: never write a V3-origin field when Fill-V4 supplied the exclude set.
+      if (excludeSet && excludeSet.has(storeFieldId)) {
+        return;
+      }
+
       const fieldDef = getFieldDef(storeFieldId);
       const exists = fieldExists(storeFieldId);
       const isCalculated = fieldDef?.inputSource === "calculated";

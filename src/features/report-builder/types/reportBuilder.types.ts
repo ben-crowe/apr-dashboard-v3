@@ -77,7 +77,7 @@ export interface ReportBuilderState {
   loadIncomeTestData: () => Promise<void>;
   runCalculations: () => void;
   loadDataSet1All: () => Promise<void>; // Test 2 - loads ALL fields to TDD
-  loadDataSet1User: () => Promise<void>; // Test 3 - loads user inputs, runs calc engine
+  loadDataSet1User: (options?: { excludeFieldIds?: string[] }) => Promise<void>; // Test 3 - loads user inputs, runs calc engine. Optional excludeFieldIds: skip these store-ids (Fill-V4 uses the V3-origin id-set so it never writes a V3-origin field). No-arg = unchanged.
   loadDataSet1DirectToTemplate: () => Promise<void>; // Direct field validation - bypasses calc engine
   setTestMode: (mode: TestMode) => void; // Switch between test modes
   setTestDataLoaded: (sectionId: string, loaded: boolean) => void; // Mark section test data as loaded/unloaded

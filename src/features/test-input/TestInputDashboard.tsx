@@ -10,6 +10,8 @@ import {
 } from "@/features/report-builder/schema/fieldRegistry";
 import { useReportBuilderStore, testDataFieldMapping } from "@/features/report-builder/store/reportBuilderStore";
 import { testDataSet1 } from "@/features/report-builder/data/TestDataSet1";
+import { composeReportFields } from "@/features/report-builder/testSeam/composeReportFields";
+import { V3_ORIGIN_FIELD_IDS, isV3OriginField } from "@/features/report-builder/testSeam/v3OriginFields";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -48,6 +50,7 @@ const TestInputDashboard: React.FC = () => {
     initializeMockData,
     activeTestMode,
     setTestMode,
+    generatePreview,
   } = useReportBuilderStore();
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(),
@@ -1179,8 +1182,10 @@ const TestInputDashboard: React.FC = () => {
                     console.log("🔵 Setting test mode and selectedDataset...");
                     setTestMode("user-input");
                     setSelectedDataset("user-fields");
-                    console.log("🔵 Calling loadDataSet1User()...");
-                    await loadDataSet1User();
+                    console.log("🔵 Calling loadDataSet1User() [Fill V4 — excludes V3-origin]...");
+                    // Fill V4: everything EXCEPT the V3-origin fields. The exclude set is the
+                    // INV-2 runtime guard, so Fill-V4 provably writes zero V3-origin values.
+                    await loadDataSet1User({ excludeFieldIds: [...V3_ORIGIN_FIELD_IDS] });
                     console.log("🔵 loadDataSet1User() completed");
                     const afterLoadSections = useReportBuilderStore.getState().sections;
                     console.log("Load Data: Complete - user data loaded with calc");
@@ -1229,13 +1234,58 @@ const TestInputDashboard: React.FC = () => {
                     e.currentTarget.style.backgroundColor = "#2a2a2a";
                   }
                 }}
-                title="Load user-input fields only, run calc engine"
+                title="Fill V4 test data — every fillable field EXCEPT the V3-origin fields (client-intake + loe-prep)"
               >
                 <Database className="w-3 h-3" />
-                Load Data
+                Fill V4 Test Data
                 {activeTestMode === "user-input" && (
                   <span className="ml-1">&#10003;</span>
                 )}
+              </Button>
+              <Button
+                onClick={async () => {
+                  console.log("🟢 Fill V3 Test Data CLICKED");
+                  try {
+                    // Fill V3: ONLY the V3-origin fields, from the chunk-1 fixed-dataset seam.
+                    // composeReportFields emits the FULL production-bridge output (some ids resolve
+                    // outside client-intake/loe-prep); filter to the V3-origin id-set so KR1's
+                    // "only S1/S2" holds. The unfiltered seam stays the chunk-3 diff baseline.
+                    const fields = composeReportFields().filter((f) =>
+                      isV3OriginField(f.fieldId),
+                    );
+                    console.log(`🟢 Fill V3: writing ${fields.length} V3-origin field(s)`);
+                    for (const { fieldId, value } of fields) {
+                      updateFieldValue(fieldId, value);
+                    }
+                    await generatePreview();
+                    console.log("🟢 Fill V3 Test Data completed");
+                  } catch (error) {
+                    console.error("Error in Fill V3 Test Data:", error);
+                    alert("Error: " + String(error));
+                  }
+                }}
+                variant="outline"
+                size="sm"
+                disabled={activeTestMode === "designer"}
+                className="gap-2 text-white border transition-colors"
+                style={{
+                  backgroundColor: "#2a2a2a",
+                  borderColor: "#4b5563",
+                }}
+                onMouseEnter={(e) => {
+                  if (activeTestMode !== "designer") {
+                    e.currentTarget.style.backgroundColor = "#333333";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activeTestMode !== "designer") {
+                    e.currentTarget.style.backgroundColor = "#2a2a2a";
+                  }
+                }}
+                title="Fill ONLY the V3-origin fields (client-intake + loe-prep) from the fixed-dataset seam"
+              >
+                <Database className="w-3 h-3" />
+                Fill V3 Test Data
               </Button>
               <Button
                 onClick={() => navigate("/apr-v4")}

@@ -22,6 +22,7 @@
  */
 
 import { seedTransitionJob, cleanupTransitionSeed } from './seedTransitionJob';
+import { deriveExpectedDifferFieldIds } from './composeReportFields';
 import {
   snapshotReportStore,
   clearReportStore,
@@ -32,7 +33,7 @@ import {
   assertRouteParity,
   formatDiffTable,
 } from './transitionDiff';
-import type { StoreSnapshot } from './transitionDiff';
+import type { StoreSnapshot, DiffResult } from './transitionDiff';
 
 interface TransitionDiffGlobal {
   /** stashed between steps by the driver */
@@ -43,7 +44,8 @@ interface TransitionDiffGlobal {
   assertEmpty: typeof assertStoreEmpty;
   seed: typeof seedTransitionJob;
   cleanup: typeof cleanupTransitionSeed;
-  diff: typeof diffSnapshots;
+  /** diff with the expected-differ set pre-injected (derived from fieldMappings). */
+  diff: (baseline: StoreSnapshot, pushed: StoreSnapshot) => DiffResult;
   assert: typeof assertRouteParity;
   format: typeof formatDiffTable;
 }
@@ -65,7 +67,10 @@ export function installTransitionDiffRunner(): void {
     assertEmpty: assertStoreEmpty,
     seed: seedTransitionJob,
     cleanup: cleanupTransitionSeed,
-    diff: diffSnapshots,
+    // expected-differ set derived from fieldMappings and injected here, so the driver's
+    // diff(baseline, pushed) call stays 2-arg and the console recipe is unchanged.
+    diff: (baseline, pushed) =>
+      diffSnapshots(baseline, pushed, deriveExpectedDifferFieldIds()),
     assert: assertRouteParity,
     format: formatDiffTable,
   };

@@ -19,6 +19,7 @@ import {
   type LoeData,
   type PropertyData,
 } from '../hooks/useLoadJobIntoReport';
+import { isV3OriginField } from './v3OriginFields';
 
 /**
  * LOE companion row (job_loe_details shape). Standalone / hand-authored — LOE fields have
@@ -35,7 +36,14 @@ export const FIXED_LOE_ROW: LoeData = {
   valcre_job_id: '9990001',
   job_number: 'VJ-FIXED-0001',
   report_type: 'Comprehensive',
-  property_rights_appraised: 'Fee Simple Estate',
+  // CASCADE-DERIVED: on Create Report the property-rights cascade (loeCascade.derivePropertyRights)
+  // recomputes interest-appraised from the seeded property (Office / Mid-Rise / Multi-Tenant) and
+  // OVERWRITES any seeded value. For the seeded property that cascade outputs 'Leased Fee Interest'
+  // (PT Office → Leased Fee Interest; Mid-Rise no override; Multi-Tenant → Leased Fee Interest). Set
+  // to that output so baseline == pushed and interest-appraised stays a COMPARED field. Must match
+  // loeCascade for this Type+Subtype+Tenancy. (Side note, banked: 'Leased Fee Interest' is not in the
+  // interest-appraised dropdown option set — a pre-existing cascade/option mismatch, out of scope.)
+  property_rights_appraised: 'Leased Fee Interest',
   scope_of_work: 'Complete appraisal with interior and exterior inspection.',
   delivery_date: '2026-01-15',
   status_of_improvements: 'Improved - Completed',
@@ -62,6 +70,23 @@ export const FIXED_PROPERTY_ROW: PropertyData = {
 export interface ComposedReportField {
   fieldId: string;
   value: string;
+}
+
+/**
+ * The seam-emitted field-ids that are NOT V3-origin — exactly the ids Fill-V3's isV3OriginField
+ * filter DROPS while the Create-Report bridge fills them (report-date, status-of-improvements,
+ * value-scenarios, approaches-to-value, value-timeframe, legal-description at time of writing).
+ * DERIVED from fieldMappings (not hardcoded) so it stays correct if the mappings change. The
+ * transition diff treats these as expected-differ: baseline empty is fine, baseline non-empty is
+ * an INV-2 Fill-V3 leak.
+ */
+export function deriveExpectedDifferFieldIds(): string[] {
+  const emitted = [
+    ...fieldMappings.map((m) => m.fieldId),
+    'client-full-name',
+    'contact-full-name',
+  ];
+  return Array.from(new Set(emitted)).filter((id) => !isV3OriginField(id));
 }
 
 /**

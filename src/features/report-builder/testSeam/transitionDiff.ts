@@ -49,36 +49,49 @@ const WATCH_SET = new Set<string>(BRIDGE_WATCH_FIELD_IDS);
 
 export type DiffStatus =
   | 'match' // baseline === pushed, and (if watch) not both-empty-trivial
-  | 'mismatch' // baseline !== pushed on a non-watch field — a real bridge bug. FAILS the run.
+  | 'mismatch' // baseline !== pushed on a plain field — a real bridge bug. FAILS the run.
   | 'known-gap' // watch field, both empty — expected (bridge does not carry it)
-  | 'watch-populated'; // watch field carries a value — flag for the wire/don't-wire ruling
+  | 'watch-populated' // watch field carries a value — flag for the wire/don't-wire ruling
+  | 'expected-differ' // seam-emitted non-V3-origin field, baseline empty — Fill-V3 legitimately
+  //                     drops it while the bridge fills it. Expected; never fails.
+  | 'expected-differ-leak'; // SAME field but baseline NON-empty — Fill-V3 leaked a value it should
+//                              have dropped (an INV-2 leak). FAILS the run — the class must not blind it.
 
 export interface DiffRow {
   fieldId: string;
   baseline: string;
   pushed: string;
   match: boolean;
-  expectedEmptyFromBridge: boolean;
+  expectedEmptyFromBridge: boolean; // watch-set member
+  expectedDiffer: boolean; // seam-emitted-but-not-V3-origin member
   status: DiffStatus;
 }
 
 export interface DiffResult {
   rows: DiffRow[];
-  mismatches: DiffRow[]; // non-watch mismatches — the failures
+  mismatches: DiffRow[]; // plain-field mismatches — failures
+  differLeaks: DiffRow[]; // expected-differ fields Fill-V3 leaked a value into — failures
   watchPopulated: DiffRow[]; // watch fields that carried a value — ruling items, not failures
-  ok: boolean; // true iff there are zero non-watch mismatches
+  ok: boolean; // true iff zero mismatches AND zero differ-leaks
 }
 
 const isEmpty = (v: string | undefined): boolean => v === undefined || v === '';
 
 /**
- * Compare two snapshots over the union of their field-ids. Non-watch mismatches are failures;
- * watch fields are classified known-gap (both empty) or watch-populated (has a value).
+ * Compare two snapshots over the union of their field-ids.
+ *
+ * @param expectedDifferIds seam-emitted ids that are NOT V3-origin — the ones Fill-V3 drops and
+ *   the bridge fills. DERIVE these programmatically (see deriveExpectedDifferFieldIds in
+ *   composeReportFields) — do NOT hardcode. Baseline-empty on such a field = expected-differ (ok);
+ *   baseline-NON-empty = expected-differ-leak (a Fill-V3 leak — FAILS, so the class never blinds
+ *   an INV-2 leak). Watch and plain fields are unaffected.
  */
 export function diffSnapshots(
   baseline: StoreSnapshot,
   pushed: StoreSnapshot,
+  expectedDifferIds: readonly string[] = [],
 ): DiffResult {
+  const differSet = new Set<string>(expectedDifferIds);
   const fieldIds = Array.from(
     new Set([...Object.keys(baseline), ...Object.keys(pushed)]),
   ).sort();
@@ -88,10 +101,13 @@ export function diffSnapshots(
     const p = pushed[fieldId] ?? '';
     const match = b === p;
     const watch = WATCH_SET.has(fieldId);
+    const differ = differSet.has(fieldId);
 
     let status: DiffStatus;
     if (watch) {
       status = isEmpty(b) && isEmpty(p) ? 'known-gap' : 'watch-populated';
+    } else if (differ) {
+      status = isEmpty(b) ? 'expected-differ' : 'expected-differ-leak';
     } else {
       status = match ? 'match' : 'mismatch';
     }
@@ -102,27 +118,36 @@ export function diffSnapshots(
       pushed: p,
       match,
       expectedEmptyFromBridge: watch,
+      expectedDiffer: differ,
       status,
     };
   });
 
   const mismatches = rows.filter((r) => r.status === 'mismatch');
+  const differLeaks = rows.filter((r) => r.status === 'expected-differ-leak');
   const watchPopulated = rows.filter((r) => r.status === 'watch-populated');
-  return { rows, mismatches, watchPopulated, ok: mismatches.length === 0 };
+  return {
+    rows,
+    mismatches,
+    differLeaks,
+    watchPopulated,
+    ok: mismatches.length === 0 && differLeaks.length === 0,
+  };
 }
 
 /**
- * FAIL LOUD. Throws if any non-watch field mismatched — a mapping bug the run exists to catch.
- * Watch-populated rows do NOT throw (they route to the wire/don't-wire ruling) but are named.
+ * FAIL LOUD. Throws on any plain-field mismatch (a mapping bug) OR any expected-differ-leak (a
+ * Fill-V3 leak). Watch-populated rows do NOT throw (they route to the wire/don't-wire ruling).
  */
 export function assertRouteParity(result: DiffResult): void {
   if (!result.ok) {
-    const detail = result.mismatches
-      .map((m) => `  ${m.fieldId}: baseline="${m.baseline}" pushed="${m.pushed}"`)
+    const fails = [...result.mismatches, ...result.differLeaks];
+    const detail = fails
+      .map((m) => `  ${m.fieldId} [${m.status}]: baseline="${m.baseline}" pushed="${m.pushed}"`)
       .join('\n');
     throw new Error(
-      `TRANSITION DIFF FAILED — ${result.mismatches.length} field(s) diverge between the ` +
-        `Fill-V3 baseline and the Create-Report push (a bridge mapping bug):\n${detail}`,
+      `TRANSITION DIFF FAILED — ${fails.length} field(s) diverge unexpectedly between the ` +
+        `Fill-V3 baseline and the Create-Report push:\n${detail}`,
     );
   }
 }
@@ -137,7 +162,9 @@ export function formatDiffTable(result: DiffResult): string {
     .join('\n');
   const summary =
     `\n\nSUMMARY: ${result.ok ? 'PASS (route-parity)' : 'FAIL'} — ` +
-    `${result.mismatches.length} mismatch(es), ${result.watchPopulated.length} watch-populated, ` +
+    `${result.mismatches.length} mismatch(es), ${result.differLeaks.length} differ-leak(s), ` +
+    `${result.watchPopulated.length} watch-populated, ` +
+    `${result.rows.filter((r) => r.status === 'expected-differ').length} expected-differ, ` +
     `${result.rows.filter((r) => r.status === 'known-gap').length} known-gap(s).`;
   return `${head}\n${body}${summary}`;
 }

@@ -91,9 +91,15 @@ export async function seedTransitionJob(): Promise<string> {
 
   // 3. job_loe_details — every bridge-read LOE column from FIXED_LOE_ROW (upsert, as the real
   //    LoeQuote path does). Cleanup already removed any prior row, so this lands one fresh row.
+  // job_loe_details.valcre_job_id is an INTEGER column — write it as a number. FIXED_LOE_ROW
+  // holds it as a numeric string; the report bridge reads the DB integer back, and the snapshot's
+  // normalize() stringifies both sides to the same value, so route-parity holds.
+  const valcreJobId = FIXED_LOE_ROW.valcre_job_id
+    ? Number.parseInt(FIXED_LOE_ROW.valcre_job_id, 10)
+    : null;
   const loeRow: TablesInsert<'job_loe_details'> = {
     job_id: jobId,
-    valcre_job_id: FIXED_LOE_ROW.valcre_job_id ?? null,
+    valcre_job_id: Number.isFinite(valcreJobId) ? valcreJobId : null,
     job_number: FIXED_LOE_ROW.job_number ?? null,
     report_type: FIXED_LOE_ROW.report_type ?? null,
     property_rights_appraised: FIXED_LOE_ROW.property_rights_appraised ?? null,

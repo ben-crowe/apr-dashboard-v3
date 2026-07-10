@@ -27,7 +27,12 @@ import {
  * deterministically without a DB-generated id.
  */
 export const FIXED_LOE_ROW: LoeData = {
-  valcre_job_id: 'VJ-FIXED-0001',
+  // NUMERIC string: job_loe_details.valcre_job_id is an INTEGER column, so the seed writes this
+  // as a number. Kept as a numeric string here (LoeData types it string; the job-number mapping
+  // returns the raw value and the snapshot's normalize() stringifies it) so the Fill-V3 baseline
+  // and the DB-read pushed snapshot both normalize to the same "9990001". A distinctive test id,
+  // unlikely to collide with a real one.
+  valcre_job_id: '9990001',
   job_number: 'VJ-FIXED-0001',
   report_type: 'Comprehensive',
   property_rights_appraised: 'Fee Simple Estate',

@@ -58,7 +58,7 @@
       <h1>S-Tab Field Audit — review</h1>
       <div class="sub">S1 Client Intake · S2 LOE Prep · S3 Client Documents — name matches vs V3 source, real wiring, and the de-dup plan. Companion to the field registry.</div>
     </div>
-    <span class="status">QA-PASSED · fixes in progress</span>
+    <span class="status">QA-PASSED · fixes built &amp; committed · render verify next</span>
   </div>
 
   <div class="note"><b>Two data paths — don't conflate.</b> A real live V3→V4 pull exists (Supabase → report fields, keyed on a real job). The test-input workbench "Load Data" button does <b>not</b> use it — it loads a static fixture. So a field can be correctly wired yet still be filled from test data on the bench.</div>
@@ -78,7 +78,7 @@
 
   <div class="foot">
     Source audit: docs/Features/07-Report-Builder/S-TAB-FIELD-AUDIT.md · QA-passed off the code, 2026-06-25 · Registry: field-registry-v6.html · Dup-id rule: REGISTRY-DUP-ID-RULE.md<br>
-    Action tags reflect the QA-passed fix spec. The React Specialist is building these fixes; this page is the review view.
+    Action tags reflect the QA-passed fix spec — all fixes now built &amp; committed on branch ops-canvas (verified by react-specialist). Next: end-to-end render verify.
   </div>
 </div>
 

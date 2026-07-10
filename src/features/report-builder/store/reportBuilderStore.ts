@@ -6826,10 +6826,6 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       .filter(Boolean)
       .join(" ");
     updateField("client-full-name", clientFullName);
-    updateField(
-      "client-name",
-      String(testDataSet1["client-name"] || clientFullName),
-    );
     updateField("client-title", String(testDataSet1["client-title"] || ""));
     updateField(
       "client-company-name",

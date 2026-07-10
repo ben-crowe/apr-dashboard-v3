@@ -148,7 +148,6 @@ export const testDataSet1: Record<string, string | number | string[]> = {
   "cap-rate-range": "0%",
   ceilings: "Textured drywall;",
   city: "North Battleford",
-  "client-name": "Kenneth Engler",
   "property-type": "Multifamily",
   // Slice-4b assignment-details (10 bucket-C fields) — values mirror a valid V3 fill
   "status-of-improvements": "Improved - Completed",

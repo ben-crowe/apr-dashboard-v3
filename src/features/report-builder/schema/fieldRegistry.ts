@@ -217,17 +217,6 @@ export const fieldRegistry: FieldDefinition[] = [
     required: false,
     calculationFormula: 'client-first-name + " " + client-last-name',
   },
-  // Template aliases - these map to other fields but template uses these IDs
-  {
-    id: "client-name",
-    storeId: "client-name",
-    label: "Client Name",
-    section: "client-intake",
-    subsection: "client-info-intake",
-    type: "text",
-    inputSource: "user-input",
-    required: false,
-  },
   // === Missing client fields (added for HomeTabPanel sync) ===
   {
     id: "client-attention",

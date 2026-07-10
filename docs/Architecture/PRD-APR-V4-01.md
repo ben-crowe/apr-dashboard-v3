@@ -29,6 +29,8 @@ tags: [apr, v4, v3-v4-transition, test-data, test-input, sharepoint, client-docu
 2. **The V3 test data on the v4 page is the SAME data definition the V3 app fills with — one source, imported, never a copy.** — **Prove:** code shows the v4 button importing from V3's `testDataGenerator` (or a shared module both import); change one value in the source, both the V3 form fill and the v4 S-tab fill show it. **Status: open.**
 3. **The V3→V4 transition is PROVEN: a real V3 job pushed via "Create Report" lands in the v4 builder with its fields matching the Fill-V3-Test-Data baseline, and any mismatch is reported as a field-level diff.** — **Prove:** the E2E run artifact — screenshots of the populated S-tabs + a diff table (pushed-job values vs baseline values per field id) with zero unexplained mismatches. **Status: open.**
 4. **The S3 Client Documents tab shows the job's SharePoint folder buckets — exact SharePoint names — with each bucket's contents listed and drag-and-drop upload into each bucket.** — **Prove:** screenshot of the tab matching the approved layout; drop a file on a bucket in the browser → the file is visible in that folder on SharePoint web. **Status: open.**
+5. **Files the client attached on the V3 intake form show up in S3 as an unsorted "Client Submitted" inbox, and each can be dragged into the proper SharePoint bucket — sorting a file MOVES it into that folder on SharePoint.** — **Prove:** submit the intake form with attachments → they appear in the inbox bucket; drag one to a named bucket → it lands in that folder on SharePoint web and leaves the inbox. **Status: open.**
+6. **(Series Part 2 — declared here, built next PRD) A follow-up email sends the client a link to their own upload page showing the same named folder buckets; client uploads land directly in the matching SharePoint folders.** — **Prove:** (at Part 2) the received email + the client page screenshot + an uploaded file visible in the right SharePoint folder. **Status: deferred to PRD-APR-V4-02 — stays on this list, never dropped.**
 
 ---
 
@@ -54,6 +56,8 @@ Prove the transition by comparing two routes of the SAME dataset (button fill vs
 - **Transition diff run (test procedure, scripted):** fill-V3 baseline → snapshot store values → clear → push a real V3 job seeded with the same dataset via Create Report → snapshot again → field-level diff report.
 - **S3 SharePoint folder tab:** bucket cards named exactly as the SharePoint folders for the job; per-bucket file list (name, modified); drag-and-drop upload into a bucket via the existing Graph app (server-side creds, same pattern as `create-job-folders`); link out to the folder on SharePoint web.
 - **Sync visibility:** if a V3 field exists in the shared dataset with no v4 mapping (or vice versa), the test-input page's mapped/unmapped menu surfaces it — drift is KNOWN, not silent.
+- **Client-submitted inbox (KR5):** the V3 intake form's attachments (today: Supabase storage upload + a `job_files` row per file, surfaced on the v3 dashboard's Uploaded Documents section) ALSO appear in S3 as an unsorted **Client Submitted** inbox bucket. Dragging a file from the inbox onto a named bucket MOVES it into that SharePoint folder (upload via the Graph app + mark the `job_files` row sorted/filed); the v3 dashboard surface keeps working unchanged.
+- **Client upload page + follow-up email (KR6 — Part 2 scope, design-anticipated here):** the bucket component built for S3 must be reusable by a future client-facing page (no dashboard-only assumptions baked in), because Part 2 sends the client a follow-up email linking to their own upload page with the same named buckets, syncing straight into the same SharePoint folders.
 
 ## Visual Spec  (MANDATORY — this renders; round-trip owed to Ben BEFORE lock)
 
@@ -64,14 +68,14 @@ Prove the transition by comparing two routes of the SAME dataset (button fill vs
    - (a) the job's five top-level folder buckets as cards;
    - (b) client-supplied-centric: the "2. CLIENT SUPPLIED" bucket promoted, with the client-required file categories (Property Details / Prior Appraisal, Proforma, Unit Mix or Rent Roll, Operating Expenses, Drawings/Plans) as sub-buckets, other folders collapsed;
    - trade-off to name on each: mirror-SharePoint-exactly vs organize-around-what-the-client-owes.
-3. State set: empty bucket / loading / upload-in-progress / upload-error / many files (overflow), and the no-folders-yet state (job whose folder set was never created — offer the existing create action).
+3. State set: empty bucket / loading / upload-in-progress / upload-error / many files (overflow), the no-folders-yet state (job whose folder set was never created — offer the existing create action), and the **Client Submitted inbox** states (empty = all sorted; populated = files awaiting sorting, visually distinct from the named buckets).
 
 **Open for Ben at the drawn round-trip:** which bucket set S3 leads with (option a vs b above).
 
 ## What This Touches
 
 - **Adds:** the second fill button + its handler; the shared test-data module (or export seam on `testDataGenerator.ts`); a Graph list-folder-contents + upload path (new serverless/edge function beside `create-job-folders`); the S3 bucket UI; the transition-diff script/procedure doc.
-- **Changes:** `src/features/test-input/TestInputDashboard.tsx` (button split + S3 tab body); `src/features/report-builder/data/TestDataSet1.ts` (V3-origin values REMOVED or delegated to the shared source — V4-only values stay); V3 `src/utils/testDataGenerator.ts` (exported/shared, values unchanged).
+- **Changes:** `src/features/test-input/TestInputDashboard.tsx` (button split + S3 tab body); `src/features/report-builder/data/TestDataSet1.ts` (V3-origin values REMOVED or delegated to the shared source — V4-only values stay); V3 `src/utils/testDataGenerator.ts` (exported/shared, values unchanged); `job_files` handling gains a sorted/filed marker for the inbox (the v3 dashboard's Uploaded Documents section and the intake upload path in `useFormSubmission.ts` keep their current behavior — each gets an INV-4-style still-holds check).
 - **Removes:** the S3 UI-only placeholder card; any V3-origin literals duplicated inside `TestDataSet1.ts`.
 
 ## Settled context — evaluate around, don't re-open
@@ -109,6 +113,9 @@ All four Key Results proven with their named artifacts, INVs proved, qa independ
 2. **Fill split** — scope the existing fill to V4-only sections; both buttons live on test-input.
 3. **Transition diff run** — seed a V3 job with the shared dataset, push, diff, report. (Read-only against the app; produces the KR3 artifact.)
 4. **S3 folder tab** — Graph list + upload function, bucket UI per Ben's picked layout. (Independent of chunks 1–3; can run parallel after the Visual Spec locks.)
+5. **Client-Submitted inbox + sort-to-bucket move** — rides on chunk 4's bucket UI; wires `job_files` into the inbox and the drag-move into SharePoint.
+
+**Out of scope for this PRD (Part 2 — PRD-APR-V4-02):** the client follow-up email + the client-facing upload page. Declared in KR6 so it's never dropped; the only Part-1 obligation is building the bucket component reusable (no dashboard-only assumptions).
 
 ## Current state
 

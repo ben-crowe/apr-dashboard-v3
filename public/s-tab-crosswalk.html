@@ -1,0 +1,124 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S1 / S2 Field Crosswalk — V4 test page vs V3</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2318181b'/><text x='16' y='22' font-family='system-ui,sans-serif' font-size='15' font-weight='700' fill='%23e4e4e7' text-anchor='middle'>CX</text></svg>">
+<style>
+  :root{--radius:8px;--shadow:0 1px 2px rgba(0,0,0,.05);
+    --text:#18181b;--text-2:#52525b;--text-3:#a1a1aa;--bg:#f4f4f5;--card:#fff;--border:#e4e4e7;
+    --green:#22c55e;--amber:#d97706;--zinc:#a1a1aa;
+    --green-bg:#dcfce7;--amber-bg:#fef3c7;--zinc-bg:#e4e4e7;
+    --green-tx:#166534;--amber-tx:#92400e;--zinc-tx:#3f3f46;}
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:14px;color:var(--text);background:var(--bg);padding:24px 32px;margin:0;line-height:1.5;}
+  .wrap{max-width:1120px;margin:0 auto;}
+  h1{font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px;}
+  .sub{font-size:12.5px;color:var(--text-3);margin-bottom:16px;}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--text-2);margin:10px 0 18px;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .dot{width:10px;height:10px;border-radius:3px;display:inline-block;}
+  .d-green{background:var(--green);}.d-amber{background:var(--amber);}.d-zinc{background:var(--zinc);}
+  h2{font-size:14px;font-weight:700;margin:26px 0 4px;}
+  .h2sub{font-size:12px;color:var(--text-2);margin-bottom:10px;}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:8px;}
+  th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-3);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);font-weight:600;background:#fafafa;}
+  td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top;font-size:13px;}
+  tr:last-child td{border-bottom:none;}
+  .lab{font-weight:600;}
+  .id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--text-3);display:block;margin-top:1px;}
+  .src{color:var(--text-2);}
+  .rev{font-size:12.5px;}
+  tr.green{background:linear-gradient(90deg,rgba(34,197,94,.05),transparent);}
+  tr.amber{background:linear-gradient(90deg,rgba(217,119,6,.06),transparent);}
+  tr.zinc{background:linear-gradient(90deg,rgba(161,161,170,.07),transparent);}
+  .tag{display:inline-block;font:600 10px/1 system-ui;padding:3px 8px;border-radius:999px;white-space:nowrap;}
+  .t-green{background:var(--green-bg);color:var(--green-tx);}
+  .t-amber{background:var(--amber-bg);color:var(--amber-tx);}
+  .t-zinc{background:var(--zinc-bg);color:var(--zinc-tx);}
+  .foot{font-size:11px;color:var(--text-3);margin-top:24px;padding-top:12px;border-top:1px solid var(--border);}
+</style>
+<div class="wrap">
+  <h1>S1 / S2 Field Crosswalk — V4 test page vs V3</h1>
+  <div class="sub">Left = the field as it is NOW on the V4 test page. Middle = the V3 field that maps into it (source of truth). Right = action. No names changed by this page — it's a verification view.</div>
+  <div class="legend">
+    <span><i class="dot d-green"></i> Maps from V3 &amp; carries through (wired)</span>
+    <span><i class="dot d-amber"></i> Is a V3 field but bridge not wired yet</span>
+    <span><i class="dot d-zinc"></i> Extra on V4 test page — not a V3 field</span>
+  </div>
+
+  <h2>S1 — Client Intake</h2>
+  <div class="h2sub">V3-origin client + property + contact fields, then the extras that only exist on V4.</div>
+  <table><thead><tr><th style="width:31%">Current field on V4 test page</th><th style="width:31%">V3 field it maps to</th><th style="width:20%">Status</th><th style="width:18%">Action</th></tr></thead><tbody id="s1"></tbody></table>
+
+  <h2>S2 — LOE Prep</h2>
+  <div class="h2sub">The V3 LOE quote fields that map in, then the V4-only report-builder fields (intentional — for the 79-page report, not conflicts).</div>
+  <table><thead><tr><th style="width:31%">Current field on V4 test page</th><th style="width:31%">V3 field it maps to</th><th style="width:20%">Status</th><th style="width:18%">Action</th></tr></thead><tbody id="s2"></tbody></table>
+
+  <div class="foot">
+    Sources: fieldRegistry.ts (client-intake + loe-prep sections) · useLoadJobIntoReport.ts (V3→report bridge) · v3OriginFields.ts (authoritative V3-origin id list). Labels reflect live code on branch ops-canvas. Next: V3 dashboard Building-Information-and-below verified against the registry (second table).
+  </div>
+</div>
+<script>
+// [v4 label, v4 id, v3 source field, status, action]
+const S1=[
+ ['Client First Name','client-first-name','Client First Name','g','Matches V3'],
+ ['Client Last Name','client-last-name','Client Last Name','g','Matches V3'],
+ ['Client Email','client-email','Client Email','g','Matches V3'],
+ ['Client Phone','client-phone','Client Phone','g','Matches V3'],
+ ['Company Name','client-company-name','Company Name (client_organization)','g','Matches V3 — dup collapsed'],
+ ['Street Address','client-organization-address','Street Address (client_address)','g','Matches V3'],
+ ['Client City','client-city','from client_address','g','Matches V3'],
+ ['Client Province','client-province','from client_address','g','Matches V3'],
+ ['Postal Code','client-postal','from client_address','g','Matches V3'],
+ ['Client Full Name','client-full-name','computed from First + Last','g','Computed — keep'],
+ ['Property Name','property-name','Property Name','g','Matches V3'],
+ ['Property Address','property-address','Property Address','g','Matches V3'],
+ ['Property Type','property-type','Property Type','g','Matches V3'],
+ ['Authorized Use','authorized-use','Intended Use (intended_use)','g','Dropdown — maps'],
+ ['Tenancy','tenancy','Tenancy','g','Matches V3'],
+ ['Contact First Name/Department','contact-first-name','property_contact_first_name','g','Matches V3'],
+ ['Contact Last Name','contact-last-name','property_contact_last_name','g','Matches V3'],
+ ['Contact Email','contact-email','property_contact_email','g','Matches V3'],
+ ['Contact Phone','contact-phone','property_contact_phone','g','Matches V3'],
+ ['Contact Full Name','contact-full-name','computed from Contact First + Last','g','Computed — keep'],
+ ['Client Title','client-title','Client Title','a','V3 field — bridge not wired'],
+ ['Valuation Premises','valuation-premises','Valuation Premises','a','V3 field — bridge not wired'],
+ ['Asset Condition','asset-condition','Asset Condition','a','V3 field — bridge not wired'],
+ ['Property City','property-city','Property City','a','V3 field — bridge not wired'],
+ ['Property Province','property-province','Property Province','a','V3 field — bridge not wired'],
+ ['Property Postal Code','property-postal','Property Postal','a','V3 field — bridge not wired'],
+ ['Property Subtype','property-subtype','Property Subtype','a','V3 field — bridge not wired'],
+ ['Additional Information','intake-notes','Additional Information','a','V3 field — bridge not wired'],
+ ['Client Name','client-name','—','z','Extra — V4 alias, not on V3'],
+ ['Client Attention Line','client-attention','—','z','Extra — not on V3'],
+ ['Client Salutation','client-salutation','—','z','Extra — not on V3'],
+ ['Company Name (firm)','company-name','—','z','Extra — appraiser firm block, not client intake'],
+ ['Company Address','company-address','—','z','Extra — appraiser firm block'],
+ ['Company City/State/Zip','company-city-state-zip','—','z','Extra — appraiser firm block'],
+ ['Company Phone','company-phone','—','z','Extra — appraiser firm block'],
+ ['Company Email','company-email','—','z','Extra — appraiser firm block'],
+ ['Company Website','company-website','—','z','Extra — appraiser firm block'],
+ ['Client Job Number','company-jobnumber','—','z','Extra — not on V3'],
+];
+const S2=[
+ ['Report Type','report-type','Report Type','g','Matches V3'],
+ ['Property Rights Appraised','interest-appraised','Property Rights Appraised','g','Matches V3'],
+ ['Valcre Job ID (VAL#)','job-number','Valcre Job # (valcre_job_id)','g','Matches V3'],
+ ['Scope of Work','scope-of-work','Scope of Work','g','Matches V3'],
+ ['Status of Improvements','status-of-improvements','Status of Improvements','g','Now mapped (FIX-4)'],
+ ['Delivery Date','delivery-date','Delivery Date','a','V3 field — bridge not wired'],
+ ['Appraisal Fee','appraisal-fee','Appraisal Fee','a','V3 field — bridge not wired'],
+ ['Retainer Amount','retainer-amount','Retainer Amount','a','V3 field — bridge not wired'],
+ ['Payment Terms','payment-terms','Payment Terms','a','V3 field — bridge not wired'],
+ ['Appraiser Comments','appraiser-comments','Appraiser Comments','a','V3 field — bridge not wired'],
+ ['Appraiser block (name, credentials, AIC, license, inspection… ~30 fields)','appraiser-*','—','z','V4-only report fields — intentional, not conflicts'],
+ ['Assignment / transaction / zoning status, CMHC, use, valuation-type, report boilerplate (~22 fields)','assignment-type · transaction-status · zoning-status · report-*','—','z','V4-only report fields — intentional, not conflicts'],
+];
+const cls={g:'green',a:'amber',z:'zinc'};
+const tag={g:'<span class="tag t-green">Wired</span>',a:'<span class="tag t-amber">V3 · not wired</span>',z:'<span class="tag t-zinc">Extra / V4-only</span>'};
+function fill(id,rows){
+  document.getElementById(id).innerHTML=rows.map(r=>
+    '<tr class="'+cls[r[3]]+'"><td><span class="lab">'+r[0]+'</span><span class="id">'+r[1]+'</span></td>'+
+    '<td class="src">'+r[2]+'</td><td>'+tag[r[3]]+'</td><td class="rev">'+r[4]+'</td></tr>').join('');
+}
+fill('s1',S1); fill('s2',S2);
+</script>

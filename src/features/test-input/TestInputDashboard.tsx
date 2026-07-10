@@ -754,7 +754,7 @@ const TestInputDashboard: React.FC = () => {
             type="number"
             value={currentValue || ""}
             onChange={(e) => handleFieldChange(field, Number(e.target.value))}
-            className="w-32 h-8 text-sm"
+            className="w-32 h-8 text-sm text-white"
             placeholder={
               field.type === "currency"
                 ? "$0"
@@ -779,7 +779,7 @@ const TestInputDashboard: React.FC = () => {
               <Input
                 type="date"
                 value={currentValue || ""}
-                className="w-36 h-8 text-sm bg-slate-800 text-slate-400"
+                className="w-36 h-8 text-sm bg-slate-800 text-slate-200"
                 readOnly
                 disabled
               />
@@ -810,7 +810,7 @@ const TestInputDashboard: React.FC = () => {
             type="date"
             value={currentValue || ""}
             onChange={(e) => handleFieldChange(field, e.target.value)}
-            className="w-36 h-8 text-sm"
+            className="w-36 h-8 text-sm text-white"
           />
         );
 
@@ -819,7 +819,7 @@ const TestInputDashboard: React.FC = () => {
           <select
             value={currentValue || ""}
             onChange={(e) => handleFieldChange(field, e.target.value)}
-            className="w-48 h-8 text-sm border rounded px-2"
+            className="w-48 h-8 text-sm border rounded px-2 text-white bg-slate-900"
           >
             <option value="">Select...</option>
             {field.options?.map((opt) => (
@@ -836,7 +836,7 @@ const TestInputDashboard: React.FC = () => {
             type="text"
             value={currentValue || ""}
             onChange={(e) => handleFieldChange(field, e.target.value)}
-            className="w-64 h-8 text-sm"
+            className="w-64 h-8 text-sm text-white"
             placeholder="Text..."
           />
         );
@@ -933,7 +933,7 @@ const TestInputDashboard: React.FC = () => {
               <Input
                 type="text"
                 value={currentValue || ""}
-                className="w-64 h-8 text-sm bg-slate-800 text-slate-400"
+                className="w-64 h-8 text-sm bg-slate-800 text-slate-200"
                 readOnly
                 disabled
               />
@@ -974,7 +974,7 @@ const TestInputDashboard: React.FC = () => {
               <Input
                 type="text"
                 value={currentValue || ""}
-                className="w-64 h-8 text-sm bg-slate-800 text-slate-400"
+                className="w-64 h-8 text-sm bg-slate-800 text-slate-200"
                 readOnly
                 disabled
               />
@@ -1005,7 +1005,7 @@ const TestInputDashboard: React.FC = () => {
             type="text"
             value={currentValue || ""}
             onChange={(e) => handleFieldChange(field, e.target.value)}
-            className="w-64 h-8 text-sm"
+            className="w-64 h-8 text-sm text-white"
             readOnly={field.inputSource === "calculated"}
             disabled={field.inputSource === "calculated"}
           />

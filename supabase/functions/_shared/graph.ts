@@ -285,6 +285,74 @@ export async function listFolderNames(driveId: string, folderPath: string): Prom
   return (j.value ?? []).map((c: { name: string }) => c.name);
 }
 
+// ----- ADDITIVE (chunk 4 — S3 folder tab). listFolderNames + uploadFile above are UNCHANGED. -----
+
+/** One item (file or subfolder) directly under a drive path — richer metadata than the names-only list. */
+export interface FolderItem {
+  name: string;
+  id: string;
+  size: number;
+  webUrl: string;
+  lastModified: string | null; // ISO 8601, or null if Graph omitted it
+  isFolder: boolean;
+}
+
+interface GraphChild {
+  name: string;
+  id: string;
+  size?: number;
+  webUrl?: string;
+  lastModifiedDateTime?: string;
+  folder?: unknown;
+}
+
+/**
+ * List item metadata directly under a drive path (empty array if the path 404s). READ-ONLY —
+ * a GET, never a write. Additive sibling of listFolderNames; does not touch its contract.
+ */
+export async function listFolderItems(driveId: string, folderPath: string): Promise<FolderItem[]> {
+  const res = await graphFetch(
+    `/drives/${driveId}/root:/${encodePath(folderPath)}:/children?$select=name,id,size,webUrl,lastModifiedDateTime,folder&$top=200`,
+  );
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(`listFolderItems failed (${res.status}): ${await res.text()}`);
+  const j = await res.json();
+  return ((j.value ?? []) as GraphChild[]).map((c) => ({
+    name: c.name,
+    id: c.id,
+    size: c.size ?? 0,
+    webUrl: c.webUrl ?? '',
+    lastModified: c.lastModifiedDateTime ?? null,
+    isFolder: Boolean(c.folder),
+  }));
+}
+
+/**
+ * Resolve the ACTUAL per-job parent folder path — READ-ONLY, creates NOTHING. Mirrors
+ * createJobFolders' prefix-match dedupe (connect to the client's existing folder whatever its
+ * description tail) without any ensureFolder writes.
+ *
+ * JOB-UNIQUE (INV-3): keys on the bare job number WITH the " - " delimiter (`${jobNumber} - `),
+ * so a jobId can never resolve to a DIFFERENT job whose number merely shares a numeric prefix
+ * (e.g. VAL261054 vs VAL2610545 — the delimiter blocks it). Returns null when no job folder
+ * exists yet (caller offers create-job-folders) and null (ambiguous, fail-safe — never guess)
+ * if more than one sibling matches the prefix.
+ */
+export async function resolveJobFolderPath(
+  driveId: string,
+  inputs: { jobNumber: string; propertyDescription: string; year: string | number },
+): Promise<string | null> {
+  const year = String(inputs.year);
+  const prefix = `${inputs.jobNumber} - `;
+  const siblings = await listFolderNames(driveId, `2.Jobs/${year}`);
+  const matches = siblings.filter((n) => n.startsWith(prefix));
+  if (matches.length === 1) return `2.Jobs/${year}/${matches[0]}`;
+  if (matches.length > 1) return null; // ambiguous -> fail safe, no cross-job resolution
+  // No prefix sibling: accept the exact composed name only if it already exists (read-only check).
+  const composed = `2.Jobs/${year}/${inputs.jobNumber} - ${inputs.propertyDescription}`;
+  return (await folderExists(driveId, composed)) ? composed : null;
+}
+
 /**
  * Pick the signed-LOE filename to write, gracefully handling the client's job-to-job
  * naming variance. If a signed-LOE file ALREADY exists in the folder (either the long

@@ -12,6 +12,7 @@ import { useReportBuilderStore, testDataFieldMapping } from "@/features/report-b
 import { testDataSet1 } from "@/features/report-builder/data/TestDataSet1";
 import { composeReportFields } from "@/features/report-builder/testSeam/composeReportFields";
 import { V3_ORIGIN_FIELD_IDS, isV3OriginField } from "@/features/report-builder/testSeam/v3OriginFields";
+import { ClientDocumentsSection } from "@/features/client-documents/ClientDocumentsSection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -51,6 +52,7 @@ const TestInputDashboard: React.FC = () => {
     activeTestMode,
     setTestMode,
     generatePreview,
+    currentJobId,
   } = useReportBuilderStore();
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(),
@@ -1363,40 +1365,15 @@ const TestInputDashboard: React.FC = () => {
               return 0;
             })
             .map((sectionId) => {
-              // S3 — Client Documents: UI-only placeholder card (SharePoint reference).
-              // No registry section, no fields — the client's required documents live in
-              // the SharePoint "2. CLIENT SUPPLIED" folder; permanent ingest is the
-              // separate asset-routing workstream, NOT built here.
+              // S3 — Client Documents: the job's SharePoint folder buckets (list + drag-drop
+              // upload) via the server-side job-folder-docs edge function. The dashboard wrapper
+              // resolves the job (currentJobId from a Create-Report entry, or a standalone picker).
               if (sectionId === "client-documents") {
                 return (
-                  <div
+                  <ClientDocumentsSection
                     key="client-documents"
-                    id="section-client-documents"
-                    className="rounded-lg overflow-hidden mb-2 p-4"
-                    style={{
-                      backgroundColor: "#2a2a2a",
-                      border: "1px solid #4b5563",
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <h2 className="text-lg font-semibold text-white">
-                        {sectionNameMapping["client-documents"]}
-                      </h2>
-                      <Badge
-                        variant="outline"
-                        className="text-xs text-gray-300 border-gray-500"
-                      >
-                        Reference
-                      </Badge>
-                    </div>
-                    <p className="mt-2 text-sm text-gray-400">
-                      Files the client is required to submit (Property Details /
-                      Prior Appraisal, Proforma, Unit Mix or Rent Roll, Operating
-                      Expenses, Drawings/Plans, tour contact). These are referenced
-                      from the client's SharePoint "2. CLIENT SUPPLIED" folder — not
-                      uploaded or stored here.
-                    </p>
-                  </div>
+                    currentJobId={currentJobId}
+                  />
                 );
               }
               const allFields = getFieldsBySection(sectionId)

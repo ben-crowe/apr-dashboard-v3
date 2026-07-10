@@ -26,7 +26,7 @@ tags: [apr, v4, v3-v4-transition, test-data, test-input, sharepoint, client-docu
 ## ⭐ Key Results (determined with Ben, 2026-07-09)
 
 1. **The test-input page has two separate fill buttons — "Fill V4 Test Data" fills every fillable field EXCEPT the V3-origin tabs; "Fill V3 Test Data" beside it fills ONLY the V3-origin tabs.** — **Prove:** screenshot of both buttons; after Fill-V4, the S1/S2 tabs are untouched (spot-check screenshot); after Fill-V3, only S1/S2 populate. **Status: open.**
-2. **The V3 test data on the v4 page is the SAME data definition the V3 app fills with — one source, imported, never a copy.** — **Prove:** code shows the v4 button importing from V3's `testDataGenerator` (or a shared module both import); change one value in the source, both the V3 form fill and the v4 S-tab fill show it. **Status: open.**
+2. **The V3 test data on the v4 page is the SAME FIXED dataset the V3 side uses — one deterministic definition, imported, never a copy.** — **Prove:** code shows one fixed-dataset export in `testDataGenerator.ts` consumed by both sides; change one value in it, both the V3 form fill (deterministic mode) and the v4 Fill-V3 show it. **Status: open.**
 3. **The V3→V4 transition is PROVEN: a real V3 job pushed via "Create Report" lands in the v4 builder with its fields matching the Fill-V3-Test-Data baseline, and any mismatch is reported as a field-level diff.** — **Prove:** the E2E run artifact — screenshots of the populated S-tabs + a diff table (pushed-job values vs baseline values per field id) with zero unexplained mismatches. **Status: open.**
 4. **The S3 Client Documents tab shows the job's SharePoint folder buckets — exact SharePoint names — with each bucket's contents listed and drag-and-drop upload into each bucket.** — **Prove:** screenshot of the tab matching the approved layout; drop a file on a bucket in the browser → the file is visible in that folder on SharePoint web. **Status: open.**
 5. **Files the client attached on the V3 intake form show up in S3 as an unsorted "Client Submitted" inbox, and each can be dragged into the proper SharePoint bucket — sorting a file MOVES it into that folder on SharePoint.** — **Prove:** submit the intake form with attachments → they appear in the inbox bucket; drag one to a named bucket → it lands in that folder on SharePoint web and leaves the inbox. **Status: open.**
@@ -50,13 +50,19 @@ Prove the transition by comparing two routes of the SAME dataset (button fill vs
 
 ## Feature surface
 
-- **Fill V4 Test Data button** (rename of the existing fill): fills all report-builder sections EXCEPT the V3-origin sections (client-intake, loe-prep, and any section the registry marks V3-origin). S3 is never filled (it's files, not fields).
-- **Fill V3 Test Data button**, beside it: fills ONLY the V3-origin sections, values sourced from V3's single test-data definition.
-- **Shared test-data source:** V3's generator becomes (or is wrapped as) a shared module; both the V3 submission form fill and the v4 V3-fill import it. The v4 side maps V3 field keys → v4 registry field ids through the SAME mapping the real bridge uses (`useLoadJobIntoReport`'s map), so the fill exercises the production mapping, not a parallel one.
-- **Transition diff run (test procedure, scripted):** fill-V3 baseline → snapshot store values → clear → push a real V3 job seeded with the same dataset via Create Report → snapshot again → field-level diff report.
-- **S3 SharePoint folder tab:** bucket cards named exactly as the SharePoint folders for the job; per-bucket file list (name, modified); drag-and-drop upload into a bucket via the existing Graph app (server-side creds, same pattern as `create-job-folders`); link out to the folder on SharePoint web.
+- **Fill V4 Test Data button** (rename of today's "Load Data" control on the test-input page): fills all report-builder sections EXCEPT the two V3-origin sections — **`client-intake` (S1) + `loe-prep` (S2)**, the explicit exclusion list (nothing else is V3-origin; verified against `sectionNameMapping`/`sectionDisplayOrder`). Mechanism: the split parameterizes the existing `loadDataSet1User` store action with a section filter; its current **gap-fill-only-blanks behavior is a preserved property** (it already never clobbers bridge-loaded values). S3 is never filled (files, not fields — `client-documents` is a UI-only block, not a registry section).
+- **Fill V3 Test Data button**, beside it: fills ONLY `client-intake` + `loe-prep`, values arriving through the production mapping chain below.
+- **Shared test-data source — the three-hop production chain (verified against code):** there are three key spaces (camelCase form keys → snake_case DB columns → kebab-case registry ids) and today NO direct form→registry mapping exists. The design reuses the two production mappings rather than inventing a third:
+  1. a **deterministic fixed dataset** is added to `src/utils/testDataGenerator.ts` (the random generator stays for ad-hoc form testing; the fixed set is the transition baseline — a randomized fill can never be a comparison baseline);
+  2. the form→DB insert literal inside `useFormSubmission.ts` is extracted into an exported pure `formToDbRow()` (behavior-neutral refactor — the form submit calls the same code);
+  3. the DB→registry `fieldMappings` table in `useLoadJobIntoReport.ts` is exported (no behavior change).
+  v4's Fill-V3 then computes `fieldMappings(formToDbRow(fixedV3Dataset))` → `updateFieldValue` — both production mappings exercised, zero DB writes, values defined once.
+- **Transition diff run (test procedure, scripted via agent-browser — headless, the house default):** Fill-V3 baseline → snapshot store values → clear → seed a REAL V3 job with the same fixed dataset through the actual form path → push via Create Report → snapshot again → field-level diff report. Artifact lands under `builds/`.
+- **S3 SharePoint folder tab:** bucket cards named EXACTLY as `JOB_SUBFOLDERS` creates them (`1. REPORT` · `2. CLIENT SUPPLIED` · `3. WORK FILES (TTSZ, PICS, COMPS)` · `4. CLIENT BILLING (Invoice, LOE)` · `5. LETTER OF RELIANCE (LOR)`); per-bucket file list (name, modified); drag-and-drop upload into a bucket; link out to the folder on SharePoint web (the stored `job_submissions.sharepoint_folder_url`).
+- **S3 Graph mechanism (extends the EXISTING shared library, `supabase/functions/_shared/graph.ts` — not from zero):** listing extends `listFolderNames` with metadata (`$select` ids/sizes/urls); upload rides the existing `uploadFile` (single PUT — size-capped, no chunked session in this PRD); folder location is re-derived by the path convention (`jobFolderInputs`) or an idempotent re-call of `create-job-folders` (returns ids) — **never parsed from the stored webUrl**, which is a browser link only. **Scope pin:** sorting is INBOX→bucket only (a Supabase-storage read + SharePoint upload + row marker); SharePoint bucket→bucket moves are OUT of this PRD (needs a new Graph move helper — Part 2 candidate).
+- **S3 job context:** SharePoint folders are per-JOB and the test-input page is standalone. S3 shows the loaded job's folders when v4 was entered from a job (the Create Report route); in standalone test mode it shows a job picker + a no-job empty state. Both states go to the drawn round-trip.
 - **Sync visibility:** if a V3 field exists in the shared dataset with no v4 mapping (or vice versa), the test-input page's mapped/unmapped menu surfaces it — drift is KNOWN, not silent.
-- **Client-submitted inbox (KR5):** the V3 intake form's attachments (today: Supabase storage upload + a `job_files` row per file, surfaced on the v3 dashboard's Uploaded Documents section) ALSO appear in S3 as an unsorted **Client Submitted** inbox bucket. Dragging a file from the inbox onto a named bucket MOVES it into that SharePoint folder (upload via the Graph app + mark the `job_files` row sorted/filed); the v3 dashboard surface keeps working unchanged.
+- **Client-submitted inbox (KR5) — COPY-PLUS-MARK, never delete:** the V3 intake form's attachments (Supabase storage bucket `job-files`, path `{jobId}/{sanitizedName}`, one `job_files` row each; surfaced on the v3 dashboard's Uploaded Documents section) ALSO appear in S3 as an unsorted **Client Submitted** inbox bucket. Dragging a file onto a named bucket: reads the blob from Supabase storage → `uploadFile` to that SharePoint folder → marks the `job_files` row filed. **The Supabase original is NEVER deleted** — the v3 dashboard keeps working unchanged (existing-behavior INV). The filed marker is a NEW column: `job_files` has no status/category column today, so this PRD includes a migration (agents self-apply migrations per project rules).
 - **Client upload page + follow-up email (KR6 — Part 2 scope, design-anticipated here):** the bucket component built for S3 must be reusable by a future client-facing page (no dashboard-only assumptions baked in), because Part 2 sends the client a follow-up email linking to their own upload page with the same named buckets, syncing straight into the same SharePoint folders.
 
 ## Visual Spec  (MANDATORY — this renders; round-trip owed to Ben BEFORE lock)
@@ -68,15 +74,15 @@ Prove the transition by comparing two routes of the SAME dataset (button fill vs
    - (a) the job's five top-level folder buckets as cards;
    - (b) client-supplied-centric: the "2. CLIENT SUPPLIED" bucket promoted, with the client-required file categories (Property Details / Prior Appraisal, Proforma, Unit Mix or Rent Roll, Operating Expenses, Drawings/Plans) as sub-buckets, other folders collapsed;
    - trade-off to name on each: mirror-SharePoint-exactly vs organize-around-what-the-client-owes.
-3. State set: empty bucket / loading / upload-in-progress / upload-error / many files (overflow), the no-folders-yet state (job whose folder set was never created — offer the existing create action), and the **Client Submitted inbox** states (empty = all sorted; populated = files awaiting sorting, visually distinct from the named buckets).
+3. State set: empty bucket / loading / upload-in-progress / upload-error / many files (overflow), the no-folders-yet state (job whose folder set was never created — offer the existing create action), the **job-context states** (job loaded via Create Report route = that job's folders; standalone test mode = job picker + no-job empty state), and the **Client Submitted inbox** states (empty = all sorted; populated = files awaiting sorting, visually distinct from the named buckets).
 
 **Open for Ben at the drawn round-trip:** which bucket set S3 leads with (option a vs b above).
 
 ## What This Touches
 
-- **Adds:** the second fill button + its handler; the shared test-data module (or export seam on `testDataGenerator.ts`); a Graph list-folder-contents + upload path (new serverless/edge function beside `create-job-folders`); the S3 bucket UI; the transition-diff script/procedure doc.
-- **Changes:** `src/features/test-input/TestInputDashboard.tsx` (button split + S3 tab body); `src/features/report-builder/data/TestDataSet1.ts` (V3-origin values REMOVED or delegated to the shared source — V4-only values stay); V3 `src/utils/testDataGenerator.ts` (exported/shared, values unchanged); `job_files` handling gains a sorted/filed marker for the inbox (the v3 dashboard's Uploaded Documents section and the intake upload path in `useFormSubmission.ts` keep their current behavior — each gets an INV-4-style still-holds check).
-- **Removes:** the S3 UI-only placeholder card; any V3-origin literals duplicated inside `TestDataSet1.ts`.
+- **Adds:** the second fill button + a section-filter parameter on `loadDataSet1User`; the deterministic fixed dataset in `testDataGenerator.ts`; a new edge function beside `create-job-folders` for S3 list/upload (built on `_shared/graph.ts` extensions: list-with-metadata, download-content); the S3 bucket UI (reusable component per KR6); a `job_files` migration adding the filed/sorted column; the transition-diff script + procedure doc.
+- **Changes:** `src/features/test-input/TestInputDashboard.tsx` (button split + S3 tab body); `src/features/report-builder/data/TestDataSet1.ts` (**V3-origin entries exist in it today with realistic job values — they get STRIPPED**; V4-only values stay; the four-file-sync rule sanctions the TestDataSet edit); `src/utils/testDataGenerator.ts` (gains the fixed dataset; random mode untouched); `src/components/submission-form/useFormSubmission.ts` (insert literal extracted to exported `formToDbRow()` — behavior-neutral); `src/features/report-builder/hooks/useLoadJobIntoReport.ts` (`fieldMappings` exported — no behavior change); `supabase/functions/_shared/graph.ts` (helper extensions). The v3 dashboard's Uploaded Documents section and the intake upload path keep their current behavior — each gets a still-holds check.
+- **Removes:** the S3 UI-only placeholder block in `TestInputDashboard.tsx`; the V3-origin literals inside `TestDataSet1.ts` (belt at both ends with the fill-time section exclusion).
 
 ## Settled context — evaluate around, don't re-open
 
@@ -86,6 +92,7 @@ Prove the transition by comparing two routes of the SAME dataset (button fill vs
 - **Create Report push shipped** (FIX 5a/5b + merge/preview fixes, late June): save→pull, UPDATE-not-INSERT, gap-fill never clobbers real V3 data. This PRD tests it; it does not reopen its design.
 - **No-login app** — no auth work in any of this; RLS posture unchanged.
 - **Registry hygiene sequence** (completion plan): test-data fills run against the FINAL registry structure — if any registry-touching work is in flight at build time, this PRD's fill work lands after it.
+- **⚑ SEQUENCING DEPENDENCY — S1/S2 alignment first.** The V3-tab alignment slice (the completion plan's top priority, scoped in V3-V4-FIELD-ALIGNMENT-DELTA.md) is NOT built yet: V4's V3-origin tabs still carry wrong/missing dropdowns and fields. The transition diff run before alignment would report all those KNOWN deltas as noise. Order: alignment lands first, then this PRD's diff run. (Fallback if order must invert: the diff consumes the delta doc as an expected-mismatch whitelist — second-best.)
 
 ## Architecture Invariants
 
@@ -93,7 +100,7 @@ Prove the transition by comparing two routes of the SAME dataset (button fill vs
 - **INV-1:** one V3 test-data definition. No V3 field value literal exists in two places. *Proved by:* grep — V3-origin values appear only in the shared module.
 - **INV-2:** Fill-V4 writes zero values into V3-origin sections. *Proved by:* store snapshot after Fill-V4 shows V3-origin field ids all empty.
 - **INV-3:** S3 reads and writes ONLY the current job's folder subtree; creds never reach the client bundle. *Proved by:* the upload function takes the job's folder path server-side; bundle grep shows no Graph secret.
-- **INV-4:** the Create Report push behavior (UPDATE-not-INSERT, gap-fill-never-clobbers) still holds after the test-data changes. *Proved by:* re-run of the FIX-5 E2E check as part of the diff run.
+- **INV-4:** the Create Report push behavior (UPDATE-not-INSERT, gap-fill-never-clobbers) still holds after the test-data changes. *Proved by:* re-run of the existing FIX-5 procedure — `docs/Features/07-Report-Builder/E2E-TEST-WORKFLOW-FIX5.md` — as part of the diff run.
 
 ## Done =
 
@@ -109,13 +116,24 @@ All four Key Results proven with their named artifacts, INVs proved, qa independ
 
 ## Build order (chunks)
 
-1. **Shared test-data seam** — extract/export V3's dataset; v4 V3-fill button consuming it through the bridge mapping. (Registry untouched; smallest blast radius.)
-2. **Fill split** — scope the existing fill to V4-only sections; both buttons live on test-input.
-3. **Transition diff run** — seed a V3 job with the shared dataset, push, diff, report. (Read-only against the app; produces the KR3 artifact.)
-4. **S3 folder tab** — Graph list + upload function, bucket UI per Ben's picked layout. (Independent of chunks 1–3; can run parallel after the Visual Spec locks.)
-5. **Client-Submitted inbox + sort-to-bucket move** — rides on chunk 4's bucket UI; wires `job_files` into the inbox and the drag-move into SharePoint.
+0. **(Dependency, not this PRD)** the S1/S2 alignment slice — completion-plan priority one — lands first; the diff run (chunk 3) is meaningful only after it.
+1. **Shared test-data seam** — fixed dataset in `testDataGenerator.ts`; `formToDbRow()` extraction; `fieldMappings` export; v4 Fill-V3 = the three-hop chain. (Registry untouched; behavior-neutral refactors; smallest blast radius.)
+2. **Fill split** — section filter on `loadDataSet1User` (Fill-V4 excludes `client-intake`+`loe-prep`; Fill-V3 is only-those); strip V3-origin entries from `TestDataSet1.ts`; both buttons on test-input.
+3. **Transition diff run** — seed a V3 job with the fixed dataset through the form path, push via Create Report, diff vs the button baseline (agent-browser, artifact under `builds/`; includes the INV-4 FIX-5 re-run).
+4. **S3 folder tab** — `_shared/graph.ts` extensions + new edge function, bucket UI per Ben's picked layout incl. job-context states. (Independent of chunks 1–3; can run parallel after the Visual Spec locks.)
+5. **Client-Submitted inbox + sort-to-bucket** — rides on chunk 4's bucket UI; `job_files` migration (filed column) + copy-plus-mark wiring.
 
 **Out of scope for this PRD (Part 2 — PRD-APR-V4-02):** the client follow-up email + the client-facing upload page. Declared in KR6 so it's never dropped; the only Part-1 obligation is building the bucket component reusable (no dashboard-only assumptions).
+
+## Verify-before-lock receipts (mechanisms confirmed against live code, 2026-07-09 deep review)
+
+- Fill control ground truth: the button is **"Load Data"** on `TestInputDashboard.tsx` → `loadDataSet1User` (report-builder store) → iterates `TestDataSet1.ts`, remaps via `testDataFieldMapping`, **gap-fills only blanks**.
+- V3-origin section ids: exactly `client-intake` + `loe-prep` (from `sectionNameMapping`/`sectionDisplayOrder`); `client-documents` is a UI-only block, not a registry section.
+- Key spaces: camelCase form (`testDataGenerator.ts`, randomized) → snake_case DB (inline insert literal, `useFormSubmission.ts`) → kebab registry ids (`fieldMappings` const array in `useLoadJobIntoReport.ts`, not currently exported; mirror serializer exists in `useSaveReportBuilderData.ts`). No form→registry mapping exists today.
+- `TestDataSet1.ts` contains V3-origin values today (e.g. client-first-name, property-address, report-type entries).
+- Graph: all Graph code in `supabase/functions/_shared/graph.ts` (client-credentials, three secrets; `ensureFolder`/`folderExists`/`listFolderNames` names-only/`uploadFile` single-PUT/`graphSendMail`); consumers incl. `create-job-folders` (idempotent, prefix-match dedupe, returns subfolder ids); exact `JOB_SUBFOLDERS` names as quoted in the Feature surface; `job_submissions.sharepoint_folder_url` stores the webUrl only.
+- `job_files`: id, job_id, file_name, file_path, file_type, file_size, created_at — no status/category column; bucket `job-files`; second upload path in `UploadedDocumentsSection.tsx`; preview via public URL, download via authed blob.
+- Alignment slice not built: V3-V4-FIELD-ALIGNMENT-DELTA.md deltas are still open (drives the chunk-0 dependency).
 
 ## Current state
 
@@ -126,4 +144,4 @@ All four Key Results proven with their named artifacts, INVs proved, qa independ
 
 ---
 
-*Draft by frontier-reviewer with Ben, 2026-07-09. Next: ui-designer drawn options (via co-architect) → qa spec-gate → Ben lock → PRD-BRIEF-APR-V4-01 filled → co-architect builds.*
+*Draft by frontier-reviewer with Ben, 2026-07-09; hardened same day by a plan-mode deep review (two code-trace passes — mechanism corrections folded in: three-hop test-data chain, real fill mechanics, S3 job context, Graph library reuse, copy-plus-mark + migration, alignment-first sequencing). Next: ui-designer drawn options (via co-architect) → qa spec-gate → Ben lock → PRD-BRIEF-APR-V4-01 filled → co-architect builds.*

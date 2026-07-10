@@ -158,9 +158,13 @@ export const fieldRegistry: FieldDefinition[] = [
     required: false,
   },
   {
+    // V3-ALIGN: label reverted "Organization" -> "Company Name". The earlier deliberate
+    // "Organization" wording is SUPERSEDED by the V3 source-of-truth rule for the S1/S2 tabs
+    // (V3 intake ClientInformationSection uses "Company Name"). Id/storeId retained — the
+    // job.client_organization -> client-company-name bridge in useLoadJobIntoReport is unchanged.
     id: "client-company-name",
     storeId: "client-company-name",
-    label: "Organization",
+    label: "Company Name",
     section: "client-intake",
     subsection: "client-info-intake",
     type: "text",

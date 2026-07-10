@@ -4,6 +4,8 @@
  * Uses test.com domain to allow detection and API bypass
  */
 
+import type { FormData } from '@/utils/validation';
+
 // Pool of first names for variety
 const firstNames = [
   'John', 'Sarah', 'Michael', 'Emily', 'David', 'Jessica', 'Robert', 'Lisa',
@@ -279,6 +281,49 @@ export function isTestEmail(email: string): boolean {
          email.toLowerCase().includes('test@') ||
          email.toLowerCase().includes('@example.com');
 }
+
+/**
+ * DETERMINISTIC FIXED DATASET — the V3→V4 transition baseline (chunk 1, shared test-data seam).
+ *
+ * The random generators above STAY for ad-hoc form testing. This is the SINGLE, fixed,
+ * camelCase form-key definition (matches `FormData`) that both the deterministic form fill
+ * and the report-field composition seam import — a randomized fill can never be a comparison
+ * baseline. One definition, imported by both routes, never copied.
+ *
+ * Addresses are street-only with city/province/postal as separate fields, mirroring the live
+ * form + random generator. (The report bridge derives client/property city via parseAddress on
+ * the street string, so it stays empty here exactly as it does for a real submitted job.)
+ * No Date/Math.random — every value is a literal so the dataset is byte-stable across runs.
+ */
+export const FIXED_FORM_DATA: FormData = {
+  clientFirstName: 'Jordan',
+  clientLastName: 'Fixture',
+  clientTitle: 'Asset Manager',
+  clientOrganization: 'Fixture Holdings Ltd.',
+  clientAddress: '100 Fixture Street',
+  clientCity: 'Calgary',
+  clientProvince: 'AB',
+  clientPostal: 'T2P 1A1',
+  clientPhone: '(403) 555-0100',
+  clientEmail: 'jordan.fixture@test.com',
+  propertyName: 'Fixture Plaza',
+  propertyAddress: '500 Property Avenue',
+  propertyCity: 'Calgary',
+  propertyProvince: 'AB',
+  propertyPostal: 'T2P 2B2',
+  propertyType: 'Office',
+  propertySubtype: 'Mid-Rise',
+  tenancy: 'Multi-Tenant',
+  intendedUse: 'First Mortgage Financing',
+  valuationPremises: 'Market Value',
+  assetCondition: 'Good',
+  notes: 'Fixed deterministic transition-baseline dataset. Do not randomize.',
+  files: [],
+  propertyContactFirstName: 'Riley',
+  propertyContactLastName: 'Contact',
+  propertyContactEmail: 'riley.contact@test.com',
+  propertyContactPhone: '(403) 555-0199',
+};
 
 /**
  * Generate a mock CAL number for test submissions

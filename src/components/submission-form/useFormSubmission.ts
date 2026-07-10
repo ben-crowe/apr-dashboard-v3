@@ -4,6 +4,63 @@ import { sendToWebhook } from "@/utils/webhooks/formSubmission";
 import { WebhookData } from "@/utils/webhooks/types";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import type { TablesInsert } from "@/integrations/supabase/types";
+
+/**
+ * Non-formData inputs to the job_submissions insert. Reads the browser globals
+ * (document.referrer / navigator.userAgent), so it is assembled by the caller and
+ * passed into formToDbRow — keeping formToDbRow pure and testable.
+ */
+export interface SourceMetadata {
+  referrer: string | null;
+  user_agent: string | null;
+}
+
+/**
+ * Pure builder for the job_submissions insert row.
+ *
+ * Extracted verbatim from handleSubmit (behavior-neutral). Every field is the same
+ * mapping the inline insert used — the `|| null` coalescing and the non-null
+ * `property_type` (required by the DB, validated before submit) are preserved exactly.
+ * `source_metadata` is the only non-formData input; the live submit passes it so the
+ * insert stays byte-identical, while the report test seam calls this with no
+ * sourceMetadata (the report bridge never reads source_metadata).
+ */
+export function formToDbRow(
+  formData: FormData,
+  sourceMetadata?: SourceMetadata,
+): TablesInsert<"job_submissions"> {
+  return {
+    client_first_name: formData.clientFirstName,
+    client_last_name: formData.clientLastName,
+    client_email: formData.clientEmail,
+    client_phone: formData.clientPhone,
+    client_title: formData.clientTitle,
+    client_organization: formData.clientOrganization,
+    client_address: formData.clientAddress,
+    client_city: formData.clientCity || null,
+    client_province: formData.clientProvince || null,
+    client_postal_code: formData.clientPostal || null,
+    property_name: formData.propertyName,
+    property_address: formData.propertyAddress,
+    property_city: formData.propertyCity || null,
+    property_province: formData.propertyProvince || null,
+    property_postal_code: formData.propertyPostal || null,
+    property_type: formData.propertyType, // Required by database - validated before submission
+    intended_use: formData.intendedUse || null,
+    valuation_premises: formData.valuationPremises || null,
+    asset_condition: formData.assetCondition || null,
+    property_contact_first_name: formData.propertyContactFirstName || null,
+    property_contact_last_name: formData.propertyContactLastName || null,
+    property_contact_email: formData.propertyContactEmail || null,
+    property_contact_phone: formData.propertyContactPhone || null,
+    notes: formData.notes,
+    status: "submitted",
+    source: "webform", // Track that this came from webform submission
+    tags: [], // Empty tags array (can be added later)
+    source_metadata: sourceMetadata ?? null,
+  };
+}
 
 const initialFormData: FormData = {
   clientFirstName: "",
@@ -120,42 +177,16 @@ const useFormSubmission = () => {
     });
 
     try {
-      // Submit job data without authentication requirement
+      // Submit job data without authentication requirement.
+      // source_metadata reads browser globals here (kept out of the pure formToDbRow);
+      // formToDbRow then builds the identical insert row from formData + this metadata.
+      const sourceMetadata: SourceMetadata = {
+        referrer: typeof document !== 'undefined' ? document.referrer : null,
+        user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
+      };
       const { data: jobData, error: saveError } = await supabase
         .from('job_submissions')
-        .insert({
-          client_first_name: formData.clientFirstName,
-          client_last_name: formData.clientLastName,
-          client_email: formData.clientEmail,
-          client_phone: formData.clientPhone,
-          client_title: formData.clientTitle,
-          client_organization: formData.clientOrganization,
-          client_address: formData.clientAddress,
-          client_city: formData.clientCity || null,
-          client_province: formData.clientProvince || null,
-          client_postal_code: formData.clientPostal || null,
-          property_name: formData.propertyName,
-          property_address: formData.propertyAddress,
-          property_city: formData.propertyCity || null,
-          property_province: formData.propertyProvince || null,
-          property_postal_code: formData.propertyPostal || null,
-          property_type: formData.propertyType, // Required by database - validated before submission
-          intended_use: formData.intendedUse || null,
-          valuation_premises: formData.valuationPremises || null,
-          asset_condition: formData.assetCondition || null,
-          property_contact_first_name: formData.propertyContactFirstName || null,
-          property_contact_last_name: formData.propertyContactLastName || null,
-          property_contact_email: formData.propertyContactEmail || null,
-          property_contact_phone: formData.propertyContactPhone || null,
-          notes: formData.notes,
-          status: "submitted",
-          source: "webform",  // Track that this came from webform submission
-          tags: [],  // Empty tags array (can be added later)
-          source_metadata: {
-            referrer: typeof document !== 'undefined' ? document.referrer : null,
-            user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null
-          }
-        })
+        .insert(formToDbRow(formData, sourceMetadata))
         .select('*')
         .single();
 

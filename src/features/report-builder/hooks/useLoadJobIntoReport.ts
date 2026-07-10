@@ -6,12 +6,12 @@ import { useReportBuilderStore } from '../store/reportBuilderStore';
  * Field mapping from job data to Home Tab field IDs in the Report Builder.
  * Maps database fields to their corresponding report builder store field IDs.
  */
-interface JobDataMapping {
+export interface JobDataMapping {
   fieldId: string;
   getValue: (jobData: JobData, loeData: LoeData | null, propertyData: PropertyData | null) => string | undefined;
 }
 
-interface JobData {
+export interface JobData {
   id: string;
   job_number?: string;
   status: string;
@@ -34,7 +34,7 @@ interface JobData {
   property_contact_phone?: string;
 }
 
-interface LoeData {
+export interface LoeData {
   job_number?: string;
   valcre_job_id?: string;
   report_type?: string;
@@ -50,7 +50,7 @@ interface LoeData {
   value_timeframe?: string;
 }
 
-interface PropertyData {
+export interface PropertyData {
   property_name?: string;
   legal_description?: string;
   year_built?: string;
@@ -58,6 +58,10 @@ interface PropertyData {
   number_of_units?: number;
   zoning_classification?: string;
   tenancy?: string;
+  // Present on the job_property_info row (form → job_property_info). Not currently read by
+  // any fieldMappings entry, but declared so the test seam's property companion can carry
+  // the form-derived value without an untyped cast. Additive, type-only — hook unchanged.
+  property_subtype?: string;
 }
 
 /**
@@ -107,7 +111,7 @@ function parseAddress(address: string | undefined): {
  * Field mappings from job data to Home Tab fields.
  * Based on the field registry in /src/features/report-builder/schema/fieldRegistry.ts
  */
-const fieldMappings: JobDataMapping[] = [
+export const fieldMappings: JobDataMapping[] = [
   // Job Setup (canonical IDs from loe-prep section)
   {
     fieldId: 'job-number',

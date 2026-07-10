@@ -1,203 +1,164 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>V3 Submission Form → S1 / S2 / S3 map</title>
+<title>V3 Submission Form → S1 / S2 / S3</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2318181b'/><text x='16' y='22' font-family='system-ui,sans-serif' font-size='15' font-weight='700' fill='%23e4e4e7' text-anchor='middle'>V3</text></svg>">
 <style>
   :root{--radius:8px;--shadow:0 1px 2px rgba(0,0,0,.05);
     --text:#18181b;--text-2:#52525b;--text-3:#a1a1aa;--bg:#f4f4f5;--card:#fff;--border:#e4e4e7;
-    --green:#22c55e;--blue:#2563eb;--amber:#d97706;--zinc:#a1a1aa;--red:#ef4444;
-    --green-bg:#dcfce7;--blue-bg:#dbeafe;--amber-bg:#fef3c7;--zinc-bg:#e4e4e7;--red-bg:#fee2e2;
-    --green-tx:#166534;--blue-tx:#1e40af;--amber-tx:#92400e;--zinc-tx:#3f3f46;--red-tx:#991b1b;}
+    --green:#22c55e;--blue:#2563eb;--teal:#0d9488;--zinc:#71717a;--amber:#d97706;
+    --green-bg:#dcfce7;--blue-bg:#dbeafe;--teal-bg:#ccfbf1;--zinc-bg:#e4e4e7;--amber-bg:#fef3c7;
+    --green-tx:#166534;--blue-tx:#1e40af;--teal-tx:#115e59;--zinc-tx:#3f3f46;--amber-tx:#92400e;}
   *{box-sizing:border-box}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:14px;color:var(--text);background:var(--bg);padding:24px 32px;margin:0;line-height:1.5;}
-  .wrap{max-width:1080px;margin:0 auto;}
+  .wrap{max-width:1000px;margin:0 auto;}
   h1{font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0 0 3px;}
   .sub{font-size:12.5px;color:var(--text-3);margin-bottom:14px;}
-  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--text-2);margin:10px 0 6px;}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--text-2);margin:10px 0 6px;}
   .legend span{display:inline-flex;align-items:center;gap:6px;}
   .dot{width:10px;height:10px;border-radius:3px;display:inline-block;}
-  .d-green{background:var(--green);}.d-blue{background:var(--blue);}.d-zinc{background:var(--zinc);}.d-amber{background:var(--amber);}.d-red{background:var(--red);}
-  h2{font-size:15px;font-weight:700;margin:24px 0 3px;}
-  .grp{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);margin:14px 0 4px;}
+  .d-green{background:var(--green);}.d-blue{background:var(--blue);}.d-teal{background:var(--teal);}.d-zinc{background:var(--zinc);}.d-amber{background:var(--amber);}
+  .grp{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);margin:16px 0 4px;}
+  .banner{margin:22px 0 2px;padding:10px 14px;background:#18181b;color:#fafafa;border-radius:var(--radius);font-size:13px;font-weight:600;}
+  .banner small{display:block;font-weight:400;color:#a1a1aa;font-size:11.5px;margin-top:2px;}
   table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:6px;}
   th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-3);text-align:left;padding:7px 12px;border-bottom:1px solid var(--border);font-weight:600;background:#fafafa;}
   td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:top;font-size:13px;}
   tr:last-child td{border-bottom:none;}
   .v3{font-weight:600;}
   .tgt{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--text-2);}
-  .note{font-size:12px;color:var(--text-2);}
+  .q{color:var(--amber);font-weight:700;font-size:15px;}
+  .mgt{color:var(--zinc);font-style:italic;}
   tr.green{background:linear-gradient(90deg,rgba(34,197,94,.05),transparent);}
   tr.blue{background:linear-gradient(90deg,rgba(37,99,235,.05),transparent);}
-  tr.zinc{background:linear-gradient(90deg,rgba(161,161,170,.06),transparent);}
-  tr.amber{background:linear-gradient(90deg,rgba(217,119,6,.07),transparent);}
-  tr.red{background:linear-gradient(90deg,rgba(239,68,68,.06),transparent);}
+  tr.teal{background:linear-gradient(90deg,rgba(13,148,136,.06),transparent);}
+  tr.zinc{background:linear-gradient(90deg,rgba(113,113,122,.07),transparent);}
+  tr.amber{background:linear-gradient(90deg,rgba(217,119,6,.09),transparent);}
   .tag{display:inline-block;font:600 10px/1 system-ui;padding:3px 8px;border-radius:999px;white-space:nowrap;}
   .t-green{background:var(--green-bg);color:var(--green-tx);}.t-blue{background:var(--blue-bg);color:var(--blue-tx);}
-  .t-zinc{background:var(--zinc-bg);color:var(--zinc-tx);}.t-amber{background:var(--amber-bg);color:var(--amber-tx);}.t-red{background:var(--red-bg);color:var(--red-tx);}
+  .t-teal{background:var(--teal-bg);color:var(--teal-tx);}.t-zinc{background:var(--zinc-bg);color:var(--zinc-tx);}.t-amber{background:var(--amber-bg);color:var(--amber-tx);}
   .foot{font-size:11px;color:var(--text-3);margin-top:22px;padding-top:12px;border-top:1px solid var(--border);}
 </style>
 <div class="wrap">
   <h1>V3 Submission Form → S1 / S2 / S3</h1>
-  <div class="sub">Left = the field on the V3 submission form (source of truth). Middle = the S1/S2/S3 field on the V4 test page it maps to. Right = flag. Grouped by the V3 form's own sections.</div>
+  <div class="sub">Left = the field on your V3 submission form. Right = where it lands on V4. Every V3 field is now accounted for: it maps to S1/S2, lives in another V4 tab, is a job-management field (not for the report), or is a genuine report gap.</div>
   <div class="legend">
-    <span><i class="dot d-green"></i> Clean map — same name</span>
+    <span><i class="dot d-green"></i> Maps to S1/S2 — same name</span>
     <span><i class="dot d-blue"></i> Maps — label differs</span>
-    <span><i class="dot d-zinc"></i> Maps to deeper registry section (not S1/S2)</span>
-    <span><i class="dot d-amber"></i> In question — no clear S-tab home</span>
-    <span><i class="dot d-red"></i> Extra on V4 — no V3 source</span>
+    <span><i class="dot d-teal"></i> Lives in another V4 tab</span>
+    <span><i class="dot d-zinc"></i> V3 Mgt — not for report</span>
+    <span><i class="dot d-amber"></i> Report gap — not found</span>
   </div>
   <div id="body"></div>
-  <div class="foot">V3 side = the submission form Ben supplied. V4 side = the live S1 (36) / S2 (58) / S3 field IDs. Amber rows = decisions for the team. Building Information &amp; Data Gathering map into the deeper report sections (site/impv/tax/zone/exec), not the two intake tabs.</div>
+  <div class="banner">V4 fields that EXIST but have NO field on the V3 form<small>Pulled out separately — the ones to decide on (duplicate, appraiser-side, or report-only).</small></div>
+  <div id="extras"></div>
+  <div class="foot">V3 = your submission form. V4 = live S1 (36) / S2 (58) IDs + registry search across all tabs. Only the amber rows are true report gaps; the grey rows are job-processing fields that were never meant to print.</div>
 </div>
 <script>
-// group -> [v3 field, S-tab target, status, note]
-const DATA = [
- ['S1 · Client Information → Client Intake',[
-  ['First Name','S1 · client-first-name','g',''],
-  ['Last Name','S1 · client-last-name','g',''],
-  ['Title','S1 · client-title','g',''],
-  ['Organization','S1 · client-company-name','b','V4 label = "Company Name"'],
-  ['Phone','S1 · client-phone','g',''],
-  ['Email','S1 · client-email','g',''],
-  ['Street Address','S1 · client-organization-address','b','V4 label = "Street Address"'],
-  ['City','S1 · client-city','g',''],
-  ['Province','S1 · client-province','g',''],
-  ['Postal Code','S1 · client-postal','g',''],
+// [v3 field, v4 target, status]  status: g/b maps · o other-tab · m mgt · q gap
+const DATA=[
+ ['Client Information',[
+  ['First Name','client-first-name','g'],['Last Name','client-last-name','g'],['Title','client-title','g'],
+  ['Organization','client-company-name','b'],['Phone','client-phone','g'],['Email','client-email','g'],
+  ['Street Address','client-organization-address','b'],['City','client-city','g'],['Province','client-province','g'],['Postal Code','client-postal','g'],
  ]],
- ['S1 · Property Information → Client Intake',[
-  ['Property Name','S1 · property-name','g',''],
-  ['Property Type','S1 · property-type','g',''],
-  ['Property Subtype','S1 · property-subtype','g',''],
-  ['Tenancy','S1 · tenancy','g',''],
-  ['Street Address','S1 · property-address','b','V4 label = "Property Address"'],
-  ['City','S1 · property-city','g',''],
-  ['Province','S1 · property-province','g',''],
-  ['Postal Code','S1 · property-postal','g',''],
-  ['Authorized Use','S1 · authorized-use','g',''],
-  ['Valuation Premises','S1 · valuation-premises','g',''],
-  ['Asset Condition','S1 · asset-condition','g',''],
+ ['Property Information',[
+  ['Property Name','property-name','g'],['Property Type','property-type','g'],['Property Subtype','property-subtype','g'],
+  ['Tenancy','tenancy','g'],['Street Address','property-address','b'],['City','property-city','g'],['Province','property-province','g'],
+  ['Postal Code','property-postal','g'],['Authorized Use','authorized-use','g'],['Valuation Premises','valuation-premises','g'],['Asset Condition','asset-condition','g'],
  ]],
- ['S1 · Property Contact → Client Intake',[
-  ['First Name','S1 · contact-first-name','b','V4 label = "Contact First Name/Department"'],
-  ['Email','S1 · contact-email','g',''],
-  ['Last Name','S1 · contact-last-name','g',''],
-  ['Phone','S1 · contact-phone','g',''],
+ ['Property Contact',[
+  ['First Name','contact-first-name','b'],['Email','contact-email','g'],['Last Name','contact-last-name','g'],['Phone','contact-phone','g'],
  ]],
- ['S1 · Client Comments / Uploads',[
-  ['Client Comments','S1 · intake-notes','b','V4 label = "Additional Information"'],
-  ['Uploaded Documents','S3 · Client Documents','g','goes to S3 buckets'],
+ ['Client Comments / Uploads',[
+  ['Client Comments','intake-notes','b'],['Uploaded Documents','S3 · Client Documents','g'],
  ]],
- ['S2 · Job Info + Purpose → LOE Prep',[
-  ['Job Number','S2 · job-number','b','V4 label = "Valcre Job ID (VAL#)"'],
-  ['Job Status','— no S2 field','a','in question — no S-tab home'],
-  ['Purpose','— no S2 field','a','in question — maps to report-intendeduse?'],
+ ['LOE · Job Info + Purpose',[
+  ['Job Number','job-number','b'],['Job Status','— job mgt','m'],['Purpose','report-purpose · report tab','o'],
  ]],
- ['S2 · Value Scenarios & Approaches',[
-  ['Status of Improvements','S2 · status-of-improvements','g',''],
-  ['Value Scenarios (derived)','— not a stored S2 field','a','derived from Status + Authorized Use'],
-  ['Property Rights (derived)','S2 · interest-appraised','b','V4 label = "Property Rights Appraised"'],
-  ['Approaches to Value (derived)','— not a stored S2 field','a','derived — lives in report, not S2'],
-  ['Property Subtype (from Subtype)','S1 · property-subtype','g','shared from S1'],
-  ['Tenancy (from Tenancy)','S1 · tenancy','g','shared from S1'],
-  ['Value Timeframe','— not in S2 list','a','in question — no S-tab home'],
+ ['LOE · Value Scenarios & Approaches',[
+  ['Status of Improvements','status-of-improvements','g'],
+  ['Value Scenarios (derived)','value-scenarios · exec tab','o'],
+  ['Property Rights (derived)','interest-appraised','b'],
+  ['Approaches to Value (derived)','approaches-to-value · home tab','o'],
+  ['Property Subtype (from Subtype)','property-subtype','g'],['Tenancy (from Tenancy)','tenancy','g'],
+  ['Value Timeframe','value-timeframe · exec tab','o'],
  ]],
- ['S2 · Scope / Report Type / Assignment',[
-  ['Scope of Work','S2 · scope-of-work','g',''],
-  ['Report Type','S2 · report-type','g',''],
-  ['Report Format','— no S2 field','a','in question — no S-tab home'],
-  ['Assignment Type','S2 · assignment-type','g',''],
-  ['Analysis Level','— no S2 field','a','in question — no S-tab home'],
+ ['LOE · Scope / Report Type / Assignment',[
+  ['Scope of Work','scope-of-work','g'],['Report Type','report-type','g'],
+  ['Report Format','— job mgt','m'],['Assignment Type','assignment-type','g'],['Analysis Level','— job mgt','m'],
  ]],
- ['S2 · Fees & Payment',[
-  ['Appraisal Fee','S2 · appraisal-fee','g',''],
-  ['Retainer Amount','S2 · retainer-amount','g',''],
-  ['Retainer Paid','— no S2 field','a','payment tracking — no S-tab home'],
-  ['Amount Paid','— no S2 field','a','payment tracking — no S-tab home'],
-  ['Paid Date','— no S2 field','a','payment tracking — no S-tab home'],
-  ['Signed Date','— no S2 field','a','payment tracking — no S-tab home'],
-  ['Payment Terms (implied)','S2 · payment-terms','g','present in S2'],
+ ['LOE · Fees & Payment',[
+  ['Appraisal Fee','appraisal-fee','g'],['Retainer Amount','retainer-amount','g'],
+  ['Retainer Paid','— job mgt','m'],['Amount Paid','— job mgt','m'],['Paid Date','— job mgt','m'],['Signed Date','— job mgt','m'],
  ]],
- ['S2 · Dates',[
-  ['Effective Date','S2 · valuation-date','b','V4 label = "Date of Valuation"'],
-  ['Client Requested Date','— no S2 field','a','in question — no S-tab home'],
-  ['Delivery Date','S2 · delivery-date','g',''],
-  ['Delivery Time (wks)','S2 · delivery-time','g',''],
+ ['LOE · Dates',[
+  ['Effective Date','valuation-date','b'],['Client Requested Date','— job mgt','m'],
+  ['Delivery Date','delivery-date','g'],['Delivery Time (wks)','delivery-time','g'],
  ]],
- ['S2 · Property Use & Other',[
-  ['Current Use','S2 · current-use-improvements','b','V4 label = "Current Use Improvements"'],
-  ['Proposed Use','S2 · proposed-use-improvements','b','V4 label = "Proposed Use Improvements"'],
-  ['CMHC Financing','S2 · cmhc-financing','g',''],
-  ['Transaction Status','S2 · transaction-status','g',''],
-  ['Zoning Status','S2 · zoning-status','g',''],
+ ['LOE · Property Use & Other',[
+  ['Current Use','current-use-improvements','b'],['Proposed Use','proposed-use-improvements','b'],
+  ['CMHC Financing','cmhc-financing','g'],['Transaction Status','transaction-status','g'],['Zoning Status','zoning-status','g'],
  ]],
- ['S2 · Property Info Request + Comments',[
-  ['Client Documents','S2 · client-documents','g',''],
-  ['Previously Appraised','S2 · previously-appraised','g',''],
-  ['Comments — General','S2 · internal-comments?','a','confirm which S2 comment field'],
-  ['Comments — Delivery','— no S2 field','a','in question'],
-  ['Comments — Payment','— no S2 field','a','in question'],
+ ['LOE · Info Request + Comments',[
+  ['Client Documents','client-documents','g'],['Previously Appraised','previously-appraised','g'],
+  ['Comments — General','internal-comments · S2','b'],['Comments — Delivery','— job mgt','m'],['Comments — Payment','— job mgt','m'],
  ]],
- ['Building Information → deeper registry (NOT S1/S2 intake)',[
-  ['Year Built','registry · impv-year-built / year-built','z','report section, not intake'],
-  ['Building Size (SF)','registry · gba','z','report section'],
-  ['Number of Units','registry · impv-num-units','z','report section'],
-  ['Parking Spaces','registry · parking-spaces','z','report section'],
-  ['State of Improvements','S2 · state-of-improvements','g','also in S2'],
-  ['Land Metric','S2 · land-metric','g','also in S2'],
-  ['Env. Assessment','registry · hazardous-waste / info-environmental','z','report section'],
-  ['Heritage / Conserv.','— no registry match found','a','in question — verify registry home'],
-  ['Legal Description','S2 · report-legal','g','also in S2'],
+ ['Building Information  (report data — lives outside S1/S2)',[
+  ['Year Built','impv-year-built · impv tab','o'],['Building Size (SF)','gba · impv tab','o'],
+  ['Number of Units','impv-num-units · impv tab','o'],['Parking Spaces','parking-spaces · impv tab','o'],
+  ['State of Improvements','state-of-improvements','g'],['Land Metric','land-metric','g'],
+  ['Env. Assessment','hazardous-waste · site tab','o'],['Heritage / Conserv.','','q'],['Legal Description','report-legal','g'],
  ]],
- ['Data Gathering — Property Research → deeper registry',[
-  ['Zoning','registry · zoning-classification / subject-zoning','z','report section'],
-  ['Zone Code','registry · subject-zoningcode','z','report section'],
-  ['Land Use','— no registry match found','a','in question — verify'],
-  ['Flood Zone','— no registry match found','a','in question — verify'],
-  ['Utilities','registry · subject-utilities','z','report section'],
-  ['Parcel Number','registry · parcel-id','z','report section'],
-  ['Gross Building Area (SF)','registry · gba','z','report section'],
-  ['Net Rentable Area (SF)','registry · total-nra / subject-nra','z','report section'],
-  ['Buildable Land (SF)','— no registry match found','a','in question — verify'],
-  ['Total Site Area (SF)','registry · site-total-area','z','report section'],
-  ['Assessed Value','— no registry match found','a','in question — verify'],
-  ['Taxes','registry · annual-taxes','z','report section'],
-  ['Assessment Year','registry · assessment-year','z','report section'],
-  ['Land Value','registry · cost-land-value / land-value-conclusion','z','report section'],
-  ['Land Split','— no registry match found','a','in question — verify'],
-  ['Improved Value','— no registry match found','a','in question — verify'],
-  ['Total Value','— no registry match found','a','in question — verify'],
-  ['Building Split','— no registry match found','a','in question — verify'],
+ ['Data Gathering — Property Research  (report data — outside S1/S2)',[
+  ['Zoning','zoning-classification · zone tab','o'],['Zone Code','subject-zoningcode · exec tab','o'],
+  ['Land Use','','q'],['Flood Zone','','q'],['Utilities','subject-utilities · site tab','o'],
+  ['Parcel Number','parcel-id · home tab','o'],['Gross Building Area (SF)','gba · impv tab','o'],
+  ['Net Rentable Area (SF)','subject-nra · exec tab','o'],['Buildable Land (SF)','land-area-usable-sf · site tab','o'],
+  ['Total Site Area (SF)','site-total-area · site tab','o'],['Assessed Value','','q'],
+  ['Taxes','annual-taxes · tax tab','o'],['Assessment Year','assessment-year · tax tab','o'],
+  ['Land Value','cost-land-value · cost tab','o'],['Land Split','','q'],['Improved Value','','q'],
+  ['Total Value','total-assessment · tax tab','o'],['Building Split','','q'],
  ]],
  ['Document Upload & Organization → S3',[
-  ['Land Title Certificate','S3 · Client Documents bucket','g',''],
-  ['Survey Certificate / RPR','S3 · Client Documents bucket','g',''],
-  ['Tax Assessment Notice','S3 · Client Documents bucket','g',''],
-  ['Aerial Photo','S3 · Client Documents bucket','g',''],
-  ['Zoning Map','S3 · Client Documents bucket','g',''],
-  ['Flood Map','S3 · Client Documents bucket','g',''],
-  ['Building Permits','S3 · Client Documents bucket','g',''],
-  ['Site Plan','S3 · Client Documents bucket','g',''],
- ]],
- ['EXTRA on V4 S1 — no field on the V3 form',[
-  ['— (V4 only)','S1 · client-name','r','extra — V4 alias'],
-  ['— (V4 only)','S1 · client-attention','r','extra'],
-  ['— (V4 only)','S1 · client-salutation','r','extra'],
-  ['— (V4 only)','S1 · company-name (firm)','r','extra — appraiser firm block'],
-  ['— (V4 only)','S1 · company-address','r','extra — appraiser firm block'],
-  ['— (V4 only)','S1 · company-city-state-zip','r','extra — appraiser firm block'],
-  ['— (V4 only)','S1 · company-phone','r','extra — appraiser firm block'],
-  ['— (V4 only)','S1 · company-email','r','extra — appraiser firm block'],
-  ['— (V4 only)','S1 · company-website','r','extra — appraiser firm block'],
-  ['— (V4 only)','S1 · company-jobnumber','r','extra'],
+  ['Land Title Certificate','S3 · bucket','g'],['Survey Certificate / RPR','S3 · bucket','g'],
+  ['Tax Assessment Notice','S3 · bucket','g'],['Aerial Photo','S3 · bucket','g'],['Zoning Map','S3 · bucket','g'],
+  ['Flood Map','S3 · bucket','g'],['Building Permits','S3 · bucket','g'],['Site Plan','S3 · bucket','g'],
  ]],
 ];
-const cls={g:'green',b:'blue',z:'zinc',a:'amber',r:'red'};
-const tag={g:'<span class="tag t-green">Maps</span>',b:'<span class="tag t-blue">Label differs</span>',z:'<span class="tag t-zinc">Deeper registry</span>',a:'<span class="tag t-amber">In question</span>',r:'<span class="tag t-red">Extra</span>'};
+const EXTRAS=[
+ ['S1 — no V3 source',[
+  ['client-name','Combined first+last — DUPLICATE of client-full-name (report uses full-name)','z'],
+  ['client-attention','Report letter addressee line — not in template','z'],
+  ['client-salutation','Report letter salutation — not in template','z'],
+  ['company-name … company-website','Appraiser\'s Company block (the appraisal firm, not the client org)','z'],
+  ['company-jobnumber','"Client Job Number" (Job Info)','z'],
+ ]],
+ ['S2 — no V3 source (report-builder fields, appraiser fills these)',[
+  ['appraiser-name … appraiser2-extent','Appraiser 1 & 2 block — credentials, AIC, license, inspection','z'],
+  ['report-extraordinary / -hypothetical / -intendeduse / -intendeduser / -limcond','Report narrative boilerplate','z'],
+  ['valuation-type / appraisal-status / desktop-report','Report config flags','z'],
+ ]],
+];
+const cls={g:'green',b:'blue',o:'teal',m:'zinc',q:'amber'};
+const tag={g:'<span class="tag t-green">Maps</span>',b:'<span class="tag t-blue">Label differs</span>',o:'<span class="tag t-teal">Other tab</span>',m:'<span class="tag t-zinc">V3 Mgt</span>',q:'<span class="tag t-amber">Report gap</span>'};
 const body=document.getElementById('body');
 DATA.forEach(([grp,rows])=>{
   const g=document.createElement('div');
-  g.innerHTML='<div class="grp">'+grp+'</div><table><thead><tr><th style="width:34%">V3 form field</th><th style="width:33%">V4 target</th><th style="width:14%">Flag</th><th style="width:19%">Note</th></tr></thead><tbody>'+
-    rows.map(r=>'<tr class="'+cls[r[2]]+'"><td class="v3">'+r[0]+'</td><td class="tgt">'+r[1]+'</td><td>'+tag[r[2]]+'</td><td class="note">'+r[3]+'</td></tr>').join('')+'</tbody></table>';
+  g.innerHTML='<div class="grp">'+grp+'</div><table><thead><tr><th style="width:40%">V3 form field</th><th style="width:42%">Where it is on V4</th><th style="width:18%">Status</th></tr></thead><tbody>'+
+    rows.map(r=>{
+      let v4;
+      if(r[2]==='q') v4='<span class="q">?</span>';
+      else if(r[2]==='m') v4='<span class="mgt">'+r[1]+' — not for report</span>';
+      else v4='<span class="tgt">'+r[1]+'</span>';
+      return '<tr class="'+cls[r[2]]+'"><td class="v3">'+r[0]+'</td><td>'+v4+'</td><td>'+tag[r[2]]+'</td></tr>';
+    }).join('')+'</tbody></table>';
   body.appendChild(g);
+});
+const ex=document.getElementById('extras');
+EXTRAS.forEach(([grp,rows])=>{
+  const g=document.createElement('div');
+  g.innerHTML='<div class="grp">'+grp+'</div><table><thead><tr><th style="width:34%">V4 field</th><th style="width:66%">What it is</th></tr></thead><tbody>'+
+    rows.map(r=>'<tr class="zinc"><td class="tgt">'+r[0]+'</td><td>'+r[1]+'</td></tr>').join('')+'</tbody></table>';
+  ex.appendChild(g);
 });
 </script>

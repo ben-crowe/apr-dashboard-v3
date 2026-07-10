@@ -25,6 +25,8 @@ import {
 import {
   ChevronDown,
   ChevronRight,
+  ChevronsDownUp,
+  ChevronsUpDown,
   ExternalLink,
   Database,
   RefreshCw,
@@ -62,8 +64,9 @@ const TestInputDashboard: React.FC = () => {
   // (standalone fill) currentJobId is null and the hook early-returns (no-op). The S3 tab reuses
   // this same currentJobId.
   useLoadJobIntoReport(currentJobId ?? undefined);
+  // Default: the first two mapping sections open (S1 client-intake, S2 loe-prep), rest closed.
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
-    new Set(),
+    new Set(["client-intake", "loe-prep"]),
   );
   const [expandedValuations, setExpandedValuations] = useState<Set<string>>(
     new Set(),
@@ -630,6 +633,13 @@ const TestInputDashboard: React.FC = () => {
     });
   };
 
+  // Expand-all / collapse-all: if anything is open, close everything; otherwise open all.
+  const toggleAllSections = () => {
+    setExpandedSections((prev) =>
+      prev.size > 0 ? new Set() : new Set(getAllSections()),
+    );
+  };
+
   // Toggle valuation approach accordion
   const toggleValuation = (valuationId: string) => {
     setExpandedValuations((prev) => {
@@ -1081,7 +1091,7 @@ const TestInputDashboard: React.FC = () => {
       className="min-h-screen px-4 pt-4 pb-12"
       style={{ backgroundColor: "#1f1f1f" }}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Header - Two Part Structure to Match Edit Panel */}
         <div className="mb-4 overflow-hidden">
           {/* Part 1: Title Bar (matches EditPanel header) */}
@@ -1115,6 +1125,8 @@ const TestInputDashboard: React.FC = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              flexWrap: "wrap",
+              rowGap: "10px",
               gap: "16px",
               minHeight: "44px",
               color: "#ffffff",
@@ -1351,6 +1363,30 @@ const TestInputDashboard: React.FC = () => {
                 View Report
                 {selectedDataset !== null && (
                   <span className="ml-1">&rarr;</span>
+                )}
+              </Button>
+              <Button
+                onClick={toggleAllSections}
+                variant="outline"
+                size="sm"
+                className="text-white border transition-colors px-2"
+                style={{ backgroundColor: "#2a2a2a", borderColor: "#4b5563" }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#333333")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#2a2a2a")
+                }
+                title={
+                  expandedSections.size > 0
+                    ? "Collapse all sections"
+                    : "Expand all sections"
+                }
+              >
+                {expandedSections.size > 0 ? (
+                  <ChevronsDownUp className="w-4 h-4" />
+                ) : (
+                  <ChevronsUpDown className="w-4 h-4" />
                 )}
               </Button>
             </div>

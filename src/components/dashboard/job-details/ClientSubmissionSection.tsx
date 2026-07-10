@@ -29,7 +29,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   onUpdateDetails,
   jobDetails,
   testMode = false,
-  insertFromData = false
+  insertFromData = false,
+  forceOpen = null
 }) => {
   // Source fields (Property Type / Subtype / Tenancy) light yellow when "Insert from data" maps them
   // into Section 2's cascade — mirrors the mock's src-mapped highlight.
@@ -42,7 +43,9 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
       ? 'h-7 text-sm w-[160px] border-0 border-b'
       : 'h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none';
   const [isOpen, setIsOpen] = useState(true);
-  
+  // Expand/collapse-all from the accordion header.
+  useEffect(() => { if (forceOpen) setIsOpen(forceOpen.open); }, [forceOpen]);
+
   // Auto-save state for section-level spinner
   const [isSectionSaving, setIsSectionSaving] = useState(false);
   // G — per-field sync-reassurance (mirror Section 2): saving → saved → synced / sync-failed.

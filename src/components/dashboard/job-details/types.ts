@@ -19,4 +19,7 @@ export interface SectionProps {
    *  light yellow and map into Section 2 (mirrors + Property Rights). Shared across Section 1 + 2. */
   insertFromData?: boolean;
   setInsertFromData?: (v: boolean) => void;
+  /** Expand/collapse-all signal from the accordion header. Each section watches it and sets its
+   *  own open state to `open` whenever `n` changes. Null = no signal yet (keep own default). */
+  forceOpen?: { open: boolean; n: number } | null;
 }

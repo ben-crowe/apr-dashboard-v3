@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>APR — Operational Canvas</title>
+<style>
+  :root {
+    --bg: #0e1116;
+    --grid: #1a1f27;
+    --panel-bg: #ffffff;
+    --chrome: #161b22;
+    --chrome-border: #2a313c;
+    --ink: #e6edf3;
+    --muted: #8b949e;
+    --accent: #4c8dff;
+    --flow: #f0b429;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; color: var(--ink); }
+
+  /* ---- top toolbar ---- */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 46px; z-index: 50;
+    display: flex; align-items: center; gap: 14px; padding: 0 16px;
+    background: rgba(14,17,22,.82); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--chrome-border);
+  }
+  #toolbar .title { font-weight: 700; font-size: 14px; letter-spacing: .2px; }
+  #toolbar .title span { color: var(--muted); font-weight: 500; }
+  #toolbar .spacer { flex: 1; }
+  #toolbar button {
+    background: var(--chrome); color: var(--ink); border: 1px solid var(--chrome-border);
+    border-radius: 7px; padding: 6px 11px; font-size: 12px; cursor: pointer; font-weight: 600;
+  }
+  #toolbar button:hover { border-color: var(--accent); }
+  #toolbar .hint { color: var(--muted); font-size: 11px; }
+  #zoomLabel { color: var(--muted); font-size: 12px; min-width: 42px; text-align: center; font-variant-numeric: tabular-nums; }
+
+  /* ---- canvas viewport ---- */
+  #viewport {
+    position: absolute; inset: 46px 0 0 0; overflow: hidden;
+    background-image:
+      radial-gradient(circle, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+    cursor: grab;
+  }
+  #viewport.panning { cursor: grabbing; }
+  #world { position: absolute; top: 0; left: 0; transform-origin: 0 0; will-change: transform; }
+
+  /* ---- panels ---- */
+  .panel { position: absolute; display: flex; flex-direction: column;
+    border-radius: 12px; overflow: hidden; box-shadow: 0 18px 50px rgba(0,0,0,.55);
+    border: 1px solid var(--chrome-border); background: var(--chrome); }
+  .panel .bar {
+    height: 40px; flex: 0 0 40px; display: flex; align-items: center; gap: 10px;
+    padding: 0 14px; background: var(--chrome); border-bottom: 1px solid var(--chrome-border);
+    user-select: none;
+  }
+  .panel .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .panel .bar .name { font-weight: 700; font-size: 13px; }
+  .panel .bar .route { color: var(--muted); font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .panel .bar .step { margin-left: auto; color: var(--muted); font-size: 11px; font-weight: 600;
+    border: 1px solid var(--chrome-border); border-radius: 20px; padding: 2px 9px; }
+  .panel .frameWrap { flex: 1; position: relative; background: var(--chrome); }
+  .panel iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+  /* click-shield: while panning, block iframe from swallowing drags. Toggled by JS. */
+  .panel .shield { position: absolute; inset: 0; z-index: 5; display: none; }
+  #viewport.panning .panel .shield { display: block; }
+
+  /* ---- flow arrows between panels (SVG overlay in world space) ---- */
+  #flowLayer { position: absolute; top: 0; left: 0; overflow: visible; pointer-events: none; z-index: 1; }
+  .flowLabel { position: absolute; background: rgba(240,180,41,.14); border: 1px solid var(--flow);
+    color: var(--flow); font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 20px;
+    white-space: nowrap; }
+
+  /* ---- minimap-ish legend bottom-left ---- */
+  #legend { position: fixed; left: 16px; bottom: 16px; z-index: 40; font-size: 11px; color: var(--muted);
+    background: rgba(14,17,22,.8); border: 1px solid var(--chrome-border); border-radius: 8px; padding: 8px 12px; line-height: 1.7; }
+  #legend b { color: var(--ink); }
+</style>
+</head>
+<body>
+  <div id="toolbar">
+    <div class="title">APR &nbsp;<span>Operational Canvas · the appraisal pipeline, stage by stage</span></div>
+    <div class="spacer"></div>
+    <span class="hint">drag = pan &nbsp;·&nbsp; scroll = zoom &nbsp;·&nbsp; panels are the live app</span>
+    <button id="fit">Fit all</button>
+    <button id="zoomOut">–</button>
+    <span id="zoomLabel">100%</span>
+    <button id="zoomIn">+</button>
+    <button id="reset">Reset</button>
+  </div>
+
+  <div id="viewport">
+    <div id="world">
+      <svg id="flowLayer"></svg>
+      <!-- panels injected by JS -->
+    </div>
+  </div>
+
+  <div id="legend">
+    <b>Flow:</b> Client Submission &nbsp;→&nbsp; Job List &nbsp;→&nbsp; Job Detail &nbsp;→&nbsp; Data Input &nbsp;→&nbsp; Report<br/>
+    Each panel is the live app, sized to its own page. Cross-panel fill is <b>not wired yet</b> (design-ahead stage).
+  </div>
+
+<script>
+const ORIGIN = location.origin; // same-origin as the APR dev app
+
+// Panel definitions — real routes, laid out on the world canvas.
+// x/y/w/h are in world (unscaled) pixels.
+// Walk-through of the real click-path — one panel per stage, each auto-sized to its own
+// page length (short list first, long report last). h is a starting guess; auto-size corrects it.
+const JOB = 'cfb1e6da-1bf6-49a4-87ad-5b0bc2104f7d'; // a real job, so the detail + report stages show live data
+const COL_W = 1440, GAP = 180, PAD_H = 90; // panel width, gap, consistent gray padding below content
+const BAR_H = 40;                          // panel title bar height (keep in sync with .panel .bar CSS)
+const MIN_PANEL_H = 1000;                  // floor — a page never collapses below ~a monitor height
+                                           // (extra space shows as padding underneath, not a sliver)
+const SCROLL_H = 1500;                     // fixed viewer height for very long pages that scroll inside
+const xs = i => i * (COL_W + GAP);
+// Live pages, top-aligned at y:0 (even tops). Each panel auto-grows to its real page length.
+const PANELS = [
+  { id:'intake', name:'Client Submission',  route:'/appraisal-request-form',       step:'1 · client submits the request',
+    color:'#ec6547', x:xs(0), y:0, w:COL_W, h:1600 },
+  { id:'list',   name:'Job List',           route:'/dashboard',                    step:'2 · pick or create a job',
+    color:'#4c8dff', x:xs(1), y:0, w:COL_W, h:900 },
+  { id:'detail', name:'Job Detail',         route:'/dashboard/job/'+JOB,           step:'3 · the job itself',
+    color:'#3fb950', x:xs(2), y:0, w:COL_W, h:1400 },
+  { id:'tdd',    name:'TDD — Data Input',    route:'/test-input',                   step:'4 · S1 / S2 / S3 inputs',
+    color:'#a371f7', x:xs(3), y:0, w:COL_W, h:1700 },
+  { id:'report', name:'Report',             route:'/dashboard/job/'+JOB+'/report',  step:'5 · full report',
+    color:'#d29922', x:xs(4), y:0, w:COL_W, h:2000 },
+];
+
+// Flow arrows: from panel A right edge to panel B left edge, with a label.
+const FLOWS = [
+  { from:'intake', to:'list',   label:'Submit → creates the job' },
+  { from:'list',   to:'detail', label:'Open job' },
+  { from:'detail', to:'tdd',    label:'Create Report → fills S1 / S2 / S3' },
+  { from:'tdd',    to:'report', label:'View Report → maps every field' },
+];
+
+const world = document.getElementById('world');
+const viewport = document.getElementById('viewport');
+const flowLayer = document.getElementById('flowLayer');
+const panelById = {};
+
+// ---- build panels ----
+for (const p of PANELS) {
+  const el = document.createElement('div');
+  el.className = 'panel';
+  el.style.left = p.x + 'px'; el.style.top = p.y + 'px';
+  el.style.width = p.w + 'px'; el.style.height = p.h + 'px';
+  el.innerHTML =
+    '<div class="bar">' +
+      '<span class="dot" style="background:'+p.color+'"></span>' +
+      '<span class="name">'+p.name+'</span>' +
+      '<span class="route">'+p.route+'</span>' +
+      '<span class="step">'+p.step+'</span>' +
+    '</div>' +
+    '<div class="frameWrap">' +
+      '<div class="shield"></div>' +
+      '<iframe loading="lazy" src="'+ORIGIN+p.route+'"></iframe>' +
+    '</div>';
+  world.appendChild(el);
+  panelById[p.id] = { def:p, el };
+
+  // Optional zoom — renders the page smaller inside the frame with EVEN breathing room on both
+  // sides (like the dashboard's own padding). Scale from top-left, then center with a left offset.
+  if (p.zoom) {
+    const fw = el.querySelector('.frameWrap');
+    fw.style.background = 'var(--chrome)';
+    fw.style.overflow = 'hidden';
+    const ifr = fw.querySelector('iframe');
+    ifr.style.inset = 'auto';
+    ifr.style.top = '0';
+    ifr.style.left = Math.round(p.w * (1 - p.zoom) / 2) + 'px'; // centers the scaled iframe
+    ifr.style.width = p.w + 'px';       // native render width (app doesn't reflow narrower)
+    ifr.style.transformOrigin = 'top left';
+    ifr.style.transform = 'scale(' + p.zoom + ')';
+  }
+
+  // Long pages (the report): fixed viewer height, scroll INSIDE the panel instead of a huge panel.
+  if (p.scroll) {
+    el.querySelector('.frameWrap').style.overflowY = 'auto';
+  }
+
+  // Auto-grow the PANEL to its page's real length (top stays at y:0, so all tops stay even).
+  // Pages use min-height:100vh, so measure the deepest text/control node for the true content bottom.
+  const iframe = el.querySelector('iframe');
+  const deepestBottom = (doc, minX, maxX) => {
+    let max = 0;
+    doc.querySelectorAll('*').forEach(elm => {
+      const hasText = elm.childElementCount === 0 && (elm.innerText || '').trim();
+      if (hasText || /^(INPUT|BUTTON|IMG|SVG|TD|LI|TEXTAREA|SELECT)$/.test(elm.tagName)) {
+        const r = elm.getBoundingClientRect();
+        if (minX && r.right <= minX) return;         // ignore the tabs column (left of the fields)
+        if (maxX && r.left >= maxX) return;          // ignore the preview column (right of the fields)
+        if (r.bottom > max && r.bottom < 100000) max = r.bottom;
+      }
+    });
+    return Math.round(max);
+  };
+  // Add REAL bottom padding INSIDE the app itself (its own background), like its left/right gutters —
+  // not a separate strip in the viewer. Also let the app flow so it never keeps its own scrollbar.
+  const padAppBottom = (doc) => {
+    if (doc.getElementById('__ops_pad')) return;
+    const s = doc.createElement('style');
+    s.id = '__ops_pad';
+    s.textContent = 'html,body{overflow:visible!important}body{padding-bottom:' + PAD_H + 'px!important}';
+    (doc.head || doc.documentElement).appendChild(s);
+  };
+  // Report only: let the FIELDS editor column flow (un-cap its inner scroll) so its true length is
+  // measurable — the preview column is left untouched so it keeps its own scroll.
+  const unscrollFields = (doc) => {
+    if (doc.getElementById('__ops_flowf')) return;
+    const s = doc.createElement('style');
+    s.id = '__ops_flowf';
+    s.textContent = '[class*="editor-panel"]{overflow:visible!important;height:auto!important;max-height:none!important}';
+    (doc.head || doc.documentElement).appendChild(s);
+  };
+  const leftPanelBg = (doc) => {
+    let n = doc.elementFromPoint(40, 300) || doc.body;   // the tabs sidebar
+    while (n) { const c = getComputedStyle(n).backgroundColor;
+      if (c && c !== 'rgba(0, 0, 0, 0)' && c !== 'transparent') return c; n = n.parentElement; }
+    return null;
+  };
+  const fitReport = (doc) => {
+    unscrollFields(doc);
+    const c = deepestBottom(doc, p.report.fieldsMinX, p.report.fieldsMaxX); // FIELDS column height
+    if (c < 120) return;
+    iframe.style.height = c + 'px';                       // preview is cut here → it scrolls on its own
+    const bg = leftPanelBg(doc);
+    if (bg) el.querySelector('.frameWrap').style.background = bg; // pad under fields = left-panel color
+    const target = Math.max(c + PAD_H + BAR_H, MIN_PANEL_H);
+    if (Math.abs(target - p.h) > 8) { p.h = target; el.style.height = p.h + 'px'; drawFlows(); }
+  };
+  const fit = () => {
+    try {
+      const doc = iframe.contentDocument;
+      if (!doc || !doc.body) return;
+      if (p.report) { fitReport(doc); return; }
+      padAppBottom(doc);
+      const c = deepestBottom(doc);
+      if (c < 120) return; // still loading
+      // Panel = content + the app's own bottom padding, floored to a monitor height.
+      const target = Math.max(c + PAD_H + BAR_H, MIN_PANEL_H);
+      // Iframe fills the whole content area — the app's OWN background (min-height + the injected
+      // padding-bottom) flows continuously under the last field. No separate viewer strip, no seam.
+      iframe.style.height = (target - BAR_H) + 'px';
+      if (Math.abs(target - p.h) > 8) {
+        p.h = target;
+        el.style.height = p.h + 'px';
+        drawFlows();
+      }
+    } catch (e) { /* not ready */ }
+  };
+  iframe.addEventListener('load', () => {
+    fit();
+    // Settle over the first few seconds: SPA content + data fetches land after the load event.
+    let n = 0;
+    const t = setInterval(() => { fit(); if (++n >= 16) clearInterval(t); }, 500);
+    // Then keep the panel LIVE-SIZED: any content change (toggles open/close, rows added)
+    // re-measures and grows/shrinks the panel to fit — no internal scroll.
+    try {
+      const doc = iframe.contentDocument;
+      const ro = new ResizeObserver(() => fit());
+      ro.observe(doc.documentElement);
+      if (doc.body) ro.observe(doc.body);
+      // ResizeObserver misses growth trapped inside an inner scroll box; a light poll covers it.
+      setInterval(fit, 1000);
+    } catch (e) { /* not ready */ }
+  });
+}
+
+// ---- flow arrows ----
+function drawFlows() {
+  flowLayer.innerHTML = '';
+  // clear any labels from a previous draw (auto-grow redraws on resize)
+  world.querySelectorAll('.flowLabel').forEach(n => n.remove());
+  const ns = 'http://www.w3.org/2000/svg';
+  // arrowhead marker
+  const defs = document.createElementNS(ns,'defs');
+  defs.innerHTML = '<marker id="ah" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto">' +
+                   '<path d="M0,0 L10,5 L0,10 z" fill="#f0b429"/></marker>';
+  flowLayer.appendChild(defs);
+  // Tops are even (y:0) but panels differ in height — anchor arrows at a fixed height from the
+  // top so they always run level between stages instead of slanting to each panel's mid.
+  const ARROW_Y = 520;
+  for (const f of FLOWS) {
+    const a = panelById[f.from].def, b = panelById[f.to].def;
+    const x1 = a.x + a.w, y1 = a.y + ARROW_Y;
+    const x2 = b.x,       y2 = b.y + ARROW_Y;
+    const midx = (x1 + x2) / 2;
+    const path = document.createElementNS(ns,'path');
+    path.setAttribute('d', `M ${x1} ${y1} C ${midx} ${y1}, ${midx} ${y2}, ${x2-6} ${y2}`);
+    path.setAttribute('stroke', '#f0b429');
+    path.setAttribute('stroke-width', '3');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke-dasharray', '9 7');
+    path.setAttribute('marker-end', 'url(#ah)');
+    flowLayer.appendChild(path);
+    // label
+    const lbl = document.createElement('div');
+    lbl.className = 'flowLabel';
+    lbl.textContent = f.label;
+    lbl.style.left = (midx) + 'px';
+    lbl.style.top  = (y1 - 90) + 'px';
+    lbl.style.transform = 'translateX(-50%)';
+    world.appendChild(lbl);
+  }
+}
+drawFlows();
+
+// ---- pan / zoom ----
+let scale = 1, tx = 0, ty = 0;
+const MIN = 0.08, MAX = 1.6;
+function apply() {
+  world.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+  document.getElementById('zoomLabel').textContent = Math.round(scale*100) + '%';
+}
+function fit() {
+  // bounding box of all panels
+  let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
+  for (const p of PANELS) { minX=Math.min(minX,p.x); minY=Math.min(minY,p.y); maxX=Math.max(maxX,p.x+p.w); maxY=Math.max(maxY,p.y+p.h); }
+  const pad = 120;
+  const vw = viewport.clientWidth, vh = viewport.clientHeight;
+  const bw = (maxX-minX)+pad*2, bh = (maxY-minY)+pad*2;
+  scale = Math.min(vw/bw, vh/bh, MAX);
+  tx = (vw - (maxX+minX)*scale)/2;
+  ty = (vh - (maxY+minY)*scale)/2;
+  apply();
+}
+document.getElementById('fit').onclick = fit;
+document.getElementById('reset').onclick = () => { scale=0.5; tx=40; ty=30; apply(); };
+document.getElementById('zoomIn').onclick  = () => zoomAt(viewport.clientWidth/2, viewport.clientHeight/2, 1.2);
+document.getElementById('zoomOut').onclick = () => zoomAt(viewport.clientWidth/2, viewport.clientHeight/2, 1/1.2);
+
+function zoomAt(cx, cy, factor) {
+  const ns = Math.min(MAX, Math.max(MIN, scale*factor));
+  const k = ns/scale;
+  tx = cx - (cx - tx)*k;
+  ty = cy - (cy - ty)*k;
+  scale = ns;
+  apply();
+}
+viewport.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const r = viewport.getBoundingClientRect();
+  const factor = e.deltaY < 0 ? 1.1 : 1/1.1;
+  zoomAt(e.clientX - r.left, e.clientY - r.top, factor);
+}, { passive:false });
+
+// drag-to-pan (only when starting on empty canvas or a panel bar, not inside an iframe)
+let panning=false, sx=0, sy=0;
+viewport.addEventListener('pointerdown', (e) => {
+  const onBar = e.target.closest('.bar');
+  const onFrame = e.target.closest('iframe');
+  if (onFrame && !onBar) return; // let the live page take the click
+  panning=true; sx=e.clientX; sy=e.clientY;
+  viewport.classList.add('panning');
+  viewport.setPointerCapture(e.pointerId);
+});
+viewport.addEventListener('pointermove', (e) => {
+  if(!panning) return;
+  tx += e.clientX - sx; ty += e.clientY - sy;
+  sx=e.clientX; sy=e.clientY; apply();
+});
+viewport.addEventListener('pointerup', (e) => { panning=false; viewport.classList.remove('panning'); });
+viewport.addEventListener('pointercancel', () => { panning=false; viewport.classList.remove('panning'); });
+
+// start fitted
+window.addEventListener('resize', () => {});
+fit();
+</script>
+</body>
+</html>

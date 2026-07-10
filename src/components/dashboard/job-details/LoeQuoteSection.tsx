@@ -195,9 +195,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   testMode = false,
   cascadeResetToken = 0,
   insertFromData = false,
-  setInsertFromData
+  setInsertFromData,
+  forceOpen = null
 }) => {
   const [isOpen, setIsOpen] = useState(true);
+  // Expand/collapse-all from the accordion header.
+  useEffect(() => { if (forceOpen) setIsOpen(forceOpen.open); }, [forceOpen]);
   const [isCreatingJob, setIsCreatingJob] = useState(false);
   const [isCreatingAssetFolders, setIsCreatingAssetFolders] = useState(false);
 

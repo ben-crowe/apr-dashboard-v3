@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -15,9 +15,12 @@ import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, Secti
 const PropertyInfoSection: React.FC<SectionProps> = ({
   job,
   jobDetails = {},
-  onUpdateDetails
+  onUpdateDetails,
+  forceOpen = null
 }) => {
-  const [isOpen, setIsOpen] = useState(true); // Default to open
+  const [isOpen, setIsOpen] = useState(false); // closed by default (first two sections open)
+  // Expand/collapse-all from the accordion header.
+  useEffect(() => { if (forceOpen) setIsOpen(forceOpen.open); }, [forceOpen]);
 
   // Format number with commas (e.g., 3000 -> 3,000)
   const formatNumber = (value: string | number): string => {

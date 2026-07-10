@@ -18,10 +18,13 @@ import { isValcreJobNumber } from "@/config/valcre";
 const OrganizingDocsSection: React.FC<SectionProps> = ({
   job,
   jobDetails = {},
-  onUpdateDetails
+  onUpdateDetails,
+  forceOpen = null
 }) => {
   const [isSectionSaving, setIsSectionSaving] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false); // closed by default (first two sections open)
+  // Expand/collapse-all from the accordion header.
+  useEffect(() => { if (forceOpen) setIsOpen(forceOpen.open); }, [forceOpen]);
   const [fieldStates, setFieldStates] = useState<Record<string, 'idle' | 'saving'>>({});
   const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
 

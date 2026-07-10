@@ -27,10 +27,13 @@ const Section4Compact: React.FC<SectionProps> = ({
   job,
   jobDetails = {},
   onUpdateDetails,
+  forceOpen = null,
 }) => {
   const [uploading, setUploading] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState<string | null>(null);
-  const [isOpen, setIsOpen] = useState(true); // Default to open
+  const [isOpen, setIsOpen] = useState(false); // closed by default (first two sections open)
+  // Expand/collapse-all from the accordion header.
+  useEffect(() => { if (forceOpen) setIsOpen(forceOpen.open); }, [forceOpen]);
 
   // Get smart links based on property address
   const smartLinks = getSmartLinks(job.propertyAddress);

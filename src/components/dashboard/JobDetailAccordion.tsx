@@ -10,6 +10,7 @@ import { isValcreJobNumber } from "@/config/valcre";
 import { useTestMode } from "@/contexts/TestModeContext";
 import { Separator } from "@/components/ui/separator";
 import { isV4Enabled } from "@/lib/featureFlags";
+import { ChevronsDownUp, ChevronsUpDown } from "lucide-react";
 
 interface JobDetailAccordionProps {
   job: DetailJob;
@@ -40,6 +41,18 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
   // "Insert from data" toggle (mock parity) — shared by Section 1 (source fields yellow) and
   // Section 2 (the checkbox + mirror/Property-Rights mapping). OFF by default; reset on Fill/Clear.
   const [insertFromData, setInsertFromData] = React.useState(false);
+
+  // Expand / collapse ALL sections — a shared signal each section watches via useEffect.
+  const [allSectionsOpen, setAllSectionsOpen] = React.useState(false);
+  const [openAllSignal, setOpenAllSignal] = React.useState<{
+    open: boolean;
+    n: number;
+  } | null>(null);
+  const toggleAllSections = () => {
+    const next = !allSectionsOpen;
+    setAllSectionsOpen(next);
+    setOpenAllSignal((s) => ({ open: next, n: (s?.n || 0) + 1 }));
+  };
 
   const handleFillTestData = () => {
     if (isLiveValcreJob) {
@@ -170,6 +183,21 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
 
   return (
     <div className="space-y-2">
+      {/* Expand / collapse all sections — small icon, top-right, always visible. */}
+      <div className="flex justify-end px-1">
+        <button
+          onClick={toggleAllSections}
+          title={allSectionsOpen ? "Collapse all sections" : "Expand all sections"}
+          className="p-1.5 rounded border border-gray-400 dark:border-white/20 text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+        >
+          {allSectionsOpen ? (
+            <ChevronsDownUp className="h-4 w-4" />
+          ) : (
+            <ChevronsUpDown className="h-4 w-4" />
+          )}
+        </button>
+      </div>
+
       {/* Test-data links — frameless text, top-right. Shown ONLY in Test Mode (global toggle).
           Gated on a live Valcre job too. */}
       {testMode && (
@@ -210,6 +238,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         onUpdateJob={onUpdateJob}
         testMode={testMode}
         insertFromData={insertFromData}
+        forceOpen={openAllSignal}
       />
 
       <LoeQuoteSection
@@ -223,6 +252,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         cascadeResetToken={cascadeResetToken}
         insertFromData={insertFromData}
         setInsertFromData={setInsertFromData}
+        forceOpen={openAllSignal}
       />
 
       {/* ── V4 GATE — section 3 onward (property research + report content) ──────────────
@@ -237,18 +267,21 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
             job={job}
             jobDetails={jobDetails}
             onUpdateDetails={onUpdateDetails}
+            forceOpen={openAllSignal}
           />
 
           <PropertyInfoSection
             job={job}
             jobDetails={jobDetails}
             onUpdateDetails={onUpdateDetails}
+            forceOpen={openAllSignal}
           />
 
           <Section4Compact
             job={job}
             jobDetails={jobDetails}
             onUpdateDetails={onUpdateDetails}
+            forceOpen={openAllSignal}
           />
         </>
       )}

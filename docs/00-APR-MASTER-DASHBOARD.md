@@ -2,7 +2,7 @@
 content_type: master-dashboard
 title: APR Dashboard — Master Navigation & Status
 status: living front-door — keep current as work lands
-updated: 2026-06-10
+updated: 2026-07-11
 tags: [apr-workflow, apr-dashboard, master-index, navigation, home]
 note: THE single front door. Open this first. Every significant feature, account, test doc, and reference links from here. Project-specific only — system/agent content lives on the Agent + Workflow dashboards.
 dashboard_format: project-specific (see ~/.claude/knowledge/PROJECT-DASHBOARD-RULES.md)
@@ -225,7 +225,9 @@ Before working a stage, the agent runs a **full two-phase context-search** on th
 
 ### Fields, Cascade & Registry
 
-The source of truth for what fields exist, their options, the cascade rules, and how it feeds the LOE. **Valta Registry V6 is the live source:** https://apr-dashboard-v3.vercel.app/field-registry-v6.html
+The source of truth for what fields exist, their options, the cascade rules, and how it feeds the LOE.
+
+> ⚠ **Field-existence ground truth = `src/features/report-builder/schema/fieldRegistry.ts` (grep it live) — NOT any HTML registry page.** The Registry V6 explorer (https://apr-dashboard-v3.vercel.app/field-registry-v6.html) is the live *viewer*, but its baked-in field arrays are a stale snapshot — judging "do we have this field" off them false-flagged real fields as missing (2026-07-11). Client's Valta master = the v03 xlsx (67 fields, sheet "Field Registry"); its reconciliation against our registry lives at `public/master-registry-valta.html`. Full rules: the [`/apr-domain`](~/.claude/skills/apr-domain/SKILL.md) skill's source-of-truth table.
 
 | Doc | What it is |
 |---|---|
@@ -241,6 +243,7 @@ The source of truth for what fields exist, their options, the cascade rules, and
 | [**Valcre OData Schema Reference**](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/VALCRE-ODATA-SCHEMA-REFERENCE.md) | GROUND TRUTH — authoritative enum token sets for every Valcre field, extracted from $metadata. Check here before guessing any enum value. |
 | [Dropdown vs Registry Audit](~/Development/APR-Dashboard-v3/docs/DROPDOWN-VS-REGISTRY-AUDIT.md) | Every dropdown's options vs the V6 registry — the mismatch punch-list. |
 | [**★ Registry Duplicate-ID Rule**](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/REGISTRY-DUP-ID-RULE.md) | **CANONICAL.** The single rule for resolving duplicate field ids (the ~111 by-design "enter once, reference everywhere" dups vs the two defect classes). Same-section dup = always collapse; cross-section dup = keep IF type/options/label-consistent, else reconcile; capture/V3 section wins the tiebreak. Cite in any registry/field build. |
+| **★ Valta↔Registry Reconciliation (2026-07-11)** — `public/master-registry-valta.html` | The live reconciliation of the client's 67-field Valta master (v03 xlsx) against our registry: three name columns (our kebab / Valta PascalCase / Valcre target), matches + genuine gaps + amber renames, filter chips. Verified aliases (field EXISTS under another name): JobStatus→appraisal-status · SubjectProperty→subject-property-name · ValueTimeframe→value-timeframe. Companion crosswalk: `public/s-tab-crosswalk.html`. Open gap-triage decisions: [Client Review Sheet](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/CLIENT-REVIEW-SHEET.md). Domain rules: [`/apr-domain`](~/.claude/skills/apr-domain/SKILL.md). |
 | [V4-Only Fields (by section, 2026-06-22)](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/V4-ONLY-FIELDS-2026-06-22.md) · [V4 Input Fields by section](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/V4-INPUT-FIELDS-by-section-2026-06-22.md) | The V4 builder's field map: 2,097 fields, 27 bridged (S1/S2), 1,466 V4-native input candidates by section. The coverage checklist for V4 test-data + completion work. |
 | [**★ Report Builder — Tab/Section Scheme**](~/Development/APR-Dashboard-v3/docs/Architecture/REPORT-BUILDER-TAB-SCHEME.md) | **CANONICAL.** The locked tab numbering (S1/S2/S3 collection layer + contiguous 01–16 report layer) + the collection-vs-report model (split by source) + the client REQUIRED-DOCUMENTS list that defines S3. Renumber spec for the registry pass. |
 | [**★ Asset Routing Architecture**](~/Development/APR-Dashboard-v3/docs/Architecture/ASSET-ROUTING-ARCHITECTURE.md) | **DRAFT (model locked, category list pends tab-scheme).** SharePoint → Supabase → report asset flow. Supabase = authoritative system of record for ALL assets; SharePoint = OPTIONAL front-door (human comfort, not a dependency). ONE canonical asset-category set drives the SharePoint subfolders + Supabase storage + report drop-zones, so **folder placement IS the routing signal** (content-scan = secondary fallback). Own workstream (not the registry sequence). |

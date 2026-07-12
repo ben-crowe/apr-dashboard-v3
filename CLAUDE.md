@@ -42,7 +42,7 @@ Checkpoint prefixes: APR-DB, APR-PIPELINE, APR-REPORT, APR-DEPLOY, APR-STATUS
 1. **Client Intake** — submission form → job_submissions table
 2. **Job Management** — Valcre API (job creation) + ClickUp (task tracking)
 3. **E-Signature** — DocuSeal (LOE documents, webhook-driven)
-4. **Report Builder** — 2082 fields, 79-page HTML template (NOT connected to DB yet)
+4. **Report Builder** — field registry + 79-page HTML template (count it live, never trust a quoted number: `grep -c 'id: "' src/features/report-builder/schema/fieldRegistry.ts`; domain context: `/apr-domain` skill)
 
 Stages 1-3: Working in production. Stage 4: Standalone only, needs DB integration.
 
@@ -66,7 +66,7 @@ Stages 1-3: Working in production. Stage 4: Standalone only, needs DB integratio
 
 | File | Purpose |
 |------|---------|
-| `src/features/report-builder/schema/fieldRegistry.ts` | 22K lines, 2082 field definitions |
+| `src/features/report-builder/schema/fieldRegistry.ts` | The field registry — single source of truth for "do we have this field" (grep it live; counts in docs go stale) |
 | `public/Report-MF-template.html` | 31K-line, 79-page report template |
 | `src/features/report-builder/store/reportBuilderStore.ts` | Zustand store (no persistence) |
 | `api/valcre.ts` | Vercel serverless — Valcre API proxy with field mapping |

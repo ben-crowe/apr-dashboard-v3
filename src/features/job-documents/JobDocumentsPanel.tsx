@@ -8,13 +8,18 @@
 // dropdown-only surface was built from the prose while the design was still being drawn — that is
 // the mistake this replaces.
 //
-// ⚑ THE ONE TRAP, and it is a STRUCTURAL inversion, not a colour swap (ui-designer's warning):
+// ⚑ COLOURS ARE TOKENS. NEVER a hardcoded value here — no bg-white, no bg-slate-*, no raw rgb().
+// Every surface uses the semantic tokens the neighbouring V3 sections use (bg-card, bg-muted,
+// text-foreground, text-muted-foreground, border-border), so the panel themes itself in BOTH the
+// light and the charcoal theme. Hardcoded values cannot do that, and picking them by eye is what
+// made this panel come out wrong twice.
+//
+// ⚑ THE STRUCTURAL POINT the tokens serve (ui-designer's warning, and it is not a colour swap):
 // in the dark original the folder cards were LIGHT on a DARK panel — that contrast is what made
-// them read as separate objects. Make the page light and a light card on a light page VANISHES:
-// five white boxes on white, no edges. So:
-//   - the right-hand folder column is a GREY WELL (#f1f5f9 = slate-100),
-//   - each folder card is WHITE with a hairline border and a 1px shadow, sitting ON the well,
-//   - the empty slots inside a card get their own tint (#f8fafc) or they disappear into the white.
+// them read as separate objects. On a light page a light card on a light page VANISHES. So the
+// folder column is a RECESSED WELL (bg-muted) and each folder card sits ON it as a raised surface
+// (bg-card + border + shadow). The empty slots inside a card need their own tint or they disappear
+// into it. That relationship is what must hold — in either theme.
 //
 // LEFT  = the client's files as a thumbnail gallery (2-up default, 1/2/3-up switch), drop zone above.
 // RIGHT = all five folders, ALWAYS visible. Clicking one opens it IN THE LEFT GALLERY.
@@ -88,11 +93,11 @@ function Art({ doc, big }: { doc: JobDocument; big: boolean }) {
   // file that is NOT in a folder is a false statement on screen.
   return (
     <div className="flex flex-col items-center justify-center gap-1">
-      <span className="rounded bg-[#f5f3ff] px-1.5 py-0.5 text-[10px] font-semibold text-violet-700">
+      <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-violet-700 dark:text-violet-300">
         {ext(doc.name)}
       </span>
       {big && (
-        <small className="text-[10px] text-[#64748b]">
+        <small className="text-[10px] text-muted-foreground">
           {doc.filedBucket ? 'filed and safe' : 'no preview'}
         </small>
       )}
@@ -116,7 +121,7 @@ function MoveSelect({
     <select
       data-testid="move-to-folder"
       aria-label={`Move ${doc.name} to a folder`}
-      className="h-6 w-full rounded border border-[#e2e8f0] bg-white px-1 text-[11px] text-[#0f172a]"
+      className="h-6 w-full rounded border border-border bg-card px-1 text-[11px] text-foreground"
       value={doc.filedBucket ?? ''}
       disabled={disabled}
       onClick={(e) => e.stopPropagation()}
@@ -216,7 +221,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
 
   if (loading) {
     return (
-      <div className="flex items-center gap-2 p-6 text-sm text-[#64748b]">
+      <div className="flex items-center gap-2 p-6 text-sm text-muted-foreground">
         <Loader2 className="h-4 w-4 animate-spin" /> Loading the client's documents…
       </div>
     );
@@ -228,7 +233,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
         <div className="flex items-center gap-2 text-sm text-red-600">
           <AlertCircle className="h-4 w-4" /> Couldn't load the documents: {error}
         </div>
-        <button onClick={() => void reload()} className="w-fit rounded border border-[#e2e8f0] px-2 py-1 text-xs">
+        <button onClick={() => void reload()} className="w-fit rounded border border-border px-2 py-1 text-xs">
           Retry
         </button>
       </div>
@@ -240,10 +245,10 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
   return (
     <div data-testid="job-documents-panel" className="flex flex-col">
       {/* ── TOP RIBBON — the folder tabs. Deliberately QUIET.
-          Selected = background #e8edf4 + a small blue dot, and NOTHING more. Ben rejected a
-          bright/white selected tab TWICE, and it is easier to break on a light page. ── */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#e2e8f0] px-1 pb-2">
-        <span className="text-[11px] text-[#64748b]">
+          Selected = a slightly darker background (bg-muted) + a small blue dot, and NOTHING more.
+          Ben rejected a bright/white selected tab TWICE. Do not make it high-contrast. ── */}
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-1 pb-2">
+        <span className="text-[11px] text-muted-foreground">
           Drag onto a folder or its tab · or use the dropdown on a file
         </span>
         <div className="flex flex-wrap items-center gap-1" data-testid="folder-ribbon">
@@ -273,16 +278,16 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                   over
                     ? 'border-dashed border-green-500 bg-green-50 text-green-700'
                     : on
-                      ? 'border-transparent bg-[#e8edf4] text-[#0f172a]'
-                      : 'border-transparent text-[#94a3b8] hover:bg-[#f1f5f9] hover:text-[#0f172a]'
+                      ? 'border-transparent bg-muted text-foreground'
+                      : 'border-transparent text-muted-foreground hover:bg-muted hover:text-foreground'
                 }`}
               >
-                {on && <span className="h-[5px] w-[5px] shrink-0 rounded-full bg-[#3b82f6]" />}
+                {on && <span className="h-[5px] w-[5px] shrink-0 rounded-full bg-blue-500" />}
                 <span>{JOB_SUBFOLDER_SHORT_LABELS[f]}</span>
-                <span className={`text-[10px] font-semibold ${items.length ? 'text-[#64748b]' : 'text-[#cbd5e1]'}`}>
+                <span className={`text-[10px] font-semibold ${items.length ? 'text-muted-foreground' : 'text-muted-foreground'}`}>
                   {items.length}
                 </span>
-                {bad > 0 && <CloudOff className="h-3 w-3 text-[#d97706]" />}
+                {bad > 0 && <CloudOff className="h-3 w-3 text-amber-600 dark:text-amber-400" />}
               </button>
             );
           })}
@@ -296,20 +301,20 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
             <CheckCircle2 className="h-4 w-4" /> Everything is sorted
           </span>
         ) : (
-          <span className="whitespace-nowrap text-sm text-[#0f172a]">
+          <span className="whitespace-nowrap text-sm text-foreground">
             <b>{inbox.length}</b> still to sort
           </span>
         )}
-        <div className="h-1.5 flex-1 overflow-hidden rounded bg-[#e2e8f0]">
+        <div className="h-1.5 flex-1 overflow-hidden rounded bg-muted">
           <div
-            className="h-full bg-[#22c55e] transition-all"
+            className="h-full bg-green-600 transition-all"
             style={{ width: total ? `${(filedCount / total) * 100}%` : '0%' }}
           />
         </div>
         {/* Said ONCE, here — NOT repeated as a paragraph in all five folders. Ben rejected that. */}
         {!sharepointReachable && (
           <span
-            className="flex items-center gap-1 whitespace-nowrap text-[11px] text-[#64748b]"
+            className="flex items-center gap-1 whitespace-nowrap text-[11px] text-muted-foreground"
             title="Filing still works — files are safe here and the copy is retried."
           >
             <CloudOff className="h-3 w-3" /> SharePoint not connected
@@ -317,9 +322,9 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-0 overflow-hidden rounded-[10px] border border-[#e2e8f0] lg:grid-cols-[1fr_380px]">
+      <div className="grid grid-cols-1 gap-0 overflow-hidden rounded-[10px] border border-border lg:grid-cols-[1fr_380px]">
         {/* ── LEFT — the gallery. Shows Unsorted, or the folder you opened. ── */}
-        <div className="flex flex-col gap-2 border-r border-[#e2e8f0] bg-white p-3">
+        <div className="flex flex-col gap-2 border-r border-border bg-card p-3">
           {/* Drop zone. */}
           <div
             data-testid="drop-zone"
@@ -336,26 +341,26 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
               );
             }}
             className={`flex flex-col items-center rounded-[9px] border-2 border-dashed py-4 text-center ${
-              overTarget === 'drop' ? 'border-[#3b82f6] bg-blue-50' : 'border-[#e2e8f0]'
+              overTarget === 'drop' ? 'border-blue-500 bg-blue-50' : 'border-border'
             }`}
           >
-            <Upload className="h-4 w-4 text-[#94a3b8]" />
-            <div className="text-xs text-[#0f172a]">Drop files here to add them</div>
-            <div className="text-[10px] text-[#64748b]">they land in the pile below, unsorted</div>
+            <Upload className="h-4 w-4 text-muted-foreground" />
+            <div className="text-xs text-foreground">Drop files here to add them</div>
+            <div className="text-[10px] text-muted-foreground">they land in the pile below, unsorted</div>
           </div>
 
           {/* Title + the 1-up / 2-up / 3-up size switch. */}
           <div className="flex items-center justify-between">
-            <span className="truncate text-sm font-semibold text-[#0f172a]">
+            <span className="truncate text-sm font-semibold text-foreground">
               {view ?? 'Unsorted'}
-              <span className="ml-1 text-xs font-normal text-[#64748b]">
+              <span className="ml-1 text-xs font-normal text-muted-foreground">
                 · {list.length} file{list.length === 1 ? '' : 's'}
               </span>
               {view && (
                 <button
                   data-testid="back-to-unsorted-link"
                   onClick={() => setView(null)}
-                  className="ml-2 rounded border border-[#e2e8f0] px-1.5 py-0.5 text-[11px] font-normal text-[#3b82f6] hover:bg-[#f1f5f9]"
+                  className="ml-2 rounded border border-border px-1.5 py-0.5 text-[11px] font-normal text-blue-600 dark:text-blue-400 hover:bg-muted"
                 >
                   back to Unsorted
                 </button>
@@ -367,7 +372,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                   key={n}
                   onClick={() => setGsize(n)}
                   className={`rounded px-1.5 py-0.5 text-[11px] ${
-                    gsize === n ? 'bg-[#e8edf4] text-[#0f172a]' : 'text-[#94a3b8] hover:bg-[#f1f5f9]'
+                    gsize === n ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted'
                   }`}
                 >
                   {n} up
@@ -379,19 +384,19 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
           {/* The thumbnails. */}
           <div className="max-h-[560px] overflow-y-auto pr-1">
             {list.length === 0 ? (
-              <div className="flex flex-col items-center gap-1 rounded-md border border-[#e2e8f0] bg-[#f8fafc] py-12 text-center">
+              <div className="flex flex-col items-center gap-1 rounded-md border border-border bg-muted/40 py-12 text-center">
                 {view ? (
                   <>
-                    <div className="text-sm font-semibold text-[#0f172a]">This folder is empty</div>
-                    <div className="text-xs text-[#64748b]">
+                    <div className="text-sm font-semibold text-foreground">This folder is empty</div>
+                    <div className="text-xs text-muted-foreground">
                       Drag a file onto it, or pick it from a file's dropdown.
                     </div>
                   </>
                 ) : (
                   <>
-                    <CheckCircle2 className="h-8 w-8 text-[#22c55e]" />
-                    <div className="text-sm font-semibold text-[#0f172a]">Everything is sorted</div>
-                    <div className="text-xs text-[#64748b]">Every file the client sent is now in a folder.</div>
+                    <CheckCircle2 className="h-8 w-8 text-green-600 dark:text-green-400" />
+                    <div className="text-sm font-semibold text-foreground">Everything is sorted</div>
+                    <div className="text-xs text-muted-foreground">Every file the client sent is now in a folder.</div>
                   </>
                 )}
               </div>
@@ -413,15 +418,15 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                         setDragDoc(null);
                         setOverTarget(null);
                       }}
-                      className={`flex flex-col overflow-hidden rounded-[9px] border bg-white transition-opacity ${
-                        amber ? 'border-[#d97706]/50' : 'border-[#e2e8f0]'
+                      className={`flex flex-col overflow-hidden rounded-[9px] border bg-card transition-opacity ${
+                        amber ? 'border-amber-500/60' : 'border-border'
                       } ${dragDoc?.id === doc.id ? 'opacity-40' : ''} ${busyId === doc.id ? 'opacity-50' : ''}`}
                     >
                       <button
                         type="button"
                         data-testid="thumb-open"
                         onClick={() => setPreviewIdx(i)}
-                        className={`relative flex items-center justify-center overflow-hidden bg-[#f1f5f9] ${
+                        className={`relative flex items-center justify-center overflow-hidden bg-muted ${
                           gsize === 1 ? 'h-[260px]' : gsize === 2 ? 'h-[150px]' : 'h-[104px]'
                         }`}
                         title="Open"
@@ -431,7 +436,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                           <span
                             data-testid="amber-mark"
                             title="Filed here. The copy to SharePoint has not landed — the file is safe."
-                            className="absolute right-1 top-1 flex items-center gap-1 rounded bg-amber-50 px-1 py-0.5 text-[9px] font-semibold text-[#d97706]"
+                            className="absolute right-1 top-1 flex items-center gap-1 rounded bg-amber-50 px-1 py-0.5 text-[9px] font-semibold text-amber-600 dark:text-amber-400"
                           >
                             <CloudOff className="h-2.5 w-2.5" /> SharePoint failed
                           </span>
@@ -439,7 +444,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                       </button>
                       <div className="flex flex-col gap-1 p-1.5">
                         {/* No file-size line — Ben cut it; it wasted a row on every card. */}
-                        <div className="truncate text-[11px] text-[#0f172a]" title={doc.name}>
+                        <div className="truncate text-[11px] text-foreground" title={doc.name}>
                           {doc.name}
                         </div>
                         {doc.sharepointOnly ? (
@@ -463,10 +468,10 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
 
         {/* ── RIGHT — the GREY WELL. All five folders, ALWAYS visible, as WHITE cards sitting on it.
             The well is the whole point: a white card on a white page has no edges. ── */}
-        <div className="flex flex-col bg-[#f1f5f9] p-3" data-testid="folder-well">
+        <div className="flex flex-col bg-muted p-3" data-testid="folder-well">
           <div className="mb-2 flex items-baseline justify-between">
-            <span className="text-sm font-semibold text-[#0f172a]">Job Folders</span>
-            <span className="text-[10px] text-[#64748b]">drag a file onto one · click to look inside</span>
+            <span className="text-sm font-semibold text-foreground">Job Folders</span>
+            <span className="text-[10px] text-muted-foreground">drag a file onto one · click to look inside</span>
           </div>
 
           <div className="flex max-h-[640px] flex-col gap-3 overflow-y-auto">
@@ -494,25 +499,25 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                     e.preventDefault();
                     dropOn(folder);
                   }}
-                  className={`shrink-0 cursor-pointer rounded-lg border-[1.5px] bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,.05)] transition-all ${
+                  className={`shrink-0 cursor-pointer rounded-lg border-[1.5px] bg-card p-3 shadow-sm transition-all ${
                     over
-                      ? 'scale-[1.01] border-dashed border-[#22c55e] bg-green-50'
+                      ? 'scale-[1.01] border-dashed border-green-500 bg-green-50'
                       : flash === folder
-                        ? 'border-[#22c55e] shadow-[0_0_0_6px_rgba(34,197,94,.3)]'
+                        ? 'border-green-500 ring-4 ring-green-500/30'
                         : on
-                          ? 'border-[#3b82f6] shadow-[0_0_0_3px_rgba(59,130,246,.22)]'
-                          : 'border-[#e2e8f0] hover:border-[#94a3b8]'
+                          ? 'border-blue-500 ring-2 ring-blue-500/30'
+                          : 'border-border hover:border-foreground/40'
                   }`}
                 >
                   <div className="mb-2 flex items-center justify-between gap-2">
-                    <span className="truncate text-[11px] font-semibold text-[#0f172a]" title={folder}>
+                    <span className="truncate text-[11px] font-semibold text-foreground" title={folder}>
                       {folder}
                     </span>
-                    <span className="flex shrink-0 items-center gap-1 text-[10px] text-[#64748b]">
+                    <span className="flex shrink-0 items-center gap-1 text-[10px] text-muted-foreground">
                       {items.length ? `${items.length} file${items.length === 1 ? '' : 's'}` : '—'}
                       {bad > 0 && (
                         <span
-                          className="flex items-center gap-0.5 font-semibold text-[#d97706]"
+                          className="flex items-center gap-0.5 font-semibold text-amber-600 dark:text-amber-400"
                           title="Did not copy to SharePoint"
                         >
                           <CloudOff className="h-3 w-3" /> {bad}
@@ -531,12 +536,12 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                           <div
                             key={f.id ?? `s-${f.name}`}
                             data-testid="folder-slot"
-                            className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[5px] bg-[#f8fafc]"
+                            className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[5px] bg-muted/40"
                             title={f.name}
                           >
                             <Art doc={f} big={false} />
                             {isAmber(f) && (
-                              <span className="absolute right-0.5 top-0.5 rounded bg-[#d97706] px-1 text-[8px] font-bold text-white">
+                              <span className="absolute right-0.5 top-0.5 rounded bg-amber-600 px-1 text-[8px] font-bold text-white">
                                 !
                               </span>
                             )}
@@ -547,7 +552,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                         return (
                           <div
                             key="more"
-                            className="flex aspect-[4/3] items-center justify-center rounded bg-[#f8fafc] text-[11px] font-semibold text-[#64748b]"
+                            className="flex aspect-[4/3] items-center justify-center rounded bg-muted/40 text-[11px] font-semibold text-muted-foreground"
                           >
                             +{rest}
                           </div>
@@ -557,7 +562,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                         <div
                           key={`hole-${k}`}
                           data-testid="empty-slot"
-                          className="flex aspect-[4/3] items-center justify-center rounded-[5px] border-[1.5px] border-dashed border-[#cbd5e1] text-[10px] font-semibold text-[#cbd5e1]"
+                          className="flex aspect-[4/3] items-center justify-center rounded-[5px] border-[1.5px] border-dashed border-border text-[10px] font-semibold text-muted-foreground"
                         >
                           {k + 1}
                         </div>
@@ -567,7 +572,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
 
                   {/* ONE short line per empty folder. NOT a paragraph, and not five times over. */}
                   {items.length === 0 && (
-                    <div className="mt-2 text-[11px] text-[#64748b]">Empty — drag a file here</div>
+                    <div className="mt-2 text-[11px] text-muted-foreground">Empty — drag a file here</div>
                   )}
                 </div>
               );

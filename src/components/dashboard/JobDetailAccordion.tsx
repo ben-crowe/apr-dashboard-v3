@@ -1,6 +1,7 @@
 import React from "react";
 import { DetailJob, JobDetails } from "@/types/job";
 import ClientSubmissionSection from "./job-details/ClientSubmissionSection";
+import { JobDocumentsPanel } from "@/features/job-documents/JobDocumentsPanel";
 import LoeQuoteSection from "./job-details/LoeQuoteSection";
 import OrganizingDocsSection from "./job-details/OrganizingDocsSection";
 import PropertyInfoSection from "./job-details/PropertyInfoSection";
@@ -240,6 +241,14 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         insertFromData={insertFromData}
         forceOpen={openAllSignal}
       />
+
+      {/* Client documents — sort the client's submitted files into the job's five real folders and
+          preview what is in each, in-app. ADDITIVE: the client-submission section above is untouched
+          and still lists and accepts the client's uploads exactly as before. */}
+      <div className="rounded-lg border border-gray-700 bg-[#1f1f1f] p-3">
+        <h3 className="mb-2 text-sm font-semibold text-white">Client Documents</h3>
+        <JobDocumentsPanel jobId={job.id} />
+      </div>
 
       <LoeQuoteSection
         job={job}

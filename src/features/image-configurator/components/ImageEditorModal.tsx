@@ -29,6 +29,18 @@ interface ImageEditorModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave?: () => void;
+  /**
+   * Override the image URL. Needed because the default builder (getPublicImageUrl) hardcodes the
+   * image-configurator's own buckets (appraisal-raw / processed) and cannot address any other one —
+   * client-submitted documents live in the `job-files` bucket. Passing a URL in lets the job-document
+   * previewer REUSE this modal instead of forking it, which is what BUILD STEP 1 just spent a commit
+   * un-doing for the folder names. Omit it and behaviour is exactly as before.
+   */
+  imageUrlOverride?: string | null;
+  /** Hide the crop/rotate/adjust rail. The document previewer views files; it does not edit them. */
+  viewOnly?: boolean;
+  /** Rendered under the header — the previewer puts its "Move to…" folder dropdown here. */
+  headerExtra?: React.ReactNode;
 }
 
 interface CropData {
@@ -68,6 +80,9 @@ export function ImageEditorModal({
   isOpen,
   onClose,
   onSave,
+  imageUrlOverride,
+  viewOnly = false,
+  headerExtra,
 }: ImageEditorModalProps) {
   const saveEdits = useSaveImageEdits();
 
@@ -153,8 +168,10 @@ export function ImageEditorModal({
     onClose();
   }, [image.id, cropData, adjustments, saveEdits, onSave, onClose]);
 
-  // Get signed URL for image (private bucket requires signed URLs)
-  const imageUrl = useSignedImageUrl(image.storage_path) || '/placeholder-image.jpg';
+  // Get signed URL for image (private bucket requires signed URLs).
+  // An override wins: the default builder can only address the image-configurator's own buckets.
+  const defaultUrl = useSignedImageUrl(image.storage_path);
+  const imageUrl = imageUrlOverride || defaultUrl || '/placeholder-image.jpg';
 
   // Build CSS filter string
   const filterStyle = `
@@ -195,28 +212,35 @@ export function ImageEditorModal({
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700">
           <div className="flex items-center gap-3">
-            <h2 className="text-lg font-medium text-white">Edit Image</h2>
+            <h2 className="text-lg font-medium text-white">{viewOnly ? 'Preview' : 'Edit Image'}</h2>
             <span className="text-sm text-slate-400 truncate max-w-[200px]">
               {image.original_filename}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={handleReset}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-slate-300 hover:text-white hover:bg-slate-700 rounded transition-colors"
-            >
-              <Undo2 className="w-4 h-4" />
-              Reset
-            </button>
-            <button
-              onClick={handleSave}
-              disabled={saveEdits.isPending}
-              className="flex items-center gap-1.5 px-4 py-1.5 text-sm bg-green-600 hover:bg-green-500 text-white rounded transition-colors disabled:opacity-50"
-            >
-              <Check className="w-4 h-4" />
-              Save
-            </button>
+            {/* The previewer drops its "Move to…" folder dropdown in here, so a file can be reviewed
+                and filed without closing the preview. */}
+            {headerExtra}
+            {!viewOnly && (
+              <button
+                onClick={handleReset}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-slate-300 hover:text-white hover:bg-slate-700 rounded transition-colors"
+              >
+                <Undo2 className="w-4 h-4" />
+                Reset
+              </button>
+            )}
+            {!viewOnly && (
+              <button
+                onClick={handleSave}
+                disabled={saveEdits.isPending}
+                className="flex items-center gap-1.5 px-4 py-1.5 text-sm bg-green-600 hover:bg-green-500 text-white rounded transition-colors disabled:opacity-50"
+              >
+                <Check className="w-4 h-4" />
+                Save
+              </button>
+            )}
             <button
               onClick={onClose}
               className="p-1.5 rounded hover:bg-slate-700 text-slate-400 hover:text-white"
@@ -246,8 +270,9 @@ export function ImageEditorModal({
             </div>
           </div>
 
-          {/* Controls sidebar */}
-          <div className="w-72 bg-slate-800 border-l border-slate-700 flex flex-col">
+          {/* Controls sidebar — the crop/rotate/adjust rail. Hidden in viewOnly: the document
+              previewer VIEWS files, it does not edit them (and a .pdf has nothing to crop). */}
+          <div className={`w-72 bg-slate-800 border-l border-slate-700 flex-col ${viewOnly ? 'hidden' : 'flex'}`}>
             {/* Tab buttons */}
             <div className="flex border-b border-slate-700">
               <button

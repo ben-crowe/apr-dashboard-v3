@@ -32,6 +32,7 @@ import {
   RefreshCw,
   FileText,
   FlaskConical,
+  AlertCircle,
 } from "lucide-react";
 import ImageFieldInput from "./components/ImageFieldInput";
 
@@ -90,6 +91,7 @@ const TestInputDashboard: React.FC = () => {
   const [seedState, setSeedState] = useState<"idle" | "seeding" | "done">(
     "idle",
   );
+  const [seedError, setSeedError] = useState<string | null>(null);
 
   // DEV-ONLY — Seed Test Job. A job created through the intake form has no job number until a
   // real Valcre job exists, so there is no way to get a complete, NUMBERED test job without
@@ -101,8 +103,12 @@ const TestInputDashboard: React.FC = () => {
   // The import is DYNAMIC and this whole handler is only reachable from a DEV-guarded button:
   // with import.meta.env.DEV statically false, Rollup drops the branch and never emits the
   // seedTransitionJob chunk — same treatment as the transition-diff runner in main.tsx.
+  // Failure surfaces INLINE, never through alert(). A browser alert() blocks every subsequent
+  // automation event — the driver cannot dismiss it, so it hangs instead of failing. This button
+  // exists so automated tests can set up a job, which makes its failure path the path a test hits.
   const handleSeedTestJob = async () => {
     setSeedState("seeding");
+    setSeedError(null);
     try {
       const { seedTransitionJob } = await import(
         "@/features/report-builder/testSeam/seedTransitionJob"
@@ -112,8 +118,9 @@ const TestInputDashboard: React.FC = () => {
       setSeedState("done");
     } catch (error) {
       setSeedState("idle");
+      const message = error instanceof Error ? error.message : String(error);
       console.error("Seed Test Job failed:", error);
-      alert("Seed Test Job failed: " + String(error));
+      setSeedError(message);
     }
   };
 
@@ -1367,6 +1374,21 @@ const TestInputDashboard: React.FC = () => {
                   {seedState === "seeding" ? "Seeding..." : "Seed Test Job"}
                   {seedState === "done" && <span className="ml-1">&#10003;</span>}
                 </Button>
+              )}
+              {import.meta.env.DEV && seedError && (
+                <div
+                  role="alert"
+                  data-testid="seed-test-job-error"
+                  className="flex items-center gap-2 rounded border px-2 py-1 text-xs"
+                  style={{
+                    backgroundColor: "#2a1215",
+                    borderColor: "#b91c1c",
+                    color: "#fca5a5",
+                  }}
+                >
+                  <AlertCircle className="w-3 h-3 shrink-0" />
+                  <span>Seed Test Job failed: {seedError}</span>
+                </div>
               )}
               <Button
                 onClick={() => navigate("/apr-v4")}

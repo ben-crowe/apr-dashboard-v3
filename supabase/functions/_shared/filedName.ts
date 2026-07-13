@@ -44,6 +44,21 @@ export function sanitizeStem(stem: string): string {
 }
 
 /**
+ * Strip what SharePoint rejects from the EXTENSION too.
+ *
+ * The extension is exactly as client-controlled as the stem — splitExtension() splits on the LAST
+ * dot, so anything after that dot is whatever the client typed. Sanitizing only the stem left every
+ * illegal character that happened to fall after the last dot alive in the name, and Graph 400s on
+ * it: "Scan 2026.01.03: final" -> ext ".03: final", colon intact. Same failure class the sanitizer
+ * exists to close, in the half of the filename that went unchecked.
+ */
+export function sanitizeExt(ext: string): string {
+  if (!ext) return '';
+  const cleaned = ext.replace(ILLEGAL, '').replace(/\.+$/, '').trim();
+  return cleaned === '.' || cleaned === '' ? '' : cleaned;
+}
+
+/**
  * The filed name for a job_files row. Pure: (row id, original file name) -> name.
  *
  * Always suffixes the short id — the LOCKED behaviour. If the stem sanitizes to empty (a name made
@@ -53,6 +68,8 @@ export function sanitizeStem(stem: string): string {
 export function filedFileName(rowId: string, originalFileName: string): string {
   const { stem, ext } = splitExtension(originalFileName);
   const safeStem = sanitizeStem(stem);
-  if (!safeStem) return `${rowId}${ext}`;
-  return `${safeStem}-${shortId(rowId)}${ext}`;
+  const safeExt = sanitizeExt(ext);
+  const name = safeStem ? `${safeStem}-${shortId(rowId)}${safeExt}` : `${rowId}${safeExt}`;
+  // SharePoint also rejects any item name ENDING in a period or in whitespace. Final guard.
+  return name.replace(/[.\s]+$/, '');
 }

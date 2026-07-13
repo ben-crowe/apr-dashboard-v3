@@ -78,6 +78,12 @@ Password Manager/
 !package-lock.json
 !tsconfig*.json
 !eslint.config.js
+# Deno config for the edge functions is SOURCE, not test data — without it the
+# type-checker cannot resolve npm imports and silently checks nothing.
+# Keep the blanket rule above: it deliberately hides live Valcre/ClickUp API
+# dumps and credential files. Un-ignore config only, never a data directory.
+!supabase/functions/deno.json
+!supabase/functions/**/deno.json
 
 # Gate contract artifact — the drift-check master config MUST ship (Vercel prod build reads it); committed like a lockfile
 !docs/Features/08-Master-Field-Registry/GENERATED-v3-drift-check.json

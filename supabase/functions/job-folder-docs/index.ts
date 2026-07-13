@@ -1,19 +1,34 @@
-// Feature B (SharePoint) — S3 Client Documents folder tab: LIST + UPLOAD (chunk 4).
+// Feature B (SharePoint) — S3 Client Documents folder tab: LIST + UPLOAD + CREATE + FILE-FROM-STORAGE.
 //
-// INV-3 SECURITY CRUX — the input contract accepts jobId (+ action, bucket, file) ONLY. The
-// folder path is DERIVED SERVER-SIDE from the job row; any client-supplied path is REJECTED.
-// creds-server-side alone does NOT stop cross-job access — the jobId-only contract does, together
-// with resolveJobFolderPath's job-unique prefix. Graph secrets never leave the server.
+// SECURITY — WHAT THE jobId-ONLY CONTRACT ACTUALLY BUYS (corrected 2026-07-13; the previous version
+// of this comment overclaimed and must not be cited again):
+//   IT STOPS PATH TRAVERSAL. The folder path is DERIVED SERVER-SIDE from the job row; any
+//   client-supplied path key is rejected outright; `bucket` is validated against the five canonical
+//   subfolder names. A caller cannot make this function write outside a job's own subtree.
+//   IT DOES *NOT* STOP CROSS-JOB ACCESS. This function has NO caller authentication whatsoever.
+//   Anyone who can reach it and knows (or guesses) a jobId can list and write that job's folder.
+//   The jobId-only contract constrains WHERE the function writes, not WHO may ask it to. Real
+//   cross-job protection needs caller auth (the Login + Roles work), and does not exist today.
+//   Graph secrets never leave the server — that part is true and is a separate property.
 //
 // Built on the EXISTING _shared/graph.ts (INV-0 — one Graph engine, one credential path):
-//   LIST   -> resolveJobFolderPath (read-only) + listFolderItems (additive)
-//   UPLOAD -> resolveJobFolderPath + uploadFile (UNCHANGED)
-//   CREATE -> createJobFolders (UNCHANGED, the no-folders-yet action)
+//   LIST              -> resolveJobFolderPath (read-only) + listFolderItems (additive)
+//   UPLOAD            -> resolveJobFolderPath + uploadFile (UNCHANGED)
+//   CREATE            -> createJobFolders (UNCHANGED, the no-folders-yet action)
+//   FILE-FROM-STORAGE -> read the job_files row + its bytes from the `job-files` storage bucket,
+//                        PUT to the subfolder, THEN stamp the row. Bytes never touch the browser.
 //
 // Request forms:
-//   LIST   (JSON):      { jobId, action: "list" }
-//   CREATE (JSON):      { jobId, action: "create" }
-//   UPLOAD (multipart): fields jobId, action="upload", bucket, + file (the dropped File)
+//   LIST              (JSON):      { jobId, action: "list" }
+//   CREATE            (JSON):      { jobId, action: "create" }
+//   UPLOAD            (multipart): fields jobId, action="upload", bucket, + file (the dropped File)
+//   FILE-FROM-STORAGE (JSON):      { jobId, action: "file-from-storage", fileId, bucket }
+//
+// ORDER OF OPERATIONS FOR FILE-FROM-STORAGE — PUT FIRST, STAMP SECOND, STAMP ONLY ON 2xx.
+// Stamp-then-PUT is FORBIDDEN: it marks a row filed, drops it out of the inbox, and silently loses
+// the file when the PUT fails. There is no transaction spanning Graph and Postgres, so idempotent
+// retry IS the design — a failed stamp leaves the row in the inbox, and the retry PUTs the same
+// bytes to the same deterministic path, overwriting itself. That is why filedFileName() is pure.
 //
 // Single-PUT cap = 4 MB (Graph simple-upload). Enforced AUTHORITATIVELY here; the client also
 // pre-checks for UX. A file > 4 MB -> 413 with a clear per-file error + the folder link-out.
@@ -30,6 +45,10 @@ import {
   createJobFolders,
   JOB_SUBFOLDERS,
 } from '../_shared/graph.ts';
+import { filedFileName } from '../_shared/filedName.ts';
+
+/** The Supabase storage bucket intake uploads land in. Confirmed in useFormSubmission.ts — NOT 'documents'. */
+const STORAGE_BUCKET = 'job-files';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -67,6 +86,7 @@ serve(async (req) => {
     let jobId: string | undefined;
     let action: string | undefined;
     let bucket: string | undefined;
+    let fileId: string | undefined;
     let fileName: string | undefined;
     let fileType = 'application/octet-stream';
     let fileBytes: Uint8Array | undefined;
@@ -93,11 +113,20 @@ serve(async (req) => {
       jobId = typeof body.jobId === 'string' ? body.jobId : undefined;
       action = typeof body.action === 'string' ? body.action : undefined;
       bucket = typeof body.bucket === 'string' ? body.bucket : undefined;
+      fileId = typeof body.fileId === 'string' ? body.fileId : undefined;
     }
 
     if (!jobId) return json({ error: 'jobId is required' }, 400);
-    if (action !== 'list' && action !== 'upload' && action !== 'create') {
-      return json({ error: 'action must be "list", "upload", or "create"' }, 400);
+    if (
+      action !== 'list' &&
+      action !== 'upload' &&
+      action !== 'create' &&
+      action !== 'file-from-storage'
+    ) {
+      return json(
+        { error: 'action must be "list", "upload", "create", or "file-from-storage"' },
+        400,
+      );
     }
 
     // ---- derive the job's folder inputs SERVER-SIDE from the job row (never from the client) ----
@@ -148,6 +177,98 @@ serve(async (req) => {
         });
       }
       return json({ foldersExist: true, folderUrl: `/${parentPath}`, buckets });
+    }
+
+    // ---- FILE-FROM-STORAGE ----
+    // Move an intake-uploaded file from the `job-files` storage bucket into a SharePoint subfolder.
+    // The bytes go server-side; the browser never re-uploads them.
+    if (action === 'file-from-storage') {
+      if (!bucket || !VALID_BUCKETS.includes(bucket)) {
+        return json({ error: 'bucket must be one of the five job subfolders' }, 400);
+      }
+      if (!fileId) return json({ error: 'fileId is required for file-from-storage' }, 400);
+      if (!parentPath) {
+        return json({ error: 'no-folders-yet', message: 'Create the client folders first.' }, 409);
+      }
+
+      // Resolve the row BY (id, job_id) together. A fileId belonging to another job cannot be
+      // filed into this job's folder — the pair must match or there is no row.
+      const { data: fileRow, error: fileErr } = await supabase
+        .from('job_files')
+        .select('id, file_name, file_path, file_type, file_size, sharepoint_path')
+        .eq('id', fileId)
+        .eq('job_id', jobId)
+        .single();
+      if (fileErr || !fileRow) return json({ error: 'File not found for this job' }, 404);
+
+      // Already filed — idempotent no-op, not an error. (v1: a filed file leaves the inbox for good.)
+      if (fileRow.sharepoint_path) {
+        return json({ filed: true, alreadyFiled: true, webUrl: fileRow.sharepoint_path });
+      }
+
+      // Size gate BEFORE pulling bytes — the row already carries the size.
+      if ((fileRow.file_size ?? 0) > MAX_UPLOAD_BYTES) {
+        return json(
+          {
+            error: 'too-large',
+            message: 'too large to file here — upload via SharePoint web',
+            maxBytes: MAX_UPLOAD_BYTES,
+            folderUrl: `/${parentPath}/${bucket}`,
+          },
+          413,
+        );
+      }
+
+      const { data: blob, error: dlErr } = await supabase.storage
+        .from(STORAGE_BUCKET)
+        .download(fileRow.file_path);
+      if (dlErr || !blob) {
+        return json({ error: `Could not read the stored file: ${dlErr?.message ?? 'no data'}` }, 502);
+      }
+      const bytes = new Uint8Array(await blob.arrayBuffer());
+
+      // Deterministic, row-keyed destination name — sanitized for SharePoint's forbidden set.
+      // Pure function of the row, so a retry overwrites its own bytes at its own path.
+      const destName = filedFileName(fileRow.id, fileRow.file_name);
+
+      // 1. PUT FIRST. If this throws, nothing is stamped and the row stays in the inbox.
+      const uploaded = await uploadFile(
+        `${parentPath}/${bucket}/${destName}`,
+        bytes,
+        fileRow.file_type || 'application/octet-stream',
+      );
+
+      // 2. STAMP SECOND, and only now — the PUT returned. A stamp failure here is survivable:
+      //    the row stays in the inbox and a retry re-PUTs the same bytes to the same path.
+      const { error: stampErr } = await supabase
+        .from('job_files')
+        .update({
+          filed_bucket: bucket,
+          filed_at: new Date().toISOString(),
+          sharepoint_path: uploaded.webUrl ?? null,
+        })
+        .eq('id', fileRow.id)
+        .eq('job_id', jobId);
+
+      if (stampErr) {
+        return json(
+          {
+            error: 'filed-but-not-stamped',
+            message:
+              'The file reached SharePoint but the database was not updated. It stays in the inbox; ' +
+              'filing it again is safe and overwrites the same file.',
+            webUrl: uploaded.webUrl ?? null,
+            detail: stampErr.message,
+          },
+          500,
+        );
+      }
+
+      return json({
+        filed: true,
+        item: { name: destName, webUrl: uploaded.webUrl, id: uploaded.id },
+        bucket,
+      });
     }
 
     // ---- UPLOAD ----

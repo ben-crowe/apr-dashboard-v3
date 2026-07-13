@@ -16,6 +16,7 @@ import {
   UploadCloud,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { S3Inbox } from './S3Inbox';
 
 // Verbatim, in order — mirrors graph.ts JOB_SUBFOLDERS. The edge function is authoritative;
 // this is the render order + empty-state scaffold when a bucket has no files yet.
@@ -137,12 +138,17 @@ export function S3FolderBuckets({ jobId, sharepointFolderUrl }: S3FolderBucketsP
   }
 
   if (state === 'error') {
+    // The inbox reads job_files from Supabase and needs SharePoint for NOTHING. Hiding it behind a
+    // SharePoint failure would make the client's uploaded files invisible exactly when the folders
+    // are unreachable — the case where seeing them matters most. Only FILING needs SharePoint, and
+    // that fails with its own message.
     return (
-      <div className="flex flex-col gap-3 p-6">
-        <div className="flex items-center gap-2 text-sm text-red-500">
-          <AlertCircle className="w-4 h-4" /> Couldn’t load folders: {error}
+      <div className="flex flex-col gap-3 p-2">
+        <S3Inbox jobId={jobId} onFiled={() => void load()} />
+        <div className="flex items-center gap-2 px-4 text-sm text-red-500">
+          <AlertCircle className="w-4 h-4" /> Couldn’t load the SharePoint folders: {error}
         </div>
-        <Button variant="outline" size="sm" className="w-fit" onClick={() => void load()}>
+        <Button variant="outline" size="sm" className="ml-4 w-fit" onClick={() => void load()}>
           Retry
         </Button>
       </div>
@@ -151,11 +157,19 @@ export function S3FolderBuckets({ jobId, sharepointFolderUrl }: S3FolderBucketsP
 
   if (state === 'no-folders') {
     return (
-      <div className="flex flex-col gap-3 p-6">
-        <div className="text-sm text-muted-foreground">
+      <div className="flex flex-col gap-3 p-2">
+        {/* The client's uploaded files are shown even with no folders yet — they exist and the user
+            should see them. Filing one before the folders exist returns a clear "create them first". */}
+        <S3Inbox jobId={jobId} onFiled={() => void load()} />
+        <div className="px-4 pt-2 text-sm text-muted-foreground">
           No client folders exist for this job yet.
         </div>
-        <Button size="sm" className="w-fit gap-2" disabled={creating} onClick={createFolders}>
+        <Button
+          size="sm"
+          className="ml-4 w-fit gap-2"
+          disabled={creating}
+          onClick={createFolders}
+        >
           {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <FolderPlus className="w-4 h-4" />}
           Create Client Folders
         </Button>
@@ -164,17 +178,21 @@ export function S3FolderBuckets({ jobId, sharepointFolderUrl }: S3FolderBucketsP
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 p-2">
-      {JOB_SUBFOLDERS.map((name) => (
-        <BucketCard
-          key={name}
-          name={name}
-          items={buckets.find((b) => b.name === name)?.items ?? []}
-          uploading={uploadingBucket === name}
-          folderUrl={sharepointFolderUrl ?? null}
-          onDropFile={(file) => void uploadTo(name, file)}
-        />
-      ))}
+    <div className="flex flex-col gap-3 p-2">
+      <S3Inbox jobId={jobId} onFiled={() => void load()} />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+        {JOB_SUBFOLDERS.map((name) => (
+          <BucketCard
+            key={name}
+            name={name}
+            items={buckets.find((b) => b.name === name)?.items ?? []}
+            uploading={uploadingBucket === name}
+            folderUrl={sharepointFolderUrl ?? null}
+            onDropFile={(file) => void uploadTo(name, file)}
+          />
+        ))}
+      </div>
     </div>
   );
 }

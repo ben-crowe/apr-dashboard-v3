@@ -583,8 +583,11 @@ export type Database = {
           file_path: string
           file_size: number
           file_type: string
+          filed_at: string | null
+          filed_bucket: string | null
           id: string
           job_id: string | null
+          sharepoint_path: string | null
         }
         Insert: {
           created_at?: string
@@ -592,8 +595,11 @@ export type Database = {
           file_path: string
           file_size: number
           file_type: string
+          filed_at?: string | null
+          filed_bucket?: string | null
           id?: string
           job_id?: string | null
+          sharepoint_path?: string | null
         }
         Update: {
           created_at?: string
@@ -601,8 +607,11 @@ export type Database = {
           file_path?: string
           file_size?: number
           file_type?: string
+          filed_at?: string | null
+          filed_bucket?: string | null
           id?: string
           job_id?: string | null
+          sharepoint_path?: string | null
         }
         Relationships: [
           {

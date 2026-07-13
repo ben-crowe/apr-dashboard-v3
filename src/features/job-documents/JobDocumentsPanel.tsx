@@ -63,15 +63,25 @@ function isAmber(d: JobDocument): boolean {
   return !!d.filedBucket && !d.sharepointPath && !d.sharepointOnly;
 }
 
+/** The sentinel for the unfile entry. Not a folder name, so it can never collide with one. */
+const UNSORTED = '__unsorted__';
+
 interface MoveMenuProps {
   doc: JobDocument;
   current: JobSubfolder | null;
   onMove: (folder: JobSubfolder) => void;
+  onUnfile: () => void;
   disabled?: boolean;
 }
 
-/** The "Move to…" dropdown. Ben's call — a dropdown, because not everyone drags. */
-function MoveMenu({ doc, current, onMove, disabled }: MoveMenuProps) {
+/**
+ * The "Move to…" dropdown. Ben's call — a dropdown, because not everyone drags.
+ *
+ * "Back to Unsorted" appears ONLY when the file is already in a folder, and it is the way OUT.
+ * Without it, filing is a one-way door: a mis-filed file could be shuffled between folders but
+ * never returned to the client's-files side, so a wrong click was unrecoverable from the UI.
+ */
+function MoveMenu({ doc, current, onMove, onUnfile, disabled }: MoveMenuProps) {
   return (
     <select
       aria-label={`Move ${doc.name} to a folder`}
@@ -80,8 +90,9 @@ function MoveMenu({ doc, current, onMove, disabled }: MoveMenuProps) {
       value={current ?? ''}
       disabled={disabled}
       onChange={(e) => {
-        const v = e.target.value as JobSubfolder;
-        if (v) onMove(v);
+        const v = e.target.value;
+        if (v === UNSORTED) onUnfile();
+        else if (v) onMove(v as JobSubfolder);
       }}
     >
       <option value="">Move to…</option>
@@ -90,6 +101,11 @@ function MoveMenu({ doc, current, onMove, disabled }: MoveMenuProps) {
           {f}
         </option>
       ))}
+      {current && (
+        <option value={UNSORTED} data-testid="back-to-unsorted">
+          ↩ Back to Unsorted
+        </option>
+      )}
     </select>
   );
 }
@@ -98,10 +114,11 @@ interface ThumbProps {
   doc: JobDocument;
   onOpen: (doc: JobDocument) => void;
   onMove: (doc: JobDocument, folder: JobSubfolder) => void;
+  onUnfile: (doc: JobDocument) => void;
   busy: boolean;
 }
 
-function Thumb({ doc, onOpen, onMove, busy }: ThumbProps) {
+function Thumb({ doc, onOpen, onMove, onUnfile, busy }: ThumbProps) {
   const isImage = IMAGE_TYPES.test(doc.type);
   const amber = isAmber(doc);
 
@@ -150,7 +167,13 @@ function Thumb({ doc, onOpen, onMove, busy }: ThumbProps) {
         {doc.sharepointOnly ? (
           <span className="text-[10px] text-blue-300">in SharePoint</span>
         ) : (
-          <MoveMenu doc={doc} current={doc.filedBucket} onMove={(f) => onMove(doc, f)} disabled={busy} />
+          <MoveMenu
+            doc={doc}
+            current={doc.filedBucket}
+            onMove={(f) => onMove(doc, f)}
+            onUnfile={() => onUnfile(doc)}
+            disabled={busy}
+          />
         )}
       </div>
     </div>
@@ -158,7 +181,8 @@ function Thumb({ doc, onOpen, onMove, busy }: ThumbProps) {
 }
 
 export function JobDocumentsPanel({ jobId }: { jobId: string }) {
-  const { inbox, byFolder, loading, error, sharepointReachable, reload, fileInto } = useJobDocuments(jobId);
+  const { inbox, byFolder, loading, error, sharepointReachable, reload, fileInto, unfile } =
+    useJobDocuments(jobId);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [preview, setPreview] = useState<JobDocument | null>(null);
 
@@ -180,6 +204,19 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
       toast.warning(
         `${doc.name} filed to ${folder}. The SharePoint copy hasn't landed (${res.error ?? 'SharePoint unreachable'}) — the file is safe here and marked.`,
       );
+    }
+  };
+
+  /** Put a filed file back in the unsorted pile. The way OUT of a folder — filing is not one-way. */
+  const putBack = async (doc: JobDocument) => {
+    if (!doc.id) return;
+    setBusyId(doc.id);
+    const res = await unfile(doc);
+    setBusyId(null);
+    if (res.ok) {
+      toast.success(`${doc.name} moved back to the client's files — not in a folder now.`);
+    } else {
+      toast.error(`Couldn't move ${doc.name} back: ${res.error}`);
     }
   };
 
@@ -247,7 +284,14 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
           ) : (
             <div className="grid grid-cols-2 gap-2">
               {inbox.map((d) => (
-                <Thumb key={d.id} doc={d} onOpen={setPreview} onMove={move} busy={busyId === d.id} />
+                <Thumb
+                  key={d.id}
+                  doc={d}
+                  onOpen={setPreview}
+                  onMove={move}
+                  onUnfile={putBack}
+                  busy={busyId === d.id}
+                />
               ))}
             </div>
           )}
@@ -291,6 +335,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                         doc={d}
                         onOpen={setPreview}
                         onMove={move}
+                        onUnfile={putBack}
                         busy={busyId === d.id}
                       />
                     ))}
@@ -323,6 +368,10 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                 current={preview.filedBucket}
                 onMove={(f) => {
                   void move(preview, f);
+                  setPreview(null);
+                }}
+                onUnfile={() => {
+                  void putBack(preview);
                   setPreview(null);
                 }}
               />

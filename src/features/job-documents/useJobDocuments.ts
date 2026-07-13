@@ -206,5 +206,35 @@ export function useJobDocuments(jobId: string | null) {
     [jobId, load],
   );
 
-  return { ...state, reload: load, fileInto };
+  /**
+   * UNFILE — put a filed document back in the unsorted pile.
+   *
+   * Without this, filing is a ONE-WAY DOOR: a mis-filed file could be shuffled between folders but
+   * never returned to the client's-files side, so a wrong click was unrecoverable from the UI.
+   *
+   * Clearing filed_bucket is all it takes — inbox membership keys on filed_bucket IS NULL, so the
+   * file reappears where it started. sharepoint_path is cleared in the SAME write for the same
+   * reason a MOVE clears it: if the file was already copied to SharePoint, that copy is sitting in
+   * a folder this file no longer claims to be in, and leaving the mirror stamp would have the app
+   * asserting a location that is no longer true. The old SharePoint copy stays where it is — we
+   * never delete from the client's tree — so the honest state is "unsorted, not mirrored".
+   */
+  const unfile = useCallback(
+    async (doc: JobDocument): Promise<{ ok: boolean; error?: string }> => {
+      if (!jobId || !doc.id) return { ok: false, error: 'This file is only in SharePoint — nothing to move.' };
+
+      const { error: dbErr } = await supabase
+        .from('job_files')
+        .update({ filed_bucket: null, filed_at: null, sharepoint_path: null })
+        .eq('id', doc.id)
+        .eq('job_id', jobId);
+
+      if (dbErr) return { ok: false, error: dbErr.message };
+      await load();
+      return { ok: true };
+    },
+    [jobId, load],
+  );
+
+  return { ...state, reload: load, fileInto, unfile };
 }

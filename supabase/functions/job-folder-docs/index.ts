@@ -227,13 +227,30 @@ serve(async (req) => {
       }
       const bytes = new Uint8Array(await blob.arrayBuffer());
 
-      // Deterministic, row-keyed destination name — sanitized for SharePoint's forbidden set.
-      // Pure function of the row, so a retry overwrites its own bytes at its own path.
-      const destName = filedFileName(fileRow.id, fileRow.file_name);
+      // Deterministic, row-keyed destination name — sanitized for SharePoint's forbidden set AND
+      // fitted to SharePoint's ~400-char full-path limit. The prefix is what the name gets appended
+      // to, so it must be the REAL destination folder or the length budget is measuring nothing.
+      // Pure function of (row, prefix), so a retry rebuilds the same path and overwrites its own bytes.
+      const destPrefix = `${parentPath}/${bucket}/`;
+      let destName: string;
+      try {
+        destName = filedFileName(fileRow.id, fileRow.file_name, destPrefix);
+      } catch (nameErr) {
+        // The job's folder path alone is too long to fit any filename. Fail loudly and leave the row
+        // in the inbox — a silent 400 from Graph on the PUT would be far harder to diagnose.
+        return json(
+          {
+            error: 'path-too-long',
+            message: nameErr instanceof Error ? nameErr.message : String(nameErr),
+            folderUrl: `/${parentPath}/${bucket}`,
+          },
+          422,
+        );
+      }
 
       // 1. PUT FIRST. If this throws, nothing is stamped and the row stays in the inbox.
       const uploaded = await uploadFile(
-        `${parentPath}/${bucket}/${destName}`,
+        `${destPrefix}${destName}`,
         bytes,
         fileRow.file_type || 'application/octet-stream',
       );

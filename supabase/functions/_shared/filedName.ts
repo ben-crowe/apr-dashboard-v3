@@ -59,17 +59,75 @@ export function sanitizeExt(ext: string): string {
 }
 
 /**
- * The filed name for a job_files row. Pure: (row id, original file name) -> name.
- *
- * Always suffixes the short id — the LOCKED behaviour. If the stem sanitizes to empty (a name made
- * entirely of illegal characters), the row id alone carries the name, so a file can never be
- * PUT as a bare extension.
+ * SharePoint rejects any item whose FULL PATH exceeds ~400 characters. The full path here is the
+ * parent job folder + the subfolder + the name this function builds, e.g.
+ *   2.Jobs/2026/VAL261054 - Stacked Townhouse Development 2822 &2828 11 Ave SE Calgary AB/3. WORK FILES (TTSZ, PICS, COMPS)/<name>
+ * The parent is already long, so a long client filename can push the total over and Graph rejects
+ * the PUT. 400 is the documented ceiling; we build to it exactly rather than guessing a margin.
  */
-export function filedFileName(rowId: string, originalFileName: string): string {
+export const MAX_SHAREPOINT_PATH = 400;
+
+/** SharePoint rejects a name ending in a period or whitespace. Applied LAST — truncation can create one. */
+function trimTrailing(name: string): string {
+  return name.replace(/[.\s]+$/, '');
+}
+
+/**
+ * The filed name for a job_files row. PURE: (row id, original name, destination prefix) -> name.
+ *
+ * `prefix` is everything the name will be appended to — the resolved parent folder path plus the
+ * subfolder plus the trailing slash. It is derived SERVER-SIDE from the job row (resolveJobFolderPath),
+ * so it is a deterministic input, not a lookup. This function reads NOTHING from SharePoint: a
+ * length check that measured the live folder would make the name depend on remote state, and the
+ * PUT-first design rests on this being a pure function of the row — a retry must rebuild the exact
+ * same path to overwrite its own bytes instead of creating a second copy.
+ *
+ * Always suffixes the short id (the LOCKED behaviour). If the stem sanitizes to empty, the row id
+ * alone carries the name, so a file can never be PUT as a bare extension.
+ *
+ * LENGTH: only the STEM is ever truncated. The short id and the extension are what make the file
+ * unique and openable, so they are never cut. If even a zero-length stem does not fit, this THROWS
+ * rather than return a name SharePoint will reject — a loud failure that leaves the row in the
+ * inbox beats a silent 400 on the PUT.
+ */
+export function filedFileName(rowId: string, originalFileName: string, prefix = ''): string {
   const { stem, ext } = splitExtension(originalFileName);
   const safeStem = sanitizeStem(stem);
   const safeExt = sanitizeExt(ext);
-  const name = safeStem ? `${safeStem}-${shortId(rowId)}${safeExt}` : `${rowId}${safeExt}`;
-  // SharePoint also rejects any item name ENDING in a period or in whitespace. Final guard.
-  return name.replace(/[.\s]+$/, '');
+
+  // What the name may cost, given everything it gets appended to.
+  const nameBudget = MAX_SHAREPOINT_PATH - prefix.length;
+
+  // The fallback name (no usable stem) — the row id carries it.
+  const fallback = trimTrailing(`${rowId}${safeExt}`);
+  if (!safeStem) {
+    if (fallback.length > nameBudget) {
+      throw new Error(
+        `filedFileName: destination path would exceed SharePoint's ${MAX_SHAREPOINT_PATH}-character limit ` +
+          `even with no filename left to cut (prefix is ${prefix.length} chars). The job folder path is too long.`,
+      );
+    }
+    return fallback;
+  }
+
+  const suffix = `-${shortId(rowId)}`;
+  const stemBudget = nameBudget - suffix.length - safeExt.length;
+
+  // No room for even one character of stem — fall back to the row id and let THAT be length-checked.
+  if (stemBudget <= 0) {
+    if (fallback.length > nameBudget) {
+      throw new Error(
+        `filedFileName: destination path would exceed SharePoint's ${MAX_SHAREPOINT_PATH}-character limit ` +
+          `even with no filename left to cut (prefix is ${prefix.length} chars). The job folder path is too long.`,
+      );
+    }
+    return fallback;
+  }
+
+  // Truncate the STEM only. trimTrailing runs AFTER the cut, because cutting mid-name can leave a
+  // trailing dot or space — which is the very thing SharePoint rejects.
+  const cutStem = trimTrailing(safeStem.slice(0, stemBudget));
+  if (!cutStem) return fallback;
+
+  return trimTrailing(`${cutStem}${suffix}${safeExt}`);
 }

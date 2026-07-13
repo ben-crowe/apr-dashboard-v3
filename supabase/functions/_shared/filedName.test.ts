@@ -6,11 +6,16 @@
 // here therefore proves two things: the real assertions hold, AND the harness is actually executing
 // them. (The extension leak below got past a passing suite precisely because nothing tested it.)
 
-import { filedFileName } from './filedName.ts';
+import { filedFileName, MAX_SHAREPOINT_PATH } from './filedName.ts';
 
 const ID = '3f2b9c1a-77de-4a10-9b6e-0c1d2e3f4a5b';
 const SHORT = '3f2b9c1a';
 const ILLEGAL = /["*:<>?/\\|]/;
+
+// A REAL destination prefix, from the locked folder spec + a real job folder name.
+const PREFIX =
+  '2.Jobs/2026/VAL261054 - Stacked Townhouse Development 2822 &2828 11 Ave SE Calgary AB/' +
+  '3. WORK FILES (TTSZ, PICS, COMPS)/';
 
 let failures = 0;
 function check(label: string, got: unknown, want: unknown): boolean {
@@ -53,6 +58,54 @@ check('NO illegal character survives into ANY output',
   samples.some((s) => ILLEGAL.test(filedFileName(ID, s))), false);
 check('NO output ends in a period or whitespace',
   samples.some((s) => /[.\s]$/.test(filedFileName(ID, s))), false);
+
+console.log('\n--- PATH LENGTH (SharePoint rejects a full path over ~400 chars) ---');
+
+// The prefix is the real destination folder; the name is appended to it. The INVARIANT is about the
+// assembled path, not the name — a valid name on an over-long path is still a rejected PUT.
+const LONG_STEM = 'A'.repeat(300);
+const longPath = PREFIX + filedFileName(ID, `${LONG_STEM}.pdf`, PREFIX);
+check('a 300-char filename is cut to fit the full path', longPath.length <= MAX_SHAREPOINT_PATH, true);
+check('the short id survives truncation (uniqueness is never cut)',
+  filedFileName(ID, `${LONG_STEM}.pdf`, PREFIX).includes(SHORT), true);
+check('the extension survives truncation (the file stays openable)',
+  filedFileName(ID, `${LONG_STEM}.pdf`, PREFIX).endsWith('.pdf'), true);
+check('a short name is NOT truncated when it already fits',
+  filedFileName(ID, 'survey.pdf', PREFIX), `survey-${SHORT}.pdf`);
+check('truncation cannot leave a trailing dot or space',
+  /[.\s]$/.test(filedFileName(ID, `${'B'.repeat(120)}   ...x.pdf`, PREFIX)), false);
+
+// Fail LOUD, never silently produce a path SharePoint will reject.
+let threw = false;
+try {
+  // A prefix so long that no filename fits after it.
+  filedFileName(ID, 'anything.pdf', 'x'.repeat(MAX_SHAREPOINT_PATH));
+} catch {
+  threw = true;
+}
+check('throws when the folder path alone leaves no room (loud, not a silent bad PUT)', threw, true);
+
+// THE INVARIANT — over every sample, at three prefix lengths. This is the assertion that would have
+// caught the extension leak, applied to length: assert the RULE, not the cases you thought of.
+const lengthSamples = [
+  'survey.pdf', 'Site Survey: North Lot.pdf', `${LONG_STEM}.pdf`, `${'x'.repeat(500)}.docx`,
+  'Scan 2026.01.03: final', 'notes.a|b', 'survey.', '///.pdf', 'README', `${'y'.repeat(250)}`,
+];
+const prefixes = ['', PREFIX, PREFIX + 'x'.repeat(50)];
+const anyOverLimit = lengthSamples.some((s) =>
+  prefixes.some((p) => (p + filedFileName(ID, s, p)).length > MAX_SHAREPOINT_PATH),
+);
+check('INVARIANT — NO assembled full path exceeds the limit, for ANY sample at ANY prefix',
+  anyOverLimit, false);
+
+// Length work must not have broken the character rules.
+const stillIllegal = lengthSamples.some((s) =>
+  prefixes.some((p) => ILLEGAL.test(filedFileName(ID, s, p))),
+);
+check('INVARIANT — truncation did not reintroduce an illegal character', stillIllegal, false);
+
+check('INVARIANT — still deterministic with a prefix (retry-idempotency)',
+  filedFileName(ID, `${LONG_STEM}.pdf`, PREFIX) === filedFileName(ID, `${LONG_STEM}.pdf`, PREFIX), true);
 
 // ---- The control: this assertion MUST fail. A green harness that skips it is not green. ----
 console.log('\n--- control (MUST fail — proves the assertions actually execute) ---');

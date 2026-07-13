@@ -86,7 +86,7 @@ function MoveMenu({ doc, current, onMove, onUnfile, disabled }: MoveMenuProps) {
     <select
       aria-label={`Move ${doc.name} to a folder`}
       data-testid="move-to-folder"
-      className="h-7 max-w-[150px] rounded border border-gray-500 bg-[#1f1f1f] px-1 text-xs text-white"
+      className="h-7 max-w-[150px] rounded border border-gray-300 bg-white px-1 text-xs text-foreground"
       value={current ?? ''}
       disabled={disabled}
       onChange={(e) => {
@@ -125,26 +125,28 @@ function Thumb({ doc, onOpen, onMove, onUnfile, busy }: ThumbProps) {
   return (
     <div
       data-testid="doc-thumb"
-      className={`relative flex flex-col rounded-md border bg-[#232323] ${
-        amber ? 'border-amber-600' : 'border-gray-700'
+      className={`relative flex flex-col rounded-md border bg-white ${
+        amber ? 'border-amber-400' : 'border-gray-300'
       }`}
     >
       <button
         type="button"
         onClick={() => onOpen(doc)}
-        className="flex h-28 items-center justify-center overflow-hidden rounded-t-md bg-[#1a1a1a]"
+        className="flex h-28 items-center justify-center overflow-hidden rounded-t-md bg-gray-50"
         title={doc.sharepointOnly ? 'In SharePoint — no preview held here' : 'Preview'}
       >
         {isImage && doc.storagePath ? (
           <img src={publicUrl(doc.storagePath)} alt={doc.name} className="h-full w-full object-cover" />
         ) : (
-          // Not previewable in-app: a type badge, and the file reads as FILED AND SAFE — never broken.
-          <div className="flex flex-col items-center gap-1 text-gray-400">
+          // Not previewable in-app. The wording is KEYED ON filed_bucket, because "filed and safe"
+          // on a file that is NOT in a folder is a plain false statement on screen — it was being
+          // rendered unconditionally. Unsorted -> say only that there is no preview.
+          <div className="flex flex-col items-center gap-1 text-gray-500">
             <FileText className="h-6 w-6" />
-            <span className="rounded bg-gray-700 px-1.5 py-0.5 text-[10px] font-medium text-gray-200">
+            <span className="rounded bg-gray-200 px-1.5 py-0.5 text-[10px] font-medium text-gray-700">
               {ext(doc.name)}
             </span>
-            <span className="text-[10px]">filed and safe</span>
+            <span className="text-[10px]">{doc.filedBucket ? 'filed and safe' : 'no preview'}</span>
           </div>
         )}
       </button>
@@ -160,12 +162,12 @@ function Thumb({ doc, onOpen, onMove, onUnfile, busy }: ThumbProps) {
       )}
 
       <div className="flex flex-col gap-1 p-1.5">
-        <span className="truncate text-[11px] text-gray-200" title={doc.name}>
+        <span className="truncate text-[11px] text-foreground" title={doc.name}>
           {doc.name}
         </span>
-        <span className="text-[10px] text-gray-500">{sizeOf(doc.size)}</span>
+        <span className="text-[10px] text-muted-foreground">{sizeOf(doc.size)}</span>
         {doc.sharepointOnly ? (
-          <span className="text-[10px] text-blue-300">in SharePoint</span>
+          <span className="text-[10px] text-blue-600">in SharePoint</span>
         ) : (
           <MoveMenu
             doc={doc}
@@ -222,7 +224,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
 
   if (loading) {
     return (
-      <div className="flex items-center gap-2 p-6 text-sm text-gray-400">
+      <div className="flex items-center gap-2 p-6 text-sm text-muted-foreground">
         <Loader2 className="h-4 w-4 animate-spin" /> Loading the client's documents…
       </div>
     );
@@ -231,10 +233,10 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
   if (error) {
     return (
       <div className="flex flex-col gap-2 p-6">
-        <div className="flex items-center gap-2 text-sm text-red-400">
+        <div className="flex items-center gap-2 text-sm text-red-600">
           <AlertCircle className="h-4 w-4" /> Couldn't load the documents: {error}
         </div>
-        <button onClick={() => void reload()} className="w-fit rounded border border-gray-600 px-2 py-1 text-xs text-gray-200">
+        <button onClick={() => void reload()} className="w-fit rounded border border-gray-300 px-2 py-1 text-xs text-foreground">
           Retry
         </button>
       </div>
@@ -244,28 +246,28 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
   return (
     <div data-testid="job-documents-panel" className="flex flex-col gap-3">
       {/* Progress — "N still to sort", ending in a tick. */}
-      <div className="flex items-center gap-3 rounded-md border border-gray-700 bg-[#232323] px-3 py-2">
+      <div className="flex items-center gap-3 rounded-md border border-gray-300 bg-gray-50 px-3 py-2">
         {inbox.length === 0 ? (
           <>
             <CheckCircle2 className="h-4 w-4 text-green-500" />
-            <span className="text-sm text-green-300">Everything is sorted</span>
+            <span className="text-sm text-green-700">Everything is sorted</span>
           </>
         ) : (
           <>
             <FolderOpen className="h-4 w-4 text-amber-400" />
-            <span className="text-sm text-amber-200">
+            <span className="text-sm text-amber-700">
               {inbox.length} still to sort
             </span>
           </>
         )}
-        <div className="ml-2 h-1.5 flex-1 overflow-hidden rounded bg-gray-700">
+        <div className="ml-2 h-1.5 flex-1 overflow-hidden rounded bg-gray-200">
           <div
             className="h-full bg-green-600 transition-all"
             style={{ width: total ? `${(filedCount / total) * 100}%` : '0%' }}
           />
         </div>
         {!sharepointReachable && (
-          <span className="flex items-center gap-1 text-[11px] text-gray-400" title="Filing still works — the copy to SharePoint will be retried.">
+          <span className="flex items-center gap-1 text-[11px] text-muted-foreground" title="Filing still works — the copy to SharePoint will be retried.">
             <CloudOff className="h-3 w-3" /> SharePoint not connected
           </span>
         )}
@@ -273,12 +275,12 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
 
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {/* LEFT — the client's unsorted files. */}
-        <div className="rounded-md border border-gray-700 bg-[#1f1f1f] p-2">
-          <div className="mb-2 px-1 text-sm font-medium text-gray-200">
+        <div className="rounded-md border border-gray-300 bg-white p-2">
+          <div className="mb-2 px-1 text-sm font-medium text-foreground">
             Client's files {inbox.length ? `— ${inbox.length} to sort` : ''}
           </div>
           {inbox.length === 0 ? (
-            <div className="p-6 text-center text-xs text-gray-500">
+            <div className="p-6 text-center text-xs text-muted-foreground">
               Nothing waiting. Every file the client sent has been put in a folder.
             </div>
           ) : (
@@ -307,13 +309,13 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                 key={folder}
                 data-testid="folder-card"
                 data-folder={folder}
-                className={`rounded-md border bg-[#232323] p-2 ${anyAmber ? 'border-amber-700' : 'border-gray-700'}`}
+                className={`rounded-md border bg-white p-2 ${anyAmber ? 'border-amber-400' : 'border-gray-300'}`}
               >
                 <div className="mb-1 flex items-center justify-between">
-                  <span className="truncate text-xs font-medium text-gray-200" title={folder}>
+                  <span className="truncate text-xs font-medium text-foreground" title={folder}>
                     {JOB_SUBFOLDER_SHORT_LABELS[folder]}
                   </span>
-                  <span className="flex items-center gap-1 text-[10px] text-gray-500">
+                  <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
                     {items.length} file{items.length === 1 ? '' : 's'}
                     {anyAmber && <CloudOff className="h-3 w-3 text-amber-500" />}
                   </span>
@@ -322,7 +324,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                 {items.length === 0 ? (
                   // Honest emptiness. If SharePoint is unreachable we may simply not be able to SEE
                   // what is in there — saying a bare "Empty" would be a claim we cannot make.
-                  <div className="px-1 py-2 text-[11px] text-gray-500">
+                  <div className="px-1 py-2 text-[11px] text-muted-foreground">
                     {sharepointReachable
                       ? 'Empty — file a document here'
                       : 'No filed documents. SharePoint is not connected, so anything already in this folder cannot be listed yet.'}
@@ -340,7 +342,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                       />
                     ))}
                     {items.length > 6 && (
-                      <div className="flex items-center justify-center rounded border border-gray-700 text-xs text-gray-400">
+                      <div className="flex items-center justify-center rounded border border-gray-300 text-xs text-muted-foreground">
                         +{items.length - 6}
                       </div>
                     )}

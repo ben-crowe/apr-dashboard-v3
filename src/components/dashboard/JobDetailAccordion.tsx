@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { DetailJob, JobDetails } from "@/types/job";
 import ClientSubmissionSection from "./job-details/ClientSubmissionSection";
 import { JobDocumentsPanel } from "@/features/job-documents/JobDocumentsPanel";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { SectionTitle } from "./job-details/ValcreStyles";
 import LoeQuoteSection from "./job-details/LoeQuoteSection";
 import OrganizingDocsSection from "./job-details/OrganizingDocsSection";
 import PropertyInfoSection from "./job-details/PropertyInfoSection";
@@ -31,6 +38,10 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
   // Test Mode is GLOBAL now (toggle lives in the header). The Fill/Clear links + cascade demo
   // + source-reference badges read it from context.
   const { testMode } = useTestMode();
+
+  // Client Documents section — collapsible like every other section on this page. Open by default
+  // so the sorting work is visible without a click; closes like the rest.
+  const [clientDocsOpen, setClientDocsOpen] = useState(true);
 
   // RULE 1 — test tools self-disable on a real (live-synced) Valcre job.
   const isLiveValcreJob = isValcreJobNumber(jobDetails?.jobNumber) && !!(jobDetails as any)?.valcreJobId;
@@ -244,11 +255,27 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
 
       {/* Client documents — sort the client's submitted files into the job's five real folders and
           preview what is in each, in-app. ADDITIVE: the client-submission section above is untouched
-          and still lists and accepts the client's uploads exactly as before. */}
-      <div className="rounded-lg border border-gray-700 bg-[#1f1f1f] p-3">
-        <h3 className="mb-2 text-sm font-semibold text-white">Client Documents</h3>
-        <JobDocumentsPanel jobId={job.id} />
-      </div>
+          and still lists and accepts the client's uploads exactly as before.
+          Collapsible with the SAME chevron header the other sections use — reused, not rebuilt. */}
+      <Collapsible
+        open={clientDocsOpen}
+        onOpenChange={setClientDocsOpen}
+        className="w-full border border-gray-400 dark:border-white/20 rounded-lg dark:bg-black/15"
+      >
+        <CollapsibleTrigger className="flex items-center justify-between w-full px-4 py-3 bg-gray-200 dark:bg-gray-800 rounded-t-lg">
+          <div className="flex items-center gap-2">
+            {clientDocsOpen ? (
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            ) : (
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            )}
+            <SectionTitle title="Client Documents" />
+          </div>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="p-4">
+          <JobDocumentsPanel jobId={job.id} />
+        </CollapsibleContent>
+      </Collapsible>
 
       <LoeQuoteSection
         job={job}

@@ -1,0 +1,9 @@
+{
+  "//": "Makes `deno check` able to run on the edge functions AT ALL. Two separate missing-package failures were stopping it, and both abort BEFORE a single line is type-checked — which is why every function importing supabase-js had never been type-checked, not once. (1) nodeModulesDir:auto lets Deno resolve the npm packages @supabase/supabase-js pulls in transitively (npm:@supabase/realtime-js). (2) @supabase/functions-js's edge-runtime.d.ts references npm:openai for its type defs, so openai must be declared and installed or type resolution dies there instead.",
+  "//run": "Deno discovers this file from the CURRENT WORKING DIRECTORY, not from the path of the file being checked — so `deno check supabase/functions/x/index.ts` from the repo root does NOT use this config, it silently picks up the root package.json instead and fails. Run `npm run check:functions` from the repo root; it passes --config explicitly. Do not rely on remembering a flag.",
+  "nodeModulesDir": "auto",
+  "exclude": ["node_modules"],
+  "imports": {
+    "openai": "npm:openai@^4.52.5"
+  }
+}

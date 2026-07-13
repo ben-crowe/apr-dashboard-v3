@@ -141,11 +141,17 @@ serve(async (req) => {
       .single();
     if (jobErr || !jobRowRaw) return json({ error: 'Job not found for jobId' }, 404);
     const jobRow = jobRowRaw as JobRow;
-    if (!jobRow.job_number) {
+    const jobNumber = jobRow.job_number;
+    if (!jobNumber) {
       return json({ error: 'Job has no job_number yet — create the Valcre job first' }, 409);
     }
 
-    const inputs = jobFolderInputs(jobRow);
+    // Pass the NARROWED value, not the whole row. Narrowing a property does not narrow the object:
+    // after the guard above, `jobNumber` is string, but `jobRow.job_number` is still typed
+    // string | null, so handing jobRow whole to jobFolderInputs (which demands string) is unsound.
+    // The behaviour was always correct — the guard returns 409 first — but the TYPE was a lie, and
+    // it is the kind of lie that hides the next real one.
+    const inputs = jobFolderInputs({ ...jobRow, job_number: jobNumber });
     const { driveId } = await resolveSharePointIds();
 
     // ---- CREATE (explicit no-folders-yet action) ----

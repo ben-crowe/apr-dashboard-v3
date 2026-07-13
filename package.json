@@ -9,6 +9,7 @@
     "build": "npm run drift-gate:prebuild && vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
+    "check:functions": "deno check --config supabase/functions/deno.json $(git ls-files 'supabase/functions/*/index.ts' 'supabase/functions/_shared/*.ts')",
     "preview": "vite preview",
     "generate-viewer": "tsx scripts/generate-standalone-viewer.ts",
     "seed:test-job": "tsx scripts/seed-test-job.ts",

@@ -82,6 +82,11 @@ function trimTrailing(name: string): string {
  * PUT-first design rests on this being a pure function of the row — a retry must rebuild the exact
  * same path to overwrite its own bytes instead of creating a second copy.
  *
+ * `prefix` IS REQUIRED — deliberately no default. A default of '' would make the budget 400 minus
+ * nothing, so a caller who forgot the argument would silently measure the NAME instead of the PATH,
+ * disabling this entire guard with no compile error and no failing test. Required means the compiler
+ * refuses to build such a caller. Pass '' explicitly if you genuinely mean "no prefix".
+ *
  * Always suffixes the short id (the LOCKED behaviour). If the stem sanitizes to empty, the row id
  * alone carries the name, so a file can never be PUT as a bare extension.
  *
@@ -90,7 +95,7 @@ function trimTrailing(name: string): string {
  * rather than return a name SharePoint will reject — a loud failure that leaves the row in the
  * inbox beats a silent 400 on the PUT.
  */
-export function filedFileName(rowId: string, originalFileName: string, prefix = ''): string {
+export function filedFileName(rowId: string, originalFileName: string, prefix: string): string {
   const { stem, ext } = splitExtension(originalFileName);
   const safeStem = sanitizeStem(stem);
   const safeExt = sanitizeExt(ext);

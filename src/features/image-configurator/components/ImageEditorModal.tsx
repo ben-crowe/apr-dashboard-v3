@@ -182,7 +182,16 @@ export function ImageEditorModal({
       />
 
       {/* Modal */}
-      <div className="relative bg-slate-900 rounded-lg shadow-2xl max-w-5xl w-full mx-4 max-h-[90vh] flex flex-col">
+      {/*
+        h-[90vh] is LOAD-BEARING, not styling. This panel is a flex COLUMN whose body is flex-1.
+        With only max-h-[90vh] and no height, the column has no height to distribute, so flex-1
+        resolved to ZERO: the panel rendered at 896x50 — the header strip alone — and the body,
+        the image pane and the image wrapper all collapsed to 0 height. The <img> was present and
+        fully loaded (naturalWidth 1220) and was then CLIPPED out of existence by its 0-height,
+        overflow-hidden parent. That is why this modal has never once been seen showing an image,
+        here or in the report builder's image tab: it could not be seen.
+      */}
+      <div className="relative bg-slate-900 rounded-lg shadow-2xl max-w-5xl w-full mx-4 h-[90vh] max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700">
           <div className="flex items-center gap-3">
@@ -218,7 +227,9 @@ export function ImageEditorModal({
         </div>
 
         {/* Content */}
-        <div className="flex flex-1 overflow-hidden">
+        {/* min-h-0 is required: a flex child defaults to min-height:auto, which refuses to shrink
+            below its content and re-collapses the row. flex-1 + min-h-0 is the pair that works. */}
+        <div className="flex flex-1 min-h-0 overflow-hidden">
           {/* Image preview */}
           <div className="flex-1 flex items-center justify-center p-4 bg-slate-950 overflow-hidden">
             <div className="relative max-w-full max-h-full overflow-hidden">

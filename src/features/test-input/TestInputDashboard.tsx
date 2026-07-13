@@ -93,6 +93,12 @@ const TestInputDashboard: React.FC = () => {
   );
   const [seedError, setSeedError] = useState<string | null>(null);
 
+  // Failure of the two fill buttons surfaces INLINE, for the same reason as the seed button:
+  // alert() blocks every subsequent automation event, so a driver hangs instead of failing with a
+  // readable message. These two are pressed by tests far more often than the seed button is.
+  // NOT DEV-guarded — unlike the seed button, these two ship, so their error state ships with them.
+  const [fillError, setFillError] = useState<string | null>(null);
+
   // DEV-ONLY — Seed Test Job. A job created through the intake form has no job number until a
   // real Valcre job exists, so there is no way to get a complete, NUMBERED test job without
   // touching Valcre. seedTransitionJob() already builds exactly that (the 3-row Create-Report
@@ -1236,6 +1242,7 @@ const TestInputDashboard: React.FC = () => {
               <Button
                 onClick={async () => {
                   console.log("🔵 Load Data button CLICKED - handler executing");
+                  setFillError(null);
                   try {
                     // Load user-input fields only, run calc engine
                     // FIX: Set selectedDataset FIRST, then wait for React to process state update
@@ -1251,7 +1258,11 @@ const TestInputDashboard: React.FC = () => {
                     console.log("Load Data: Complete - user data loaded with calc");
                   } catch (error) {
                     console.error("Error in Load Data:", error);
-                    alert("Error: " + String(error));
+                    setFillError(
+                      `Fill V4 Test Data failed: ${
+                        error instanceof Error ? error.message : String(error)
+                      }`,
+                    );
                   }
                 }}
                 variant={
@@ -1305,6 +1316,7 @@ const TestInputDashboard: React.FC = () => {
               <Button
                 onClick={async () => {
                   console.log("🟢 Fill V3 Test Data CLICKED");
+                  setFillError(null);
                   try {
                     // Fill V3: ONLY the V3-origin fields, from the chunk-1 fixed-dataset seam.
                     // composeReportFields emits the FULL production-bridge output (some ids resolve
@@ -1321,7 +1333,11 @@ const TestInputDashboard: React.FC = () => {
                     console.log("🟢 Fill V3 Test Data completed");
                   } catch (error) {
                     console.error("Error in Fill V3 Test Data:", error);
-                    alert("Error: " + String(error));
+                    setFillError(
+                      `Fill V3 Test Data failed: ${
+                        error instanceof Error ? error.message : String(error)
+                      }`,
+                    );
                   }
                 }}
                 variant="outline"
@@ -1374,6 +1390,21 @@ const TestInputDashboard: React.FC = () => {
                   {seedState === "seeding" ? "Seeding..." : "Seed Test Job"}
                   {seedState === "done" && <span className="ml-1">&#10003;</span>}
                 </Button>
+              )}
+              {fillError && (
+                <div
+                  role="alert"
+                  data-testid="fill-test-data-error"
+                  className="flex items-center gap-2 rounded border px-2 py-1 text-xs"
+                  style={{
+                    backgroundColor: "#2a1215",
+                    borderColor: "#b91c1c",
+                    color: "#fca5a5",
+                  }}
+                >
+                  <AlertCircle className="w-3 h-3 shrink-0" />
+                  <span>{fillError}</span>
+                </div>
               )}
               {import.meta.env.DEV && seedError && (
                 <div

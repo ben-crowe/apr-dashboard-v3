@@ -18,15 +18,8 @@ import {
 import { toast } from 'sonner';
 import { S3Inbox } from './S3Inbox';
 
-// Verbatim, in order — mirrors graph.ts JOB_SUBFOLDERS. The edge function is authoritative;
-// this is the render order + empty-state scaffold when a bucket has no files yet.
-const JOB_SUBFOLDERS = [
-  '1. REPORT',
-  '2. CLIENT SUPPLIED',
-  '3. WORK FILES (TTSZ, PICS, COMPS)',
-  '4. CLIENT BILLING (Invoice, LOE)',
-  '5. LETTER OF RELIANCE (LOR)',
-] as const;
+// The five names come from the ONE leaf module — this file no longer keeps its own copy.
+import { JOB_SUBFOLDERS } from '@shared/jobSubfolders';
 
 const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // 4 MB — Graph single-PUT cap (server enforces too)
 const MANY_FILES = 25; // overflow threshold — scroll the list instead of growing the card

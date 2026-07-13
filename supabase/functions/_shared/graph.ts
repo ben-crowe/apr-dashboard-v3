@@ -173,13 +173,11 @@ export async function ensureFolder(
 }
 
 // The five canonical job subfolders — EXACT order + casing (confirmed from live SharePoint).
-export const JOB_SUBFOLDERS = [
-  '1. REPORT',
-  '2. CLIENT SUPPLIED',
-  '3. WORK FILES (TTSZ, PICS, COMPS)',
-  '4. CLIENT BILLING (Invoice, LOE)',
-  '5. LETTER OF RELIANCE (LOR)',
-] as const;
+// The five folder names now live in ONE leaf module that the browser bundle can also import
+// (this file cannot be imported from the browser — it is full of Deno.* refs). Re-exported here so
+// every existing `import { JOB_SUBFOLDERS } from '../_shared/graph.ts'` keeps working unchanged.
+export { JOB_SUBFOLDERS } from './jobSubfolders.ts';
+export type { JobSubfolder } from './jobSubfolders.ts';
 
 export interface JobFolderArgs {
   year: string | number;     // {YEAR} segment under 2.Jobs

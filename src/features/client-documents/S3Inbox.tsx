@@ -26,16 +26,11 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-const JOB_SUBFOLDERS = [
-  '1. REPORT',
-  '2. CLIENT SUPPLIED',
-  '3. WORK FILES (TTSZ, PICS, COMPS)',
-  '4. CLIENT BILLING (Invoice, LOE)',
-  '5. LETTER OF RELIANCE (LOR)',
-] as const;
+// The five names come from the ONE leaf module — this file no longer keeps its own copy.
+import { JOB_SUBFOLDERS } from '@shared/jobSubfolders';
 
 // The client's own attachments are almost always what they were asked to supply.
-const DEFAULT_BUCKET = '2. CLIENT SUPPLIED';
+const DEFAULT_BUCKET = JOB_SUBFOLDERS[1]; // '2. CLIENT SUPPLIED'
 
 const MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // 4 MB — Graph single-PUT cap; the server re-checks.
 const STORAGE_BUCKET = 'job-files'; // confirmed in useFormSubmission.ts — NOT 'documents'

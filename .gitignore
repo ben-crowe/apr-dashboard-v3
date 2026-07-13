@@ -46,6 +46,10 @@ dist-ssr
 *.sqlite
 *.dump
 
+# Migrations are source, not backups — the blanket *.sql above hid every new one
+# from git, so schema changes existed only on the machine that applied them.
+!supabase/migrations/*.sql
+
 # Large/binary files
 *.zip
 *.tar.gz

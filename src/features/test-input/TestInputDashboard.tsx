@@ -31,6 +31,7 @@ import {
   Database,
   RefreshCw,
   FileText,
+  FlaskConical,
 } from "lucide-react";
 import ImageFieldInput from "./components/ImageFieldInput";
 
@@ -56,6 +57,7 @@ const TestInputDashboard: React.FC = () => {
     setTestMode,
     generatePreview,
     currentJobId,
+    setCurrentJobId,
   } = useReportBuilderStore();
 
   // When Create Report lands here with a job (currentJobId set), pull that saved job's data into
@@ -85,6 +87,35 @@ const TestInputDashboard: React.FC = () => {
   const [localValues, setLocalValues] = useState<Record<string, any>>({});
   const [selectedDataset, setSelectedDataset] = useState<string | null>(null);
   const [templateFieldIds, setTemplateFieldIds] = useState<string[]>([]);
+  const [seedState, setSeedState] = useState<"idle" | "seeding" | "done">(
+    "idle",
+  );
+
+  // DEV-ONLY — Seed Test Job. A job created through the intake form has no job number until a
+  // real Valcre job exists, so there is no way to get a complete, NUMBERED test job without
+  // touching Valcre. seedTransitionJob() already builds exactly that (the 3-row Create-Report
+  // read-set from the fixed dataset, fixed mock job number, fires nothing external) — this only
+  // surfaces it as a button. Setting currentJobId is what makes it useful: it fires
+  // useLoadJobIntoReport, so S1/S2 fill through the SAME inbound bridge a real Create-Report uses.
+  //
+  // The import is DYNAMIC and this whole handler is only reachable from a DEV-guarded button:
+  // with import.meta.env.DEV statically false, Rollup drops the branch and never emits the
+  // seedTransitionJob chunk — same treatment as the transition-diff runner in main.tsx.
+  const handleSeedTestJob = async () => {
+    setSeedState("seeding");
+    try {
+      const { seedTransitionJob } = await import(
+        "@/features/report-builder/testSeam/seedTransitionJob"
+      );
+      const jobId = await seedTransitionJob();
+      setCurrentJobId(jobId);
+      setSeedState("done");
+    } catch (error) {
+      setSeedState("idle");
+      console.error("Seed Test Job failed:", error);
+      alert("Seed Test Job failed: " + String(error));
+    }
+  };
 
   // Dataset field IDs for filtering
   const datasetFieldIds = useMemo(
@@ -1309,6 +1340,34 @@ const TestInputDashboard: React.FC = () => {
                 <Database className="w-3 h-3" />
                 Fill V3 Test Data
               </Button>
+              {import.meta.env.DEV && (
+                <Button
+                  onClick={handleSeedTestJob}
+                  variant="outline"
+                  size="sm"
+                  disabled={seedState === "seeding"}
+                  className="gap-2 text-white border transition-colors"
+                  style={{
+                    backgroundColor: seedState === "done" ? "#7c3aed" : "#2a2a2a",
+                    borderColor: seedState === "done" ? "#7c3aed" : "#4b5563",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (seedState !== "seeding") {
+                      e.currentTarget.style.backgroundColor =
+                        seedState === "done" ? "#8b5cf6" : "#333333";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      seedState === "done" ? "#7c3aed" : "#2a2a2a";
+                  }}
+                  title="DEV ONLY — create a real test job in the database (fixed mock job number, no Valcre call) and load it into S1/S2/S3 through the Create-Report bridge"
+                >
+                  <FlaskConical className="w-3 h-3" />
+                  {seedState === "seeding" ? "Seeding..." : "Seed Test Job"}
+                  {seedState === "done" && <span className="ml-1">&#10003;</span>}
+                </Button>
+              )}
               <Button
                 onClick={() => navigate("/apr-v4")}
                 variant="outline"

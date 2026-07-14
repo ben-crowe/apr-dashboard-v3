@@ -106,11 +106,9 @@ function Art({ doc, big }: { doc: JobDocument; big: boolean }) {
       <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-violet-700 dark:text-violet-300">
         {ext(doc.name)}
       </span>
-      {big && (
-        <small className="text-[10px] text-muted-foreground">
-          {doc.filedBucket ? 'filed and safe' : 'no preview'}
-        </small>
-      )}
+      {/* "no preview" was a lie the moment the previewer learned to render documents — it CAN be
+          opened, it just has no thumbnail. Saying otherwise trains the user not to click it. */}
+      {big && <small className="text-[10px] text-muted-foreground">click to open</small>}
     </div>
   );
 }
@@ -592,15 +590,19 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
       </div>
 
       {/* ── PREVIEW — full-screen, in-app. No download, no external tab. Reuses the report builder's
-          window with the crop/rotate/adjust rail switched off. ── */}
+          window with the crop/rotate/adjust rail switched off.
+
+          imageUrlOverride is passed for EVERY file we hold bytes for, not just pictures. Gating it
+          on IMAGE_TYPES sent non-images down the modal's OWN default URL builder, which addresses
+          the image-configurator's buckets — so a PDF that really exists in `job-files` resolved to a
+          404 in `appraisal-raw` and drew as a broken image. We say WHERE the file lives; the modal
+          decides HOW to draw it. ── */}
       {preview && (
         <ImageEditorModal
           image={toJobImage(preview)}
           isOpen
           viewOnly
-          imageUrlOverride={
-            preview.storagePath && IMAGE_TYPES.test(preview.type) ? publicUrl(preview.storagePath) : null
-          }
+          imageUrlOverride={preview.storagePath ? publicUrl(preview.storagePath) : null}
           headerExtra={
             <div className="flex items-center gap-2">
               <button

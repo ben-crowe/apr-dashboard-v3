@@ -173,6 +173,16 @@ export function ImageEditorModal({
   const defaultUrl = useSignedImageUrl(image.storage_path);
   const imageUrl = imageUrlOverride || defaultUrl || '/placeholder-image.jpg';
 
+  /**
+   * Keyed on the FILENAME, not on a mime column: `job_files` rows reach us through an adapter that
+   * carries no mime type, and the placeholder fallback has no extension at all. Anything we cannot
+   * positively identify as a picture is drawn in the document frame, which degrades safely — a frame
+   * showing a picture still shows the picture, whereas an <img> given a PDF shows nothing.
+   */
+  const isRenderableImage = /\.(png|jpe?g|gif|webp|bmp|svg|avif|heic)$/i.test(
+    (image.original_filename || imageUrl).split('?')[0],
+  );
+
   // Build CSS filter string
   const filterStyle = `
     brightness(${adjustments.brightness}%)
@@ -254,20 +264,33 @@ export function ImageEditorModal({
         {/* min-h-0 is required: a flex child defaults to min-height:auto, which refuses to shrink
             below its content and re-collapses the row. flex-1 + min-h-0 is the pair that works. */}
         <div className="flex flex-1 min-h-0 overflow-hidden">
-          {/* Image preview */}
+          {/* Image preview — or a document frame. An <img> CANNOT render a PDF: it fetches the bytes,
+              fails to decode them, and paints a broken-image box. That is exactly what a client's PDF
+              did here. Anything that is not a picture goes in an <iframe>, which is what the browser's
+              own PDF viewer needs. The crop/rotate filters are meaningless on a document, so they are
+              not applied to it. */}
           <div className="flex-1 flex items-center justify-center p-4 bg-slate-950 overflow-hidden">
-            <div className="relative max-w-full max-h-full overflow-hidden">
-              <img
-                ref={imageRef}
+            {isRenderableImage ? (
+              <div className="relative max-w-full max-h-full overflow-hidden">
+                <img
+                  ref={imageRef}
+                  src={imageUrl}
+                  alt={image.original_filename}
+                  className="max-w-full max-h-[60vh] object-contain transition-transform duration-200"
+                  style={{
+                    filter: filterStyle,
+                    transform: transformStyle,
+                  }}
+                />
+              </div>
+            ) : (
+              <iframe
+                data-testid="doc-frame"
                 src={imageUrl}
-                alt={image.original_filename}
-                className="max-w-full max-h-[60vh] object-contain transition-transform duration-200"
-                style={{
-                  filter: filterStyle,
-                  transform: transformStyle,
-                }}
+                title={image.original_filename}
+                className="h-full w-full rounded border border-slate-700 bg-white"
               />
-            </div>
+            )}
           </div>
 
           {/* Controls sidebar — the crop/rotate/adjust rail. Hidden in viewOnly: the document

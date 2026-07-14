@@ -247,11 +247,11 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
       {/* ── TOP RIBBON — the folder tabs. Deliberately QUIET.
           Selected = a slightly darker background (bg-muted) + a small blue dot, and NOTHING more.
           Ben rejected a bright/white selected tab TWICE. Do not make it high-contrast. ── */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-1 pb-2">
+      <div className="flex flex-wrap items-center gap-2 border-b border-border px-1 pb-2">
         <span className="text-[11px] text-muted-foreground">
           Drag onto a folder or its tab · or use the dropdown on a file
         </span>
-        <div className="flex flex-wrap items-center gap-1" data-testid="folder-ribbon">
+        <div className="ml-auto flex flex-wrap items-center justify-end gap-1" data-testid="folder-ribbon">
           {JOB_SUBFOLDERS.map((f) => {
             const items = byFolder[f];
             const bad = items.filter(isAmber).length;
@@ -468,7 +468,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
 
         {/* ── RIGHT — the GREY WELL. All five folders, ALWAYS visible, as WHITE cards sitting on it.
             The well is the whole point: a white card on a white page has no edges. ── */}
-        <div className="flex flex-col bg-muted p-3" data-testid="folder-well">
+        <div className="flex flex-col bg-slate-200 p-3 dark:bg-slate-800" data-testid="folder-well">
           <div className="mb-2 flex items-baseline justify-between">
             <span className="text-sm font-semibold text-foreground">Job Folders</span>
             <span className="text-[10px] text-muted-foreground">drag a file onto one · click to look inside</span>
@@ -499,14 +499,14 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                     e.preventDefault();
                     dropOn(folder);
                   }}
-                  className={`shrink-0 cursor-pointer rounded-lg border-[1.5px] bg-card p-3 shadow-sm transition-all ${
+                  className={`shrink-0 cursor-pointer rounded-lg border-[1.5px] bg-card p-3 shadow dark:shadow-none transition-all ${
                     over
                       ? 'scale-[1.01] border-dashed border-green-500 bg-green-50'
                       : flash === folder
                         ? 'border-green-500 ring-4 ring-green-500/30'
                         : on
                           ? 'border-blue-500 ring-2 ring-blue-500/30'
-                          : 'border-border hover:border-foreground/40'
+                          : 'border-slate-300 dark:border-white/20 hover:border-slate-400 dark:hover:border-white/30'
                   }`}
                 >
                   <div className="mb-2 flex items-center justify-between gap-2">
@@ -536,7 +536,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                           <div
                             key={f.id ?? `s-${f.name}`}
                             data-testid="folder-slot"
-                            className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[5px] bg-muted/40"
+                            className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[5px] border border-slate-300 bg-slate-100 dark:border-white/20 dark:bg-white/5"
                             title={f.name}
                           >
                             <Art doc={f} big={false} />
@@ -562,7 +562,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                         <div
                           key={`hole-${k}`}
                           data-testid="empty-slot"
-                          className="flex aspect-[4/3] items-center justify-center rounded-[5px] border-[1.5px] border-dashed border-border text-[10px] font-semibold text-muted-foreground"
+                          className="flex aspect-[4/3] items-center justify-center rounded-[5px] border border-slate-200 bg-slate-100 text-[10px] font-semibold text-muted-foreground dark:border-white/10 dark:bg-white/5"
                         >
                           {k + 1}
                         </div>

@@ -90,14 +90,19 @@ export function PdfPages({ url, name }: { url: string; name: string }) {
       // paper. A slate/navy surround tinted the whole document.
       className="h-full w-full overflow-y-auto bg-neutral-100 p-6"
     >
-      <div className="mx-auto flex max-w-3xl flex-col items-center gap-4">
+      {/* ONE WHOLE PAGE, NOT A CROPPED ONE (Ben: "you don't want to see it get cut off on the
+          bottom… it should fit, one page view"). Sizing a page by WIDTH makes a portrait page taller
+          than the window and lops its foot off. Each page is capped to the pane's HEIGHT instead and
+          keeps its aspect ratio, so a whole page lands inside the frame with a little air under it,
+          and a multi-page document scrolls one page at a time. */}
+      <div className="flex min-h-full flex-col items-center justify-center gap-6">
         {pages.map((src, i) => (
           <img
             key={src}
             data-testid="doc-page"
             src={src}
             alt={`${name} — page ${i + 1}`}
-            className="w-full bg-white shadow-[0_2px_12px_rgba(0,0,0,0.18)]"
+            className="max-h-[calc(90vh-9rem)] w-auto max-w-full bg-white object-contain shadow-[0_2px_12px_rgba(0,0,0,0.18)]"
           />
         ))}
         {loading && (

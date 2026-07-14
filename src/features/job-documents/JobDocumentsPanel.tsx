@@ -353,65 +353,6 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
           Drag onto a folder or its tab · or use the dropdown on a file
         </span>
         <div className="ml-auto flex flex-wrap items-center justify-end gap-1" data-testid="folder-ribbon">
-        {/* ── THE FOLDER SET — one small button, sitting WITH the folder tabs because that is what it
-                 governs. It replaced a full-width coloured banner that shouted the same information at
-                 the user on every single page load (Ben: "way too in your face").
-
-                 Two states, the same logic the old LOE ribbon button had:
-                   folders exist  -> GREEN, active, opens them in SharePoint.
-                   no folders yet -> DIM, and it CREATES the set. Filing stays blocked until then.
-
-                 The explanation is not gone, it is BEHIND the "?" — press it and it appears. An
-                 explanation the user can summon is worth more than one they have to read every time, and
-                 permanently-visible instructional text stops being read at all. ── */}
-          {!loading && (
-            <div className="flex items-center gap-1" data-testid="folder-set-control">
-              <button
-                type="button"
-                data-testid={foldersExist ? 'open-folders' : 'create-folders'}
-                onClick={() => {
-                  if (foldersExist) folderUrl && window.open(folderUrl, '_blank', 'noopener');
-                  else void makeFolders();
-                }}
-                disabled={
-                  foldersExist ? !folderUrl : creatingFolders || !sharepointReachable
-                }
-                title={
-                  foldersExist
-                    ? 'Folders are set up — open them in SharePoint'
-                    : sharepointReachable
-                      ? 'Create this job’s SharePoint folders'
-                      : 'SharePoint is unreachable'
-                }
-                className={`flex items-center gap-1.5 whitespace-nowrap rounded-md border px-2 py-1 text-[11px] font-medium transition-colors disabled:opacity-50 ${
-                  foldersExist
-                    ? 'border-emerald-500/60 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:text-emerald-300'
-                    : 'border-border bg-transparent text-muted-foreground hover:border-foreground/40 hover:text-foreground'
-                }`}
-              >
-                {creatingFolders ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                ) : foldersExist ? (
-                  <FolderOpen className="h-3.5 w-3.5" />
-                ) : (
-                  <FolderPlus className="h-3.5 w-3.5" />
-                )}
-                <span>{creatingFolders ? 'Creating…' : foldersExist ? 'Folders' : 'Create folder set'}</span>
-                {foldersExist && <CheckCircle2 className="h-3 w-3" />}
-              </button>
-
-              <button
-                type="button"
-                data-testid="folder-help"
-                aria-label="What is the folder set?"
-                aria-expanded={showFolderHelp}
-                onClick={() => setShowFolderHelp((v) => !v)}
-                className="flex h-5 w-5 items-center justify-center rounded-full border border-border text-[10px] text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground"
-              >
-                ?
-              </button>
-            </div>
-          )}
           {/* A folder tab is DORMANT until the folder set exists — it is a name for a folder that has
               not been created, so it must not look like something you can act on. Dormant = dimmed and
               inert (no hover, not a drop target). The moment the set is created every tab brightens and
@@ -471,6 +412,74 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
               </button>
             );
           })}
+
+        {/* ── THE FOLDER SET — one small button, sitting WITH the folder tabs because that is what it
+                 governs. It replaced a full-width coloured banner that shouted the same information at
+                 the user on every single page load (Ben: "way too in your face").
+
+                 Two states, the same logic the old LOE ribbon button had:
+                   folders exist  -> GREEN, active, opens them in SharePoint.
+                   no folders yet -> DIM, and it CREATES the set. Filing stays blocked until then.
+
+                 The explanation is not gone, it is BEHIND the "?" — press it and it appears. An
+                 explanation the user can summon is worth more than one they have to read every time, and
+                 permanently-visible instructional text stops being read at all. ── */}
+          {!loading && (
+            <div className="flex items-center gap-1" data-testid="folder-set-control">
+              <button
+                type="button"
+                data-testid={foldersExist ? 'open-folders' : 'create-folders'}
+                onClick={() => {
+                  if (foldersExist) folderUrl && window.open(folderUrl, '_blank', 'noopener');
+                  else void makeFolders();
+                }}
+                disabled={
+                  foldersExist ? !folderUrl : creatingFolders || !sharepointReachable
+                }
+                title={
+                  foldersExist
+                    ? 'Folders are set up — open them in SharePoint'
+                    : sharepointReachable
+                      ? 'Create this job’s SharePoint folders'
+                      : 'SharePoint is unreachable'
+                }
+                className={`flex items-center gap-1.5 whitespace-nowrap rounded-md border px-2 py-1 text-[11px] font-medium transition-colors disabled:opacity-50 ${
+                  foldersExist
+                    ? 'border-emerald-500/60 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:text-emerald-300'
+                    : 'border-border bg-transparent text-muted-foreground hover:border-foreground/40 hover:text-foreground'
+                }`}
+              >
+                {creatingFolders ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : foldersExist ? (
+                  <FolderOpen className="h-3.5 w-3.5" />
+                ) : (
+                  <FolderPlus className="h-3.5 w-3.5" />
+                )}
+                <span>{creatingFolders ? 'Creating…' : foldersExist ? 'Folders' : 'Create folder set'}</span>
+                {foldersExist && <CheckCircle2 className="h-3 w-3" />}
+              </button>
+
+              {/* The help mark. Tiny and nearly invisible until you go near it: it BRIGHTENS on hover
+                  and the explanation appears with it — no click needed. Click still works, and it also
+                  responds to keyboard focus, because a hover-only control does not exist for anyone
+                  navigating by keyboard. */}
+              <button
+                type="button"
+                data-testid="folder-help"
+                aria-label="What is the folder set?"
+                aria-expanded={showFolderHelp}
+                onMouseEnter={() => setShowFolderHelp(true)}
+                onMouseLeave={() => setShowFolderHelp(false)}
+                onFocus={() => setShowFolderHelp(true)}
+                onBlur={() => setShowFolderHelp(false)}
+                onClick={() => setShowFolderHelp((v) => !v)}
+                className="flex h-3.5 w-3.5 items-center justify-center rounded-full border border-border/60 text-[8px] leading-none text-muted-foreground/50 transition-colors hover:border-foreground/50 hover:text-foreground focus:border-foreground/50 focus:text-foreground"
+              >
+                ?
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

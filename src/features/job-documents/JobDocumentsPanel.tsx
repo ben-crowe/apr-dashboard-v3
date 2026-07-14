@@ -8,18 +8,28 @@
 // dropdown-only surface was built from the prose while the design was still being drawn — that is
 // the mistake this replaces.
 //
-// ⚑ COLOURS ARE TOKENS. NEVER a hardcoded value here — no bg-white, no bg-slate-*, no raw rgb().
-// Every surface uses the semantic tokens the neighbouring V3 sections use (bg-card, bg-muted,
-// text-foreground, text-muted-foreground, border-border), so the panel themes itself in BOTH the
-// light and the charcoal theme. Hardcoded values cannot do that, and picking them by eye is what
-// made this panel come out wrong twice.
+// ⚑ COLOURS — READ THIS BEFORE "FIXING" THE PALETTE. There are TWO rules here, not one, and the
+// second one is the reason the file does something the first one appears to forbid.
 //
-// ⚑ THE STRUCTURAL POINT the tokens serve (ui-designer's warning, and it is not a colour swap):
-// in the dark original the folder cards were LIGHT on a DARK panel — that contrast is what made
-// them read as separate objects. On a light page a light card on a light page VANISHES. So the
-// folder column is a RECESSED WELL (bg-muted) and each folder card sits ON it as a raised surface
-// (bg-card + border + shadow). The empty slots inside a card need their own tint or they disappear
-// into it. That relationship is what must hold — in either theme.
+//   1. SEMANTIC TOKENS EVERYWHERE BY DEFAULT — bg-card, bg-muted, text-foreground,
+//      text-muted-foreground, border-border, the same tokens the neighbouring V3 sections use. No
+//      raw hex, no rgb(). Picking colour values by eye is what made this panel come out wrong twice.
+//
+//   2. THE ONE DELIBERATE EXCEPTION: the folder TRAY, the folder CARDS and their SLOTS use an
+//      explicit slate scale (bg-slate-200/100 + dark:bg-slate-800/white-alpha, border-slate-300).
+//      That is PALETTE B, chosen by Ben and specified by ui-designer. It is NOT a leftover and it is
+//      NOT a mistake. DO NOT "restore" it to bg-muted — that is precisely what broke it: bg-muted
+//      resolves to near-white on this page, the white cards vanished into it, and Ben's words were
+//      "it's pure white, I don't want to see the whole folder system white."
+//      Every one of those slate classes carries a dark: variant, so both themes still separate.
+//
+// ⚑ THE STRUCTURAL POINT the palette serves (ui-designer's warning — it is not a colour swap):
+// in the dark original the folder cards were LIGHT on a DARK panel; that contrast is what made them
+// read as separate objects. On a light page a light card on a light page VANISHES. So the folder
+// column is a RECESSED TRAY that is VISIBLY DARKER THAN THE PAGE, and each folder card sits ON it as
+// a raised white surface (border + shadow). Slots take solid hairline borders, never dashed — dashed
+// on white reads as nothing. That relationship is what must hold, in either theme. Change the values
+// only with Ben and ui-designer; the relationship is the requirement.
 //
 // LEFT  = the client's files as a thumbnail gallery (2-up default, 1/2/3-up switch), drop zone above.
 // RIGHT = all five folders, ALWAYS visible. Clicking one opens it IN THE LEFT GALLERY.

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Download, Loader2, ZoomIn, ZoomOut } from 'lucide-react';
 
 /**
@@ -20,6 +20,30 @@ export function PdfPages({ url, name }: { url: string; name: string }) {
   // Our OWN zoom. The browser plugin's zoom went away with the plugin; Ben wanted the CONTROLS kept,
   // just made small — not the plugin's oversized chrome. 1 = the whole page fits the frame.
   const [zoom, setZoom] = useState(1);
+
+  /**
+   * The frame's REAL height, measured — not derived from `90vh` arithmetic.
+   *
+   * A vh-based cap (`max-h-[calc(90vh-9rem)]`) is a GUESS about how much chrome sits above the
+   * document, and it was wrong: the page overshot the frame and its foot was cut off again. The
+   * frame is right there and can be asked. ResizeObserver keeps it right when the window changes.
+   */
+  const boxRef = useRef<HTMLDivElement>(null);
+  const [fitHeight, setFitHeight] = useState(0);
+
+  useEffect(() => {
+    const el = boxRef.current;
+    if (!el) return;
+    const measure = () => {
+      // minus the box's own vertical padding (p-6 = 24px each side), or the page fills the frame edge
+      // to edge and the shadow has nowhere to fall.
+      setFitHeight(Math.max(120, el.clientHeight - 48));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   const [failed, setFailed] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -86,45 +110,54 @@ export function PdfPages({ url, name }: { url: string; name: string }) {
   }
 
   return (
-    <div
-      data-testid="doc-pages"
-      // NEUTRAL, NOT BLUE (Ben: "do not add blue to the background of the PDF page"). The page is white
-      // paper; it sits on a plain light surface and casts a soft shadow, which is what makes it read as
-      // paper. A slate/navy surround tinted the whole document.
-      className="group/doc h-full w-full overflow-y-auto bg-neutral-100 p-6"
-    >
-      {/* ONE WHOLE PAGE, NOT A CROPPED ONE (Ben: "you don't want to see it get cut off on the
-          bottom… it should fit, one page view"). Sizing a page by WIDTH makes a portrait page taller
-          than the window and lops its foot off. Each page is capped to the pane's HEIGHT instead and
-          keeps its aspect ratio, so a whole page lands inside the frame with a little air under it,
-          and a multi-page document scrolls one page at a time. */}
-      <div className="flex min-h-full flex-col items-center justify-center gap-6">
-        {pages.map((src, i) => (
-          <img
-            key={src}
-            data-testid="doc-page"
-            src={src}
-            alt={`${name} — page ${i + 1}`}
-            style={{ maxHeight: `calc((90vh - 9rem) * ${zoom})` }}
-            className="w-auto max-w-none bg-white object-contain shadow-[0_2px_12px_rgba(0,0,0,0.18)]"
-          />
-        ))}
-        {loading && (
-          <div className="flex items-center gap-2 py-6 text-xs text-neutral-500">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            {pages.length ? 'Loading more pages…' : 'Opening…'}
-          </div>
-        )}
+    // The toolbar must pin to the FRAME, not to the scrolling content — placed inside the scroll box it
+    // slides away with the page. So the frame is a relative wrapper holding the scroll box and the bar
+    // as SIBLINGS.
+    <div className="relative h-full w-full">
+      <div
+        data-testid="doc-pages"
+        // NEUTRAL, NOT BLUE (Ben: "do not add blue to the background of the PDF page"). The page is
+        // white paper; it sits on a plain light surface and casts a soft shadow, which is what makes it
+        // read as paper. A slate/navy surround tinted the whole document.
+        ref={boxRef}
+        className="h-full w-full overflow-y-auto bg-neutral-100 p-6"
+      >
+        {/* ONE WHOLE PAGE, NOT A CROPPED ONE (Ben: "you don't want to see it get cut off on the
+            bottom… it should fit"). Sizing a page by WIDTH makes a portrait page taller than the frame
+            and lops its foot off. Each page is capped to the frame's MEASURED height (see fitHeight —
+            a vh guess was wrong at Ben's window size) and keeps its aspect ratio, so a whole page lands
+            inside the frame whatever its shape, and a multi-page document scrolls a page at a time. */}
+        <div className="flex min-h-full flex-col items-center justify-center gap-6">
+          {pages.map((src, i) => (
+            <img
+              key={src}
+              data-testid="doc-page"
+              src={src}
+              alt={`${name} — page ${i + 1}`}
+              style={fitHeight ? { maxHeight: fitHeight * zoom } : undefined}
+              className="w-auto max-w-none bg-white object-contain shadow-[0_2px_12px_rgba(0,0,0,0.18)]"
+            />
+          ))}
+          {loading && (
+            <div className="flex items-center gap-2 py-6 text-xs text-neutral-500">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              {pages.length ? 'Loading more pages…' : 'Opening…'}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* OUR controls, not the browser's. Ben kept the zoom and the download — he objected to the
-          PLUGIN'S versions, which were oversized, unstyleable and drew themselves over the page. These
-          are small, they sit at the foot of the frame, and they fade in on hover so a clean page is
-          what you see at rest. */}
+          PLUGIN'S versions, which were oversized, unstyleable and drew themselves over the page.
+
+          ALWAYS VISIBLE (Ben: "no need for hover-over to bring up those tools, let them be seen").
+          And FLOATING, not in the flow: a sticky bar still occupies height, which pushed the frame's
+          content past its own bottom and forced a scrollbar onto a page that already fitted. Absolute
+          positioning takes it out of the layout entirely, so the page keeps its fit. */}
       {!!pages.length && (
         <div
           data-testid="doc-tools"
-          className="pointer-events-none sticky bottom-0 flex justify-center pt-4 opacity-0 transition-opacity duration-150 group-hover/doc:opacity-100"
+          className="pointer-events-none absolute bottom-4 left-0 right-0 z-10 flex justify-center"
         >
           <div className="pointer-events-auto flex items-center gap-0.5 rounded-full border border-black/10 bg-white/95 px-1.5 py-1 shadow-md backdrop-blur-sm">
             <button

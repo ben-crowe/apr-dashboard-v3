@@ -348,11 +348,20 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
       {/* ── TOP RIBBON — the folder tabs. Deliberately QUIET.
           Selected = a slightly darker background (bg-muted) + a small blue dot, and NOTHING more.
           Ben rejected a bright/white selected tab TWICE. Do not make it high-contrast. ── */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-border px-1 pb-2">
-        <span className="text-[11px] text-muted-foreground">
+      {/* NO WRAPPING (Ben). On a narrow page this row SCROLLS sideways — it does not fold onto a second
+          line. A wrapped ribbon rearranges itself under the user and the folder order stops being a
+          row you can scan. `min-w-0` on the flex child is what actually permits the overflow: without
+          it the child refuses to shrink below its content and the scroll never engages. */}
+      <div className="border-b border-border px-1 pb-2">
+        {/* The hint stays on its OWN line, ABOVE the folders (Ben) — it is guidance, not a control, and
+            putting it in the same row crowds the things you actually click. */}
+        <div className="pb-1.5 text-[11px] text-muted-foreground">
           Drag onto a folder or its tab · or use the dropdown on a file
-        </span>
-        <div className="ml-auto flex flex-wrap items-center justify-end gap-1" data-testid="folder-ribbon">
+        </div>
+        <div
+          className="flex min-w-0 items-center justify-end gap-1 overflow-x-auto whitespace-nowrap"
+          data-testid="folder-ribbon"
+        >
           {/* A folder tab is DORMANT until the folder set exists — it is a name for a folder that has
               not been created, so it must not look like something you can act on. Dormant = dimmed and
               inert (no hover, not a drop target). The moment the set is created every tab brightens and
@@ -412,6 +421,17 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
               </button>
             );
           })}
+
+          {/* A gap and a hairline rule (Ben). The folder names are places you FILE INTO; the button is
+              an ACTION ON the set. Sitting flush together they read as one list of six things, and the
+              button looks like a sixth folder. The rule says: different kind of thing. */}
+          {!loading && (
+            <span
+              data-testid="folder-set-divider"
+              aria-hidden
+              className="mx-2 h-4 w-px shrink-0 bg-border"
+            />
+          )}
 
         {/* ── THE FOLDER SET — one small button, sitting WITH the folder tabs because that is what it
                  governs. It replaced a full-width coloured banner that shouted the same information at
@@ -474,7 +494,7 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
                 onFocus={() => setShowFolderHelp(true)}
                 onBlur={() => setShowFolderHelp(false)}
                 onClick={() => setShowFolderHelp((v) => !v)}
-                className="flex h-3.5 w-3.5 items-center justify-center rounded-full border border-border/60 text-[8px] leading-none text-muted-foreground/50 transition-colors hover:border-foreground/50 hover:text-foreground focus:border-foreground/50 focus:text-foreground"
+                className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-border text-[9px] font-semibold leading-none text-muted-foreground transition-colors hover:border-foreground hover:bg-muted hover:text-foreground focus:border-foreground focus:text-foreground"
               >
                 ?
               </button>

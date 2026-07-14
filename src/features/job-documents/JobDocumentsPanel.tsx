@@ -352,100 +352,119 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
         <span className="text-[11px] text-muted-foreground">
           Drag onto a folder or its tab · or use the dropdown on a file
         </span>
-        {/* ── THE FOLDER SET — one small button, sitting WITH the folder tabs because that is what it
-               governs. It replaced a full-width coloured banner that shouted the same information at
-               the user on every single page load (Ben: "way too in your face").
-
-               Two states, the same logic the old LOE ribbon button had:
-                 folders exist  -> GREEN, active, opens them in SharePoint.
-                 no folders yet -> DIM, and it CREATES the set. Filing stays blocked until then.
-
-               The explanation is not gone, it is BEHIND the "?" — press it and it appears. An
-               explanation the user can summon is worth more than one they have to read every time, and
-               permanently-visible instructional text stops being read at all. ── */}
-        {!loading && (
-          <div className="flex items-center gap-1" data-testid="folder-set-control">
-            <button
-              type="button"
-              data-testid={foldersExist ? 'open-folders' : 'create-folders'}
-              onClick={() => {
-                if (foldersExist) folderUrl && window.open(folderUrl, '_blank', 'noopener');
-                else void makeFolders();
-              }}
-              disabled={
-                foldersExist ? !folderUrl : creatingFolders || !sharepointReachable
-              }
-              title={
-                foldersExist
-                  ? 'Folders are set up — open them in SharePoint'
-                  : sharepointReachable
-                    ? 'Create this job’s SharePoint folders'
-                    : 'SharePoint is unreachable'
-              }
-              className={`flex items-center gap-1.5 whitespace-nowrap rounded-md border px-2 py-1 text-[11px] font-medium transition-colors disabled:opacity-50 ${
-                foldersExist
-                  ? 'border-emerald-500/60 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:text-emerald-300'
-                  : 'border-border bg-transparent text-muted-foreground hover:border-foreground/40 hover:text-foreground'
-              }`}
-            >
-              {creatingFolders ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              ) : foldersExist ? (
-                <FolderOpen className="h-3.5 w-3.5" />
-              ) : (
-                <FolderPlus className="h-3.5 w-3.5" />
-              )}
-              <span>{creatingFolders ? 'Creating…' : foldersExist ? 'Folders' : 'Create folder set'}</span>
-              {foldersExist && <CheckCircle2 className="h-3 w-3" />}
-            </button>
-
-            <button
-              type="button"
-              data-testid="folder-help"
-              aria-label="What is the folder set?"
-              aria-expanded={showFolderHelp}
-              onClick={() => setShowFolderHelp((v) => !v)}
-              className="flex h-5 w-5 items-center justify-center rounded-full border border-border text-[10px] text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground"
-            >
-              ?
-            </button>
-          </div>
-        )}
-
         <div className="ml-auto flex flex-wrap items-center justify-end gap-1" data-testid="folder-ribbon">
+        {/* ── THE FOLDER SET — one small button, sitting WITH the folder tabs because that is what it
+                 governs. It replaced a full-width coloured banner that shouted the same information at
+                 the user on every single page load (Ben: "way too in your face").
+
+                 Two states, the same logic the old LOE ribbon button had:
+                   folders exist  -> GREEN, active, opens them in SharePoint.
+                   no folders yet -> DIM, and it CREATES the set. Filing stays blocked until then.
+
+                 The explanation is not gone, it is BEHIND the "?" — press it and it appears. An
+                 explanation the user can summon is worth more than one they have to read every time, and
+                 permanently-visible instructional text stops being read at all. ── */}
+          {!loading && (
+            <div className="flex items-center gap-1" data-testid="folder-set-control">
+              <button
+                type="button"
+                data-testid={foldersExist ? 'open-folders' : 'create-folders'}
+                onClick={() => {
+                  if (foldersExist) folderUrl && window.open(folderUrl, '_blank', 'noopener');
+                  else void makeFolders();
+                }}
+                disabled={
+                  foldersExist ? !folderUrl : creatingFolders || !sharepointReachable
+                }
+                title={
+                  foldersExist
+                    ? 'Folders are set up — open them in SharePoint'
+                    : sharepointReachable
+                      ? 'Create this job’s SharePoint folders'
+                      : 'SharePoint is unreachable'
+                }
+                className={`flex items-center gap-1.5 whitespace-nowrap rounded-md border px-2 py-1 text-[11px] font-medium transition-colors disabled:opacity-50 ${
+                  foldersExist
+                    ? 'border-emerald-500/60 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:text-emerald-300'
+                    : 'border-border bg-transparent text-muted-foreground hover:border-foreground/40 hover:text-foreground'
+                }`}
+              >
+                {creatingFolders ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : foldersExist ? (
+                  <FolderOpen className="h-3.5 w-3.5" />
+                ) : (
+                  <FolderPlus className="h-3.5 w-3.5" />
+                )}
+                <span>{creatingFolders ? 'Creating…' : foldersExist ? 'Folders' : 'Create folder set'}</span>
+                {foldersExist && <CheckCircle2 className="h-3 w-3" />}
+              </button>
+
+              <button
+                type="button"
+                data-testid="folder-help"
+                aria-label="What is the folder set?"
+                aria-expanded={showFolderHelp}
+                onClick={() => setShowFolderHelp((v) => !v)}
+                className="flex h-5 w-5 items-center justify-center rounded-full border border-border text-[10px] text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground"
+              >
+                ?
+              </button>
+            </div>
+          )}
+          {/* A folder tab is DORMANT until the folder set exists — it is a name for a folder that has
+              not been created, so it must not look like something you can act on. Dormant = dimmed and
+              inert (no hover, not a drop target). The moment the set is created every tab brightens and
+              takes a small green dot: the row itself tells you the folders are alive, with no banner
+              needed to say it. Keep the dot SMALL (Ben) — it is a status mark, not a decoration. */}
           {JOB_SUBFOLDERS.map((f) => {
             const items = byFolder[f];
             const bad = items.filter(isAmber).length;
             const on = view === f;
             const over = overTarget === `tab:${f}`;
+            const live = foldersExist;
             return (
               <button
                 key={f}
                 type="button"
                 data-testid="folder-tab"
                 data-folder={f}
-                title={f}
-                onClick={() => goToFolder(f)}
+                data-live={live ? 'true' : 'false'}
+                title={live ? f : `${f} — this folder does not exist yet`}
+                onClick={() => live && goToFolder(f)}
+                aria-disabled={!live}
                 onDragOver={(e) => {
+                  if (!live) return;
                   e.preventDefault();
                   setOverTarget(`tab:${f}`);
                 }}
                 onDragLeave={() => setOverTarget(null)}
                 onDrop={(e) => {
                   e.preventDefault();
-                  dropOn(f);
+                  if (live) dropOn(f);
                 }}
                 className={`flex items-center gap-1.5 whitespace-nowrap rounded-md border px-2 py-1 text-[11px] transition-colors ${
-                  over
-                    ? 'border-dashed border-green-500 bg-green-50 text-green-700'
-                    : on
-                      ? 'border-transparent bg-muted text-foreground'
-                      : 'border-transparent text-muted-foreground hover:bg-muted hover:text-foreground'
+                  !live
+                    ? 'cursor-default border-transparent text-muted-foreground/40'
+                    : over
+                      ? 'border-dashed border-green-500 bg-green-50 text-green-700'
+                      : on
+                        ? 'border-transparent bg-muted text-foreground'
+                        : 'border-transparent text-muted-foreground hover:bg-muted hover:text-foreground'
                 }`}
               >
-                {on && <span className="h-[5px] w-[5px] shrink-0 rounded-full bg-blue-500" />}
+                {/* The selected tab keeps its blue dot. An unselected LIVE tab gets a small green one —
+                    the "this folder is real" mark. A dormant tab gets nothing. */}
+                {on ? (
+                  <span className="h-[5px] w-[5px] shrink-0 rounded-full bg-blue-500" />
+                ) : live ? (
+                  <span
+                    data-testid="folder-live-dot"
+                    className="h-[5px] w-[5px] shrink-0 rounded-full bg-emerald-500/70"
+                  />
+                ) : null}
                 <span>{JOB_SUBFOLDER_SHORT_LABELS[f]}</span>
-                <span className={`text-[10px] font-semibold ${items.length ? 'text-muted-foreground' : 'text-muted-foreground'}`}>
+                <span className={`text-[10px] font-semibold ${live ? 'text-muted-foreground' : 'text-muted-foreground/40'}`}>
                   {items.length}
                 </span>
                 {bad > 0 && <CloudOff className="h-3 w-3 text-amber-600 dark:text-amber-400" />}

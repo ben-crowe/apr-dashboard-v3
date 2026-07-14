@@ -236,5 +236,53 @@ export function useJobDocuments(jobId: string | null) {
     [jobId, load],
   );
 
-  return { ...state, reload: load, fileInto, unfile };
+  /**
+   * Add files the appraiser drops in from their own machine. They land UNSORTED, exactly where a
+   * client's uploads land — filing is a separate, deliberate act.
+   *
+   * The storage key is built with the SAME rule as the client intake form (useFormSubmission.ts):
+   * a random token, then a stripped-to-legal name segment. Do not "simplify" it to the bare
+   * filename. That was the bug fixed on 2026-07-13 — two files whose names differ only in stripped
+   * characters collide on one key, the second upload 409s, and a file is silently LOST. The token is
+   * what makes the key unique; `file_name` below keeps the original name for display.
+   *
+   * A failed row-insert is treated as harshly as a failed upload: the bytes would sit in storage
+   * with nothing pointing at them, invisible to this panel forever.
+   */
+  const addFiles = useCallback(
+    async (files: File[]): Promise<{ added: number; failed: string[] }> => {
+      const failed: string[] = [];
+      let added = 0;
+      if (!jobId) return { added, failed: files.map((f) => f.name) };
+
+      for (const file of files) {
+        const token = crypto.randomUUID().slice(0, 8);
+        const segment = file.name.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9._-]/g, '');
+        const filePath = `${jobId}/${token}${segment ? `-${segment}` : ''}`;
+
+        const { error: upErr } = await supabase.storage.from(STORAGE_BUCKET).upload(filePath, file);
+        if (upErr) {
+          failed.push(file.name);
+          continue;
+        }
+
+        const { error: dbErr } = await supabase.from('job_files').insert({
+          job_id: jobId,
+          file_name: file.name,
+          file_path: filePath,
+          file_type: file.type || 'application/octet-stream',
+          file_size: file.size,
+        });
+
+        if (dbErr) failed.push(file.name);
+        else added++;
+      }
+
+      if (added) await load();
+      return { added, failed };
+    },
+    [jobId, load],
+  );
+
+  return { ...state, reload: load, fileInto, unfile, addFiles };
 }

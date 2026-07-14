@@ -177,7 +177,7 @@ function MoveSelect({
 }
 
 export function JobDocumentsPanel({ jobId }: { jobId: string }) {
-  const { inbox, byFolder, loading, error, sharepointReachable, reload, fileInto, unfile } =
+  const { inbox, byFolder, loading, error, sharepointReachable, reload, fileInto, unfile, addFiles } =
     useJobDocuments(jobId);
 
   /** null = the Unsorted pile. A folder name = that folder, opened IN THE LEFT GALLERY. */
@@ -188,7 +188,25 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
   const [overTarget, setOverTarget] = useState<string | null>(null);
   const [flash, setFlash] = useState<string | null>(null);
   const [previewIdx, setPreviewIdx] = useState<number | null>(null);
+  const [uploading, setUploading] = useState(false);
   const foldRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const pickerRef = useRef<HTMLInputElement | null>(null);
+
+  /**
+   * The one place a file from the appraiser's own machine enters. Both the drop and the file-picker
+   * route here, so there is a single upload path to reason about, not two.
+   */
+  const takeFiles = async (files: File[]) => {
+    if (!files.length || uploading) return;
+    setUploading(true);
+    const { added, failed } = await addFiles(files);
+    setUploading(false);
+
+    if (added) toast.success(`${added} file${added > 1 ? 's' : ''} added — unsorted, file them into a folder`);
+    // Never silent. A file that does not arrive must SAY it did not arrive, by name — the whole
+    // point of the 2026-07-13 intake-form fix, and it applies identically here.
+    if (failed.length) toast.error(`Could not add: ${failed.join(', ')}`);
+  };
 
   const list = view ? byFolder[view] : inbox;
   const filedCount = useMemo(
@@ -355,28 +373,58 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
       <div className="grid grid-cols-1 gap-0 overflow-hidden rounded-[10px] border border-border lg:grid-cols-[1fr_380px]">
         {/* ── LEFT — the gallery. Shows Unsorted, or the folder you opened. ── */}
         <div className="flex flex-col gap-2 border-r border-border bg-card p-3">
-          {/* Drop zone. */}
+          {/* Drop zone. It used to be an empty target that only printed "isn't wired up yet" — it now
+              actually takes the file. Clicking it opens the OS file picker, because a drop target with
+              no click fallback is unreachable by keyboard and unreachable by anything scripted. */}
           <div
             data-testid="drop-zone"
+            role="button"
+            tabIndex={0}
+            aria-label="Add files to this job"
+            aria-busy={uploading}
+            onClick={() => !uploading && pickerRef.current?.click()}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (!uploading) pickerRef.current?.click();
+              }
+            }}
             onDragOver={(e) => {
               e.preventDefault();
+              // Tells the OS this is a COPY target. Without it macOS shows the "no entry" cursor and
+              // the drop never fires — the drag looks refused even though the handler exists.
+              e.dataTransfer.dropEffect = 'copy';
               setOverTarget('drop');
             }}
             onDragLeave={() => setOverTarget(null)}
             onDrop={(e) => {
               e.preventDefault();
               setOverTarget(null);
-              toast.info(
-                "Adding files from the desktop isn't wired up yet — the client's uploads appear here on their own.",
-              );
+              // dataTransfer.files, NOT .items — .items is empty for an OS-level file drag in some
+              // engines, and reading the wrong one silently yields zero files on a real drop.
+              void takeFiles(Array.from(e.dataTransfer.files));
             }}
-            className={`flex flex-col items-center rounded-[9px] border-2 border-dashed py-4 text-center ${
-              overTarget === 'drop' ? 'border-blue-500 bg-blue-50' : 'border-border'
-            }`}
+            className={`flex cursor-pointer flex-col items-center rounded-[9px] border-2 border-dashed py-4 text-center transition-colors ${
+              overTarget === 'drop' ? 'border-blue-500 bg-blue-500/10' : 'border-border hover:border-blue-500/60'
+            } ${uploading ? 'pointer-events-none opacity-60' : ''}`}
           >
             <Upload className="h-4 w-4 text-muted-foreground" />
-            <div className="text-xs text-foreground">Drop files here to add them</div>
+            <div className="text-xs text-foreground">
+              {uploading ? 'Adding…' : 'Drop files here, or click to choose'}
+            </div>
             <div className="text-[10px] text-muted-foreground">they land in the pile below, unsorted</div>
+            <input
+              ref={pickerRef}
+              data-testid="file-picker"
+              type="file"
+              multiple
+              className="hidden"
+              onChange={(e) => {
+                void takeFiles(Array.from(e.target.files ?? []));
+                // Reset, or picking the SAME file twice in a row fires no change event the second time.
+                e.target.value = '';
+              }}
+            />
           </div>
 
           {/* Title + the 1-up / 2-up / 3-up size switch. */}

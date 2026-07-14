@@ -46,7 +46,16 @@ import { JOB_SUBFOLDERS, JOB_SUBFOLDER_SHORT_LABELS, type JobSubfolder } from '@
 import { useJobDocuments, type JobDocument, STORAGE_BUCKET } from './useJobDocuments';
 import { ImageEditorModal } from '@/features/image-configurator/components/ImageEditorModal';
 import type { JobImage } from '@/features/image-configurator/types';
-import { AlertCircle, CheckCircle2, CloudOff, FileText, FolderPlus, Loader2, Upload } from 'lucide-react';
+import {
+  AlertCircle,
+  CheckCircle2,
+  CloudOff,
+  FileText,
+  FolderOpen,
+  FolderPlus,
+  Loader2,
+  Upload,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 const IMAGE_TYPES = /^image\//;
@@ -176,7 +185,7 @@ function MoveSelect({
   );
 }
 
-export function JobDocumentsPanel({ jobId }: { jobId: string }) {
+export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderUrl?: string | null }) {
   const {
     inbox,
     byFolder,
@@ -385,30 +394,73 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
         </div>
       </div>
 
-      {/* ── THE FOLDER SET — this lives HERE, in the document screen, because this is where folders
-             are USED. It sat in the letter-of-engagement ribbon, which is not where anyone filing a
-             document would look for it. Until the set exists there is nothing to file into, so the
-             screen says so plainly and every filing route below is disabled. ── */}
-      {!loading && !foldersExist && (
+      {/* ── THE FOLDER SET — ONE control, ALWAYS present, and it lives HERE because this is the screen
+             where folders are USED. It was in the letter-of-engagement ribbon, which is not where
+             anyone filing a document would think to look.
+
+             It is always visible ON PURPOSE. The first version only appeared when the folders were
+             MISSING — so on a job that HAD folders there was no way to reach them from this screen at
+             all, which is the very thing moving the button was meant to fix. A control that hides once
+             its job is done leaves the user with nothing.
+
+             Two states, mirroring the button it replaces: create the set, or open the existing one.
+             Never re-create — the server connects to an existing set rather than making a second. ── */}
+      {!loading && (
         <div
-          data-testid="no-folders-yet"
-          className="mb-2 flex flex-wrap items-center gap-3 rounded-[9px] border border-amber-500/50 bg-amber-50 px-3 py-2 dark:bg-amber-500/10"
+          data-testid="folder-set-bar"
+          className={`mb-2 flex flex-wrap items-center gap-3 rounded-[9px] border px-3 py-2 ${
+            foldersExist
+              ? 'border-emerald-500/50 bg-emerald-50 dark:bg-emerald-500/10'
+              : 'border-amber-500/50 bg-amber-50 dark:bg-amber-500/10'
+          }`}
         >
-          <FolderPlus className="h-4 w-4 shrink-0 text-amber-700 dark:text-amber-400" />
-          <div className="flex-1 text-xs text-amber-900 dark:text-amber-200">
-            <b>This job has no SharePoint folders yet.</b> Files can still be added below — they wait,
-            unsorted — but nothing can be filed until the folder set exists.
-          </div>
-          <button
-            type="button"
-            data-testid="create-folders"
-            onClick={makeFolders}
-            disabled={creatingFolders || !sharepointReachable}
-            title={sharepointReachable ? 'Create this job’s five SharePoint folders' : 'SharePoint is unreachable'}
-            className="whitespace-nowrap rounded-md border border-amber-600/60 bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-900 transition-colors hover:bg-amber-200 disabled:opacity-50 dark:bg-amber-500/20 dark:text-amber-100"
+          {foldersExist ? (
+            <FolderOpen className="h-4 w-4 shrink-0 text-emerald-700 dark:text-emerald-400" />
+          ) : (
+            <FolderPlus className="h-4 w-4 shrink-0 text-amber-700 dark:text-amber-400" />
+          )}
+
+          <div
+            className={`flex-1 text-xs ${
+              foldersExist ? 'text-emerald-900 dark:text-emerald-200' : 'text-amber-900 dark:text-amber-200'
+            }`}
           >
-            {creatingFolders ? 'Creating…' : 'Create folder set'}
-          </button>
+            {foldersExist ? (
+              <>
+                <b>SharePoint folders are set up for this job.</b> Filing a document copies it into the
+                client’s folder.
+              </>
+            ) : (
+              <>
+                <b>This job has no SharePoint folders yet.</b> Files can still be added below — they
+                wait, unsorted — but nothing can be filed until the folder set exists.
+              </>
+            )}
+          </div>
+
+          {foldersExist ? (
+            <button
+              type="button"
+              data-testid="open-folders"
+              onClick={() => folderUrl && window.open(folderUrl, '_blank', 'noopener')}
+              disabled={!folderUrl}
+              title={folderUrl ? 'Open this job’s folders in SharePoint' : 'No folder link stored for this job'}
+              className="whitespace-nowrap rounded-md border border-emerald-600/60 bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-900 transition-colors hover:bg-emerald-200 disabled:opacity-50 dark:bg-emerald-500/20 dark:text-emerald-100"
+            >
+              Open in SharePoint
+            </button>
+          ) : (
+            <button
+              type="button"
+              data-testid="create-folders"
+              onClick={makeFolders}
+              disabled={creatingFolders || !sharepointReachable}
+              title={sharepointReachable ? 'Create this job’s five SharePoint folders' : 'SharePoint is unreachable'}
+              className="whitespace-nowrap rounded-md border border-amber-600/60 bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-900 transition-colors hover:bg-amber-200 disabled:opacity-50 dark:bg-amber-500/20 dark:text-amber-100"
+            >
+              {creatingFolders ? 'Creating…' : 'Create folder set'}
+            </button>
+          )}
         </div>
       )}
 

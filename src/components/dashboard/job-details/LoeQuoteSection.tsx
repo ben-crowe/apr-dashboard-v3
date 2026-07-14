@@ -1565,38 +1565,17 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               />
             )}
 
-            {/* Asset Folders — two states. CREATED (job has a folder URL): green "active" look that
-                OPENS the existing set (never re-creates). NOT YET: plain outline that creates once. */}
-            {(job as any)?.sharepointFolderUrl ? (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => window.open((job as any).sharepointFolderUrl, '_blank')}
-                className="border border-emerald-500/70 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-400/40 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 transition-colors text-sm font-medium"
-                title="Asset folders exist — click to open in SharePoint"
-              >
-                <FolderOpen className="h-4 w-4 mr-1" />
-                Asset Folders
-                <CheckCircle className="h-3.5 w-3.5 ml-1" />
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleCreateAssetFolders}
-                disabled={isCreatingAssetFolders || !isValcreJobNumber(jobDetails?.jobNumber)}
-                className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground hover:bg-muted dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-foreground transition-colors text-sm font-medium"
-              >
-                {isCreatingAssetFolders ? (
-                  <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                ) : (
-                  <FolderOpen className="h-4 w-4 mr-1" />
-                )}
-                {isCreatingAssetFolders ? 'Creating...' : 'Asset Folders'}
-              </Button>
-            )}
+            {/* The Asset Folders button MOVED to the Client Documents section (2026-07-14, Ben).
+                It lived here, in the LOE ribbon, which is not where anyone filing a document would
+                look for it — and folders are USED on the documents screen, not this one. It is now a
+                bar at the top of JobDocumentsPanel with the same two states (create the set / open the
+                existing one), plus the thing this button never did: it GATES filing, so a document
+                cannot be filed into a folder set that does not exist yet.
+
+                Deliberately not left in both places. Two controls for one action drift, and the next
+                person to change the behaviour will change one of them. handleCreateAssetFolders is
+                retained above only because it is still the reference implementation of the single-arg
+                { jobId } invoke — if it becomes genuinely unused, delete it, don't leave it rotting. */}
 
             {/* E-Signature Button - Only visible when REAL Valcre job exists (has valcre_job_id) */}
             {hasRealValcreJob(jobDetails) ? (

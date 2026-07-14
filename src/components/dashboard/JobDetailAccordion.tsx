@@ -273,7 +273,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
           </div>
         </CollapsibleTrigger>
         <CollapsibleContent className="p-4">
-          <JobDocumentsPanel jobId={job.id} />
+          <JobDocumentsPanel jobId={job.id} folderUrl={(job as any)?.sharepointFolderUrl ?? null} />
         </CollapsibleContent>
       </Collapsible>
 

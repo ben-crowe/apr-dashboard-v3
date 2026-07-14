@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Workflow Verification 1 of 5 — Client Intake and File Management</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>
+    body{max-width:820px;margin:0 auto;padding:40px 28px;font:16px/1.6 -apple-system,Segoe UI,Roboto,sans-serif;color:#1a1a1a;background:#fff}
+    h1{font-size:28px;border-bottom:2px solid #222;padding-bottom:10px}
+    h2{font-size:22px;margin-top:34px;border-bottom:1px solid #ddd;padding-bottom:6px}
+    h3{font-size:18px;margin-top:26px;color:#333}
+    table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+    th,td{border:1px solid #ccc;padding:7px 10px;text-align:left;vertical-align:top}
+    th{background:#f4f4f4}
+    code{background:#f0f0f0;padding:1px 5px;border-radius:3px;font-size:14px}
+    blockquote{border-left:4px solid #b58900;margin:10px 0;padding:6px 14px;background:#fbf7ec;color:#444}
+    .shot{border:2px dashed #999;background:#fafafa;color:#777;text-align:center;padding:18px;margin:10px 0;border-radius:6px;font-weight:600;letter-spacing:.3px}
+    hr{border:none;border-top:1px solid #ddd;margin:30px 0}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Workflow Verification 1 of 5 — Client Intake and File
+Management</h1>
+</header>
+<h1
+id="walkthrough-1-of-5--client-intake-and-file-management-form-submission--sharepoint">Walkthrough
+1 of 5 — Client Intake and File Management (form submission →
+SharePoint)</h1>
+<blockquote>
+<p><strong>This is ONE section of a five-part workflow verification of the app.</strong>
+It starts at the public intake form where a client submits details and
+attaches files, and ends with those files sorted into the job's folders
+and copied to SharePoint. The other four flows are <strong>not written
+yet</strong> — listed here so you see where this one sits:</p>
+<ol type="1">
+<li><strong>Client Intake and File Management</strong> — the intake
+submission and its files, from the form to SharePoint <em>(this
+document)</em></li>
+<li><strong>Job creation from the intake</strong> — the submission
+becoming a job record in the dashboard <em>(tentative, not
+written)</em></li>
+<li><strong>Job &amp; client management</strong> — the job pushed into
+the firm's job-tracking tools <em>(tentative, not written)</em></li>
+<li><strong>Engagement letter &amp; e-signature</strong> — the signable
+engagement letter stage <em>(tentative, not written)</em></li>
+<li><strong>Report builder</strong> — building the appraisal report
+<em>(tentative, not written)</em></li>
+</ol>
+</blockquote>
+<hr />
+<h2 id="what-this-app-is--read-before-you-touch-a-step">What this app is
+— read before you touch a step</h2>
+<p>You are testing part of an <strong>appraisal-job workflow
+system</strong> for a property-valuation firm:</p>
+<ul>
+<li><strong>A client submits an intake form</strong> — the public
+"Appraisal Request" form where someone requesting a property appraisal
+fills in their details and attaches documents. Submitting it
+<strong>creates a job</strong>.</li>
+<li><strong>The job lands in the dashboard</strong> — the firm's
+internal workspace, where one job moves through several stages (intake,
+job/client management, e-signature of the engagement letter, report
+builder).</li>
+<li><strong>Documents are one of those flows</strong> — a client's
+uploaded files must reach the firm's document store,
+<strong>SharePoint</strong>, sorted into five fixed folders per
+job.</li>
+</ul>
+<p><strong>This workflow verification tests the document path end to end.</strong>
+It follows a single file from the intake form, into the job, filed into
+a folder, copied to the client's real SharePoint, and confirmed there by
+eye. <strong>These are real client documents in the client's real
+SharePoint</strong> — treat the data as live.</p>
+<hr />
+<h2 id="run-these-searches-before-you-start">Run these searches BEFORE
+you start</h2>
+<ul>
+<li><strong>Run the two-phase search skill — <code>/search-2phase</code>
+— scoped to this project. Declare the skill by name; do not paste a raw
+command.</strong> The skill owns both phases, the scoping, and the
+refuse-to-skip. A pasted command is something an agent half-runs; the
+skill named does the whole job.</li>
+<li><strong>Run it TWICE — once per subject, they are two different
+subjects.</strong> A single blended query returns whichever subject the
+recent records favour and silently drops the other:
+<ul>
+<li><code>/search-2phase</code> for the <strong>client-intake
+flow</strong> — the Appraisal Request form and submission — scoped to
+this project.</li>
+<li><code>/search-2phase</code> for <strong>job creation in the
+dashboard</strong> — scoped to this project.</li>
+</ul></li>
+<li><strong>Read the results YOURSELF.</strong> Running the search is
+not the whole job; the understanding only forms in whoever did the
+reading. Do not hand the comprehension search to a helper agent.</li>
+<li><strong>Read the project map first:</strong>
+<code>docs/00-APR-MASTER-DASHBOARD.md</code>. The
+<code>/prime-apr</code> skill runs this for you.</li>
+<li><strong>The five folder names come from one file:</strong>
+<code>supabase/functions/_shared/jobSubfolders.ts</code> — the source of
+truth if the app ever shows a sixth or renamed folder.</li>
+</ul>
+<hr />
+<h2 id="how-to-drive-this-walk">How to drive this walk</h2>
+<ul>
+<li><strong>Open your OWN browser surface</strong> and use only that ref
+for the whole walk:
+<code>cmux browser open &lt;url&gt; --workspace &lt;ws&gt;</code>. The
+app is shown in a shared surface in this workspace — if two agents drive
+the same one, each navigates the page out from under the other and reads
+the wrong screen.</li>
+<li><strong>Drive with the built-in browser:</strong>
+<code>cmux browser &lt;surface&gt; navigate | eval | screenshot --out &lt;path&gt;</code>.
+Where a control has <strong>no accessible role</strong> (several here
+are plain divs, not buttons), use the exact selector given in the step —
+a snapshot looking for a "button" will find nothing and wrongly report
+the control missing.</li>
+<li><strong>The failure rule:</strong> when a step fails, <strong>stop
+there, capture the screenshot, and report it.</strong> Do NOT repair the
+app mid-walk — a walk that fixes as it goes hides the defect it was
+meant to find.</li>
+</ul>
+<h2 id="run-notes--read-these-or-you-will-misread-the-app">Run notes —
+read these or you will misread the app</h2>
+<ul>
+<li><strong>A blank page is usually a dead browser tab, NOT a broken
+app.</strong> The built-in browser tab can silently drop to
+<code>about:blank</code>, then answer every read as empty and refuse to
+navigate — it looks exactly like an app crash. Open a FRESH surface; the
+dead one never recovers.</li>
+<li><strong>Every file currently shows TWICE</strong> — an older
+"Uploaded Documents" list and the newer "Client Documents" panel read
+the same records. Known open item. Work in the <strong>Client
+Documents</strong> panel; ignore the duplicate.</li>
+<li><strong>The client's SharePoint already holds two leftover test
+PDFs</strong> from an earlier session (pending removal). Check for the
+specific file YOU filed; don't expect an empty tenant.</li>
+</ul>
+<hr />
+<h2
+id="capabilities-map--every-user-capability-filled-first">Capabilities
+map — every user capability, filled first</h2>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Built?</th>
+<th>Where it lives on screen</th>
+<th>What proves it works</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Submit the intake form with a file attached</td>
+<td>Yes</td>
+<td>the public "Appraisal Request" form</td>
+<td>a new job + the file in that job's unsorted pile</td>
+</tr>
+<tr>
+<td>See the submitted file waiting unsorted</td>
+<td>Yes</td>
+<td>Client Documents panel (must be expanded), left gallery</td>
+<td>the file card in the Unsorted area</td>
+</tr>
+<tr>
+<td>Create the folder set for a new job</td>
+<td>Yes</td>
+<td>one small button at the right end of the folder-tabs row</td>
+<td>the button turns green and reads "Folders"; five folders exist</td>
+</tr>
+<tr>
+<td>Drag a file straight into the panel</td>
+<td>Yes (proven)</td>
+<td>dashed drop box at top of the left gallery</td>
+<td>a dropped file uploads and appears in Unsorted</td>
+</tr>
+<tr>
+<td>File a document into a folder</td>
+<td>Yes</td>
+<td>the "Move to" select box below each file's thumbnail</td>
+<td>the file leaves Unsorted and appears under the chosen folder
+tab</td>
+</tr>
+<tr>
+<td>Un-file (put a file back to Unsorted)</td>
+<td>Yes</td>
+<td>the "Back to Unsorted" entry in that select, after filing</td>
+<td>the file returns to Unsorted and stays there across a reload</td>
+</tr>
+<tr>
+<td>The app copies a filed file to SharePoint</td>
+<td>Yes</td>
+<td>(server, on filing)</td>
+<td>the file appears in the matching SharePoint folder</td>
+</tr>
+<tr>
+<td>Preview a document in the app</td>
+<td>Yes</td>
+<td>the file tile (a div, not a button — see selector)</td>
+<td>the document renders readable in the preview frame</td>
+</tr>
+<tr>
+<td>Upload straight into one named folder</td>
+<td>GAP</td>
+<td>(not present)</td>
+<td>fail-closed: no such control exists yet</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="the-walkthrough--numbered-steps">The verification — numbered
+steps</h2>
+<h3 id="precondition--the-intake-form">Precondition — the intake
+form</h3>
+<p><strong>Step 1.1</strong> — Open the public "Appraisal Request" form.
+Press the <strong>"Test Data"</strong> button to fill every field in one
+click.</p>
+<blockquote>
+<p><strong>Where the button is:</strong> top-right of the form's header
+row, same line as the heading "Appraisal Request". It is
+<strong>deliberately faint</strong> — small grey text, no border, no
+fill, with a small downward chevron to its left. Look for grey text
+top-right; a walker scanning for a normal button misses it. Hover
+tooltip: "Fill test data for development". In a script, match on visible
+text <code>Test Data</code> or the title attribute
+<code>Fill test data for development</code> (no test id). The button
+fills client, property, and contact fields but does <strong>not</strong>
+attach a file — that's the one manual step.</p>
+</blockquote>
+<p><strong>Step 1.2</strong> — In the documents section, attach a small
+test PDF named clearly (e.g. <code>walkthrough-test.pdf</code>).</p>
+<blockquote>
+<p><strong>SCREENSHOT [A]</strong> — the form filled by "Test Data",
+with the test PDF attached, before submitting. <strong>PASS [A]</strong>
+= every field is populated and the attached file's name shows.</p>
+</blockquote>
+<div class="shot">SCREENSHOT [A] — picture goes here once walked</div>
+
+<p><strong>Step 1.3</strong> — Submit the form.</p>
+<blockquote>
+<p><strong>SCREENSHOT [B]</strong> — the success/confirmation screen.
+<strong>PASS [B]</strong> = the form reports success. Data pair: a new
+intake record exists and a document record references the file at the
+new job's storage path.</p>
+</blockquote>
+<div class="shot">SCREENSHOT [B] — picture goes here once walked</div>
+
+<h3 id="a-the-file-waits-unsorted">A. The file waits unsorted</h3>
+<p><strong>Step 2.1 — expand the panel FIRST.</strong> On the new job's
+page, the Client Documents panel starts <strong>collapsed</strong>.
+Click the button whose exact text is <strong>"Client Documents"</strong>
+to expand it. (Skip this and you screenshot empty space and wrongly
+report the file never arrived.)</p>
+<blockquote>
+<p><strong>SCREENSHOT [C]</strong> — the expanded panel with the file in
+the Unsorted area of the left gallery. <strong>PASS [C]</strong> = the
+file is in Unsorted. Data pair: exactly one document record for this job
+with no folder set.</p>
+</blockquote>
+<div class="shot">SCREENSHOT [C] — picture goes here once walked</div>
+
+<h3 id="b-create-the-folder-set-the-dependency-first">B. Create the
+folder set (the dependency, first)</h3>
+<p><strong>Step 3.1 — negative control.</strong> Look at the folder-tabs
+row and a file's card.</p>
+<blockquote>
+<p><strong>SCREENSHOT [D]</strong> — the folder tabs dimmed (no green
+dots), a <strong>dim outlined button reading "Create folder
+set"</strong> at the right end of that row (past a thin vertical
+divider), and the file's "Move to" select greyed. <strong>PASS
+[D]</strong> = filing is blocked while no folders exist.
+<strong>CRITICAL:</strong> a greyed "Create folder set" on a fresh job
+means <strong>SharePoint is unreachable</strong>, not that the gate is
+working (the button disables when it can't reach SharePoint). If greyed,
+the walk can't proceed — report SharePoint down, don't record a
+pass.</p>
+</blockquote>
+<div class="shot">SCREENSHOT [D] — picture goes here once walked</div>
+
+<p><strong>Step 3.2</strong> — Press "Create folder set" and wait.</p>
+<blockquote>
+<p><strong>SCREENSHOT [E]</strong> — the <strong>same button now green,
+reading "Folders" with a checkmark</strong>; each folder tab bright with
+a small green dot; the five folder cards in the right-hand grey column.
+(Pressing the green "Folders" button later opens the job's SharePoint
+folder in a new tab.) <strong>PASS [E]</strong> = the button is green
+and reads "Folders"; five folders exist. Data pair: spot-confirm the
+same five exist on SharePoint.</p>
+</blockquote>
+<div class="shot">SCREENSHOT [E] — picture goes here once walked</div>
+
+<h3 id="c-drag-a-second-file-straight-into-the-panel-proven-built">C.
+Drag a second file straight into the panel (proven built)</h3>
+<p><strong>Step 4.1</strong> — Find the <strong>dashed drop box at the
+top of the left gallery</strong> reading "Drop files here, or click to
+choose". Drag a second real file onto it (or click it to open the
+picker).</p>
+<blockquote>
+<p><strong>SCREENSHOT [F]</strong> — the dropped file now in Unsorted
+alongside the first. <strong>PASS [F]</strong> = the dropped file
+uploads and appears in Unsorted. (Proven byte-for-byte: a real
+multi-page PDF dropped in, downloaded back, matched exactly.)</p>
+</blockquote>
+<div class="shot">SCREENSHOT [F] — picture goes here once walked</div>
+
+<h3 id="d-file-a-document-into-a-folder">D. File a document into a
+folder</h3>
+<p><strong>Step 5.1</strong> — On a file's card, open the <strong>"Move
+to" select below the thumbnail</strong> (full card width, not on the
+right edge; selector <code>[data-testid=move-to-folder]</code>).</p>
+<blockquote>
+<p><strong>SCREENSHOT [G]</strong> — the select open: a placeholder
+"Move to…" first, then the five <strong>full</strong> names:
+<code>1. REPORT</code>, <code>2. CLIENT SUPPLIED</code>,
+<code>3. WORK FILES (TTSZ, PICS, COMPS)</code>,
+<code>4. CLIENT BILLING (Invoice, LOE)</code>,
+<code>5. LETTER OF RELIANCE (LOR)</code>. <strong>PASS [G]</strong> =
+the five full names appear here, exactly. Note: the folder
+<strong>tabs</strong> show SHORTENED names ("2. Client Supplied", "3.
+Work Files") — check the names in THIS dropdown, not the tabs. A sixth
+"Back to Unsorted" appears only <strong>after</strong> a file is filed,
+so "a sixth option" is a FAIL only before filing.</p>
+</blockquote>
+<div class="shot">SCREENSHOT [G] — picture goes here once walked</div>
+
+<p><strong>Step 5.2 — negative control for the destination.</strong>
+Before filing, open the client's SharePoint
+<code>2. CLIENT SUPPLIED</code> folder for this job.</p>
+<blockquote>
+<p><strong>SCREENSHOT [H]</strong> — that folder without your file
+(leftover test PDFs may be present — look for YOUR filename's absence).
+<strong>PASS [H]</strong> = your file is not there before you file
+it.</p>
+</blockquote>
+<div class="shot">SCREENSHOT [H] — picture goes here once walked</div>
+
+<p><strong>Step 5.3</strong> — Choose <code>2. CLIENT SUPPLIED</code>
+from the select.</p>
+<blockquote>
+<p><strong>SCREENSHOT [I]</strong> — the file <strong>gone from
+Unsorted</strong> and <strong>present under the "2. Client Supplied"
+tab</strong> when you click that tab. <strong>PASS [I]</strong> = the
+file left Unsorted AND shows under the tab. Data pair: the file's folder
+field now reads <code>2. CLIENT SUPPLIED</code>. (Count alone is not
+enough — confirm the card actually moved.)</p>
+</blockquote>
+<div class="shot">SCREENSHOT [I] — picture goes here once walked</div>
+
+<h3 id="e-it-copies-to-sharepoint--the-destination-proof">E. It copies
+to SharePoint — the destination proof</h3>
+<p><strong>Step 6.1</strong> — Refresh the client's SharePoint
+<code>2. CLIENT SUPPLIED</code> folder.</p>
+<blockquote>
+<p><strong>SCREENSHOT [J]</strong> — the folder now showing YOUR
+document, "Modified By" reading <code>SharePoint App</code>, timestamp
+matching the filing. <strong>PASS [J]</strong> = your file is present in
+the real SharePoint folder, authored by <code>SharePoint App</code>,
+timestamped to now. <strong>The file appearing here is the pass — not
+the app saying "filed."</strong></p>
+</blockquote>
+<div class="shot">SCREENSHOT [J] — picture goes here once walked</div>
+
+<h3 id="f-un-file--filing-is-not-a-one-way-door">F. Un-file — filing is
+not a one-way door</h3>
+<p>Filing used to be one-way; putting a file in the wrong folder trapped
+it. Un-filing is a shipped fix. Use the SECOND file (the dragged-in
+one), so the SharePoint-proven file stays put.</p>
+<p><strong>Step 7.1</strong> — File the second file into any folder,
+then open its "Move to" select again and choose <strong>"Back to
+Unsorted"</strong> (the sixth entry that appears after filing). Then
+<strong>reload the page</strong>.</p>
+<blockquote>
+<p><strong>SCREENSHOT [K]</strong> — the second file back in the
+Unsorted area, and still there after the reload. <strong>PASS
+[K]</strong> = the file returns to Unsorted AND survives a page reload
+(not just a screen flicker). Data pair: its folder field is cleared back
+to none.</p>
+</blockquote>
+<div class="shot">SCREENSHOT [K] — picture goes here once walked</div>
+
+<h3 id="g-preview-it-in-the-app">G. Preview it in the app</h3>
+<p><strong>Step 8.1 — negative control with teeth.</strong> Before
+opening anything, assert nothing is previewed:
+<code>document.querySelector('[data-testid=doc-frame]')</code> returns
+<strong>null</strong>.</p>
+<blockquote>
+<p><strong>SCREENSHOT [L]</strong> — the panel with no document open
+(paired with the null assertion above — the assertion is what can
+actually fail). <strong>PASS [L]</strong> = the doc-frame element is
+null before you click.</p>
+</blockquote>
+<div class="shot">SCREENSHOT [L] — picture goes here once walked</div>
+
+<p><strong>Step 8.2</strong> — Open the document. The file tile is a
+plain <code>div</code>, <strong>not a button</strong> — a snapshot won't
+find a control. Click it by selector: find the file-name label
+(<code>div.truncate</code> containing the filename), walk up to its
+<code>closest('div.flex.flex-col.overflow-hidden')</code> tile, and
+click that tile's <code>firstElementChild</code>.</p>
+<blockquote>
+<p><strong>SCREENSHOT [M]</strong> — the document rendered readable in
+the preview frame (a real page, not a blank/broken box). <strong>PASS
+[M]</strong> = TWO checks together, because a blank white box looks
+identical to a real page in a photo: (1) the screenshot shows readable
+content; (2) assert <code>[data-testid=doc-frame]</code> is now
+<strong>non-null</strong> AND its <code>src</code> matches
+<code>/\.pdf/i</code> — it really points at the PDF.</p>
+</blockquote>
+<div class="shot">SCREENSHOT [M] — picture goes here once walked</div>
+
+<hr />
+<h2 id="the-story-in-one-glance">The story in one glance</h2>
+<p>Thirteen pictures: the client fills the intake form with the faint
+"Test Data" button and attaches a file <code>[A]</code>, submits it
+<code>[B]</code>; the panel is expanded and the file waits in Unsorted
+<code>[C]</code>; filing is blocked until the folder set is created
+<code>[D]</code>, then the small button goes green to "Folders" and five
+folders exist <code>[E]</code>; a second file drags straight in
+<code>[F]</code>; the "Move to" dropdown shows the five full names
+<code>[G]</code>; the destination folder lacks our file before we file
+<code>[H]</code>; the file leaves Unsorted and appears under the Client
+Supplied tab <code>[I]</code> and really lands in the client's
+SharePoint, authored by the app <code>[J]</code>; un-filing returns the
+second file to Unsorted and it survives a reload <code>[K]</code>; and
+the document previews readably, confirmed by the frame's PDF source
+<code>[L][M]</code>. Any one wrong is where the feature fails.</p>
+<hr />
+<h2 id="machine-runnable-layer--for-the-walking-agent">Machine-runnable
+layer — for the walking agent</h2>
+<p>One row per screenshot. Open your OWN surface. Save each to the named
+path.</p>
+<table>
+<thead>
+<tr>
+<th>Shot</th>
+<th>Action</th>
+<th>Control (text / selector)</th>
+<th>Expected state to capture</th>
+<th>Save to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>open Appraisal Request form, press Test Data, attach
+<code>walkthrough-test.pdf</code></td>
+<td>text <code>Test Data</code> / title
+<code>Fill test data for development</code></td>
+<td>form filled, file name shown</td>
+<td>apr-df-A.png</td>
+</tr>
+<tr>
+<td>B</td>
+<td>submit the form</td>
+<td>submit button</td>
+<td>success screen</td>
+<td>apr-df-B.png</td>
+</tr>
+<tr>
+<td>C</td>
+<td>click <code>Client Documents</code> to expand, view panel</td>
+<td>button text <code>Client Documents</code></td>
+<td>file in Unsorted (ignore old duplicate list)</td>
+<td>apr-df-C.png</td>
+</tr>
+<tr>
+<td>D</td>
+<td>look at folder-tabs row + a file card, before creating folders</td>
+<td>button <code>Create folder set</code> (id create-folders)</td>
+<td>tabs dimmed, button dim/outlined, Move-to greyed</td>
+<td>apr-df-D.png</td>
+</tr>
+<tr>
+<td>E</td>
+<td>press Create folder set, wait</td>
+<td>same button (id open-folders after)</td>
+<td>button green reads <code>Folders</code>, tabs bright + green dots, 5
+cards</td>
+<td>apr-df-E.png</td>
+</tr>
+<tr>
+<td>F</td>
+<td>drop a 2nd file on the drop box</td>
+<td>drop box (id drop-zone)
+<code>Drop files here, or click to choose</code></td>
+<td>dropped file appears in Unsorted</td>
+<td>apr-df-F.png</td>
+</tr>
+<tr>
+<td>G</td>
+<td>open a file's Move to select</td>
+<td><code>[data-testid=move-to-folder]</code></td>
+<td>placeholder + five FULL folder names</td>
+<td>apr-df-G.png</td>
+</tr>
+<tr>
+<td>H</td>
+<td>open SharePoint <code>2. CLIENT SUPPLIED</code> (held session)</td>
+<td>—</td>
+<td>your file absent</td>
+<td>apr-df-H.png</td>
+</tr>
+<tr>
+<td>I</td>
+<td>choose <code>2. CLIENT SUPPLIED</code></td>
+<td>move-to-folder</td>
+<td>file gone from Unsorted, present under that tab</td>
+<td>apr-df-I.png</td>
+</tr>
+<tr>
+<td>J</td>
+<td>refresh SharePoint <code>2. CLIENT SUPPLIED</code></td>
+<td>—</td>
+<td>your file present, Modified By SharePoint App</td>
+<td>apr-df-J.png</td>
+</tr>
+<tr>
+<td>K</td>
+<td>file the 2nd file, choose <code>Back to Unsorted</code>, reload
+page</td>
+<td>move-to-folder → <code>Back to Unsorted</code></td>
+<td>file back in Unsorted, survives reload</td>
+<td>apr-df-K.png</td>
+</tr>
+<tr>
+<td>L</td>
+<td>assert no preview open</td>
+<td>eval <code>[data-testid=doc-frame]</code> is null</td>
+<td>empty preview + null assertion</td>
+<td>apr-df-L.png</td>
+</tr>
+<tr>
+<td>M</td>
+<td>click the file tile (div.truncate → closest
+div.flex.flex-col.overflow-hidden → firstElementChild)</td>
+<td>(no role — use selector)</td>
+<td>doc-frame non-null AND src matches /.pdf/i, page readable</td>
+<td>apr-df-M.png</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

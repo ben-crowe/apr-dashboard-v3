@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Download, Loader2, ZoomIn, ZoomOut } from 'lucide-react';
 
 /**
  * A PDF rendered as PAGES WE DRAW OURSELVES — never an <iframe>.
@@ -17,6 +17,9 @@ import { Loader2 } from 'lucide-react';
  */
 export function PdfPages({ url, name }: { url: string; name: string }) {
   const [pages, setPages] = useState<string[]>([]);
+  // Our OWN zoom. The browser plugin's zoom went away with the plugin; Ben wanted the CONTROLS kept,
+  // just made small — not the plugin's oversized chrome. 1 = the whole page fits the frame.
+  const [zoom, setZoom] = useState(1);
   const [failed, setFailed] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -88,7 +91,7 @@ export function PdfPages({ url, name }: { url: string; name: string }) {
       // NEUTRAL, NOT BLUE (Ben: "do not add blue to the background of the PDF page"). The page is white
       // paper; it sits on a plain light surface and casts a soft shadow, which is what makes it read as
       // paper. A slate/navy surround tinted the whole document.
-      className="h-full w-full overflow-y-auto bg-neutral-100 p-6"
+      className="group/doc h-full w-full overflow-y-auto bg-neutral-100 p-6"
     >
       {/* ONE WHOLE PAGE, NOT A CROPPED ONE (Ben: "you don't want to see it get cut off on the
           bottom… it should fit, one page view"). Sizing a page by WIDTH makes a portrait page taller
@@ -102,7 +105,8 @@ export function PdfPages({ url, name }: { url: string; name: string }) {
             data-testid="doc-page"
             src={src}
             alt={`${name} — page ${i + 1}`}
-            className="max-h-[calc(90vh-9rem)] w-auto max-w-full bg-white object-contain shadow-[0_2px_12px_rgba(0,0,0,0.18)]"
+            style={{ maxHeight: `calc((90vh - 9rem) * ${zoom})` }}
+            className="w-auto max-w-none bg-white object-contain shadow-[0_2px_12px_rgba(0,0,0,0.18)]"
           />
         ))}
         {loading && (
@@ -112,6 +116,53 @@ export function PdfPages({ url, name }: { url: string; name: string }) {
           </div>
         )}
       </div>
+
+      {/* OUR controls, not the browser's. Ben kept the zoom and the download — he objected to the
+          PLUGIN'S versions, which were oversized, unstyleable and drew themselves over the page. These
+          are small, they sit at the foot of the frame, and they fade in on hover so a clean page is
+          what you see at rest. */}
+      {!!pages.length && (
+        <div
+          data-testid="doc-tools"
+          className="pointer-events-none sticky bottom-0 flex justify-center pt-4 opacity-0 transition-opacity duration-150 group-hover/doc:opacity-100"
+        >
+          <div className="pointer-events-auto flex items-center gap-0.5 rounded-full border border-black/10 bg-white/95 px-1.5 py-1 shadow-md backdrop-blur-sm">
+            <button
+              type="button"
+              data-testid="doc-zoom-out"
+              onClick={() => setZoom((z) => Math.max(0.6, +(z - 0.25).toFixed(2)))}
+              disabled={zoom <= 0.6}
+              title="Zoom out"
+              className="flex h-6 w-6 items-center justify-center rounded-full text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-900 disabled:opacity-30"
+            >
+              <ZoomOut className="h-3.5 w-3.5" />
+            </button>
+
+            <button
+              type="button"
+              data-testid="doc-zoom-in"
+              onClick={() => setZoom((z) => Math.min(3, +(z + 0.25).toFixed(2)))}
+              disabled={zoom >= 3}
+              title="Zoom in"
+              className="flex h-6 w-6 items-center justify-center rounded-full text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-900 disabled:opacity-30"
+            >
+              <ZoomIn className="h-3.5 w-3.5" />
+            </button>
+
+            <span className="mx-1 h-3.5 w-px bg-black/10" />
+
+            <a
+              data-testid="doc-download"
+              href={url}
+              download={name}
+              title={`Download ${name}`}
+              className="flex h-6 w-6 items-center justify-center rounded-full text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-900"
+            >
+              <Download className="h-3.5 w-3.5" />
+            </a>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

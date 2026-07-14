@@ -98,35 +98,103 @@ const UNSORTED = '__un';
 
 const PDF_NAME = /\.pdf$/i;
 
+/**
+ * A PDF's first page, RASTERISED to a flat image.
+ *
+ * ⚑ WHY THIS IS NOT AN <iframe>, AND DO NOT "SIMPLIFY" IT BACK TO ONE.
+ * An <iframe> pointed at a PDF runs the BROWSER'S OWN PDF PLUGIN. On hover that plugin draws its
+ * own floating toolbar — zoom in, zoom out, rotate, DOWNLOAD — straight over the card. It is drawn
+ * by the engine, ABOVE the page's own compositing, so NOTHING in our DOM can cover it: neither
+ * `pointer-events-none` on the frame, nor a transparent shield layer on top of it (both were tried;
+ * the toolbar came through and our own hover control ended up UNDERNEATH it). The `#toolbar=0` URL
+ * fragment is a Chrome-only hint and is not honoured here either.
+ *
+ * The only way to show a PDF page with no plugin attached is to STOP EMBEDDING A VIEWER and draw
+ * the page ourselves. pdf.js renders page 1 to a canvas; we hand out a plain <img>. An image has no
+ * controls, no scrollbar and nothing to hover.
+ */
+function PdfThumb({ url, name }: { url: string; name: string }) {
+  const [src, setSrc] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    let dead = false;
+    let objectUrl: string | null = null;
+
+    (async () => {
+      try {
+        const pdfjs = await import('pdfjs-dist');
+        // The worker must be resolved through Vite, not from a CDN — this app has no external script
+        // allowance and a bare specifier here silently yields a blank canvas.
+        pdfjs.GlobalWorkerOptions.workerSrc = (
+          await import('pdfjs-dist/build/pdf.worker.min.mjs?url')
+        ).default;
+
+        const pdf = await pdfjs.getDocument({ url }).promise;
+        const page = await pdf.getPage(1);
+
+        // 2x for a crisp thumbnail on a retina panel; a 1x render looks smeared at card size.
+        const viewport = page.getViewport({ scale: 2 });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('no 2d context');
+
+        await page.render({ canvas, canvasContext: ctx, viewport }).promise;
+        if (dead) return;
+
+        const blob: Blob | null = await new Promise((r) => canvas.toBlob(r, 'image/png'));
+        if (!blob || dead) return;
+        objectUrl = URL.createObjectURL(blob);
+        setSrc(objectUrl);
+      } catch {
+        // A PDF we cannot rasterise still has to render SOMETHING — falling through to a blank card
+        // would look identical to a broken one.
+        if (!dead) setFailed(true);
+      }
+    })();
+
+    return () => {
+      dead = true;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [url]);
+
+  if (failed) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-1">
+        <FileText className="h-6 w-6 text-muted-foreground" />
+        <small className="text-[10px] text-muted-foreground">click to open</small>
+      </div>
+    );
+  }
+
+  if (!src) {
+    return <div data-testid="pdf-thumb-loading" className="h-full w-full animate-pulse bg-muted" />;
+  }
+
+  return (
+    <img
+      data-testid="pdf-thumb"
+      src={src}
+      alt={name}
+      className="h-full w-full bg-white object-cover object-top"
+    />
+  );
+}
+
 /** The picture on a card (big) or in a folder slot (small). */
 function Art({ doc, big }: { doc: JobDocument; big: boolean }) {
   if (IMAGE_TYPES.test(doc.type) && doc.storagePath) {
     return <img src={publicUrl(doc.storagePath)} alt={doc.name} className="h-full w-full object-cover" />;
   }
 
-  // A PDF gets a REAL first-page thumbnail, not a type badge. Every card looked identical before
-  // this, which defeats the point of a sorter — you could not tell two documents apart without
-  // opening each one. The browser's own PDF viewer does the rendering (the same one the previewer
-  // uses), so this costs no new dependency. `pointer-events-none` is load-bearing: without it the
-  // frame swallows the click and the card no longer opens. The viewer chrome is suppressed via the
-  // URL fragment; a browser that ignores it still shows the page, which is the thing we want.
+  // A PDF gets a REAL first-page thumbnail, not a type badge — every non-image card looked identical
+  // before, which defeats the point of a sorter. See PdfThumb for why this is a rasterised image and
+  // must never go back to being an embedded viewer.
   if (PDF_NAME.test(doc.name) && doc.storagePath && !doc.sharepointOnly) {
-    return (
-      // The frame is overshot and CLIPPED: the browser's PDF viewer draws its own scrollbar down the
-      // right edge and the URL fragment does not reliably suppress it. Widening the frame past the
-      // card and hiding the overflow pushes that scrollbar out of sight. The fragment stays as a hint
-      // for engines that DO honour it.
-      <span className="block h-full w-full overflow-hidden">
-        <iframe
-          data-testid="pdf-thumb"
-          src={`${publicUrl(doc.storagePath)}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
-          title={doc.name}
-          tabIndex={-1}
-          aria-hidden
-          className="pointer-events-none h-full w-[calc(100%+18px)] border-0 bg-white"
-        />
-      </span>
-    );
+    return <PdfThumb url={publicUrl(doc.storagePath)} name={doc.name} />;
   }
 
   if (doc.sharepointOnly) {
@@ -723,19 +791,12 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
                       >
                         <Art doc={doc} big />
 
-                        {/* ⚑ THE SHIELD — DO NOT REMOVE. The PDF thumbnail is a real <iframe> running the
-                            BROWSER'S OWN PDF VIEWER. On hover that viewer draws its own chrome ON TOP of
-                            our card: a zoom-in/zoom-out/rotate/DOWNLOAD toolbar and a scrollbar. Ben's
-                            words: "this massive magnifying glass and whatnot… looks ridiculous."
-                            `pointer-events-none` on the iframe is NOT enough — the engine still reacts to
-                            the cursor being over that region. This transparent layer sits ABOVE the frame
-                            and takes the pointer itself, so the viewer never sees the hover and never
-                            draws its toolbar. Clicks pass to the button because this is inside it. */}
-                        <span aria-hidden className="absolute inset-0 z-10" />
-
-                        {/* The hover affordance the card SHOULD have had: a soft wash and one expand
-                            circle saying "this opens". Nothing else — the download and zoom belong in the
-                            previewer, not on a thumbnail. */}
+                        {/* The hover affordance: a soft wash and one expand circle saying "this opens".
+                            Nothing else — zoom and download belong in the previewer, not on a thumbnail.
+                            (A transparent "shield" layer used to sit here, trying to hide the browser
+                            PDF plugin's own toolbar. It did not work and could never have worked — the
+                            plugin draws above the page's compositing. The thumbnail is now a rasterised
+                            IMAGE with no plugin attached, so there is nothing to shield.) */}
                         <span
                           aria-hidden
                           data-testid="thumb-hover"

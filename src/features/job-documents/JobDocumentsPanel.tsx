@@ -475,20 +475,23 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
                   if (live) dropOn(f);
                 }}
                 className={`flex items-center gap-1.5 whitespace-nowrap rounded-md border px-2 py-1 text-[11px] transition-colors ${
+                  // SELECTING A TAB DOES NOT RECOLOUR IT (Ben). It used to fill with a tint and swap its
+                  // dot to blue — two colour changes for one click, and the row flickered between
+                  // palettes as you moved through the folders. Selection is now shown by the EDGE
+                  // alone: the border comes up. Nothing else moves.
                   !live
                     ? 'cursor-default border-transparent text-muted-foreground/40'
                     : over
-                      ? 'border-dashed border-green-500 bg-green-50 text-green-700'
+                      ? 'border-dashed border-foreground/50 text-foreground'
                       : on
-                        ? 'border-transparent bg-muted text-foreground'
-                        : 'border-transparent text-muted-foreground hover:bg-muted hover:text-foreground'
+                        ? 'border-foreground/40 text-foreground'
+                        : 'border-transparent text-muted-foreground hover:border-border hover:text-foreground'
                 }`}
               >
-                {/* The selected tab keeps its blue dot. An unselected LIVE tab gets a small green one —
-                    the "this folder is real" mark. A dormant tab gets nothing. */}
-                {on ? (
-                  <span className="h-[5px] w-[5px] shrink-0 rounded-full bg-blue-500" />
-                ) : live ? (
+                {/* The dot means ONE thing and never changes meaning: this folder is REAL. It stays
+                    green whether the tab is selected or not — a dot that changes colour on selection is
+                    saying two different things with one mark. A dormant tab has no dot. */}
+                {live ? (
                   <span
                     data-testid="folder-live-dot"
                     className="h-[5px] w-[5px] shrink-0 rounded-full bg-emerald-500/70"

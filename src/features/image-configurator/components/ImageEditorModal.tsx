@@ -23,6 +23,7 @@ import {
 import type { JobImage } from '../types';
 import { useSaveImageEdits } from '../hooks/useJobImages';
 import { useSignedImageUrl } from '@/utils/supabaseStorage';
+import { PdfPages } from './PdfPages';
 
 interface ImageEditorModalProps {
   image: JobImage;
@@ -264,12 +265,20 @@ export function ImageEditorModal({
         {/* min-h-0 is required: a flex child defaults to min-height:auto, which refuses to shrink
             below its content and re-collapses the row. flex-1 + min-h-0 is the pair that works. */}
         <div className="flex flex-1 min-h-0 overflow-hidden">
-          {/* Image preview — or a document frame. An <img> CANNOT render a PDF: it fetches the bytes,
-              fails to decode them, and paints a broken-image box. That is exactly what a client's PDF
-              did here. Anything that is not a picture goes in an <iframe>, which is what the browser's
-              own PDF viewer needs. The crop/rotate filters are meaningless on a document, so they are
-              not applied to it. */}
-          <div className="flex-1 flex items-center justify-center p-4 bg-slate-950 overflow-hidden">
+          {/* Image preview — or a document, rendered as PAGES WE DRAW (see PdfPages). An <img> cannot
+              decode a PDF; it paints the broken-image box, which is what a client's PDF used to do
+              here. But an <iframe> is worse: it attaches the browser's PDF PLUGIN, which draws its own
+              zoom/rotate/download bar over the document on hover, above our compositing and beyond our
+              control. So the document is rasterised by pdf.js and shown as plain images. The
+              crop/rotate filters are meaningless on a document and are not applied to it. */}
+          {/* A DOCUMENT fills the pane edge to edge on its own light surface — no dark frame, no
+              padding ring around it (Ben). An IMAGE keeps the dark backdrop it has always had, because
+              a photo needs a dark surround to read against and a document does not. */}
+          <div
+            className={`flex-1 flex items-center justify-center overflow-hidden ${
+              isRenderableImage ? 'bg-slate-950 p-4' : ''
+            }`}
+          >
             {isRenderableImage ? (
               <div className="relative max-w-full max-h-full overflow-hidden">
                 <img
@@ -284,12 +293,7 @@ export function ImageEditorModal({
                 />
               </div>
             ) : (
-              <iframe
-                data-testid="doc-frame"
-                src={imageUrl}
-                title={image.original_filename}
-                className="h-full w-full rounded border border-slate-700 bg-white"
-              />
+              <PdfPages url={imageUrl} name={image.original_filename} />
             )}
           </div>
 

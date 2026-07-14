@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FormData, ValidationErrors, validateForm } from "@/utils/validation";
-import { sendToWebhook } from "@/utils/webhooks/formSubmission";
 import { WebhookData } from "@/utils/webhooks/types";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -244,29 +243,44 @@ const useFormSubmission = () => {
         })),
       };
 
+      // Files the client attached that did NOT make it. The submission still succeeds — we never
+      // lose a whole appraisal over one attachment — but they are TOLD, by name, and asked to
+      // re-send. Silence here is what lost client files: a file could vanish with nothing said.
+      const lostFiles: string[] = [];
+
       if (formData.files.length > 0) {
         console.log(`📤 Uploading ${formData.files.length} files for job ${jobData.id}`);
 
         for (const file of formData.files) {
-          // Sanitize filename: replace spaces with underscores, remove special characters
-          const sanitizedName = file.name
-            .replace(/\s+/g, '_')  // Replace spaces with underscores
-            .replace(/[^a-zA-Z0-9._-]/g, '');  // Remove special characters except . _ -
-
-          const filePath = `${jobData.id}/${sanitizedName}`;
-          console.log(`📁 Uploading file: ${file.name} → ${sanitizedName} (${file.type}, ${file.size} bytes)`);
+          // THE STORAGE KEY. Two jobs, deliberately separated:
+          //
+          //   UNIQUENESS comes from the token — NOT from the name. The old code built the path from
+          //   the sanitised name alone, so two DIFFERENT client files could sanitise to the SAME
+          //   path ("Scan 1.pdf" and "Scan_1.pdf" both became "Scan_1.pdf"). The second upload then
+          //   failed 409 Duplicate and the loop `continue`d straight past the row insert. The file
+          //   was gone, and only a toast said so. Reproduced before this fix: two distinct files in,
+          //   ONE object out.
+          //
+          //   LEGALITY comes from the strip — the segment still sits inside a Supabase storage key,
+          //   which must be a legal key, so a minimal strip-to-safe-characters stays. It no longer
+          //   matters that it mangles ("Évaluation.pdf" -> "valuation.pdf"): the token already made
+          //   the key unique, and file_name below keeps the client's ORIGINAL name for display.
+          //   This is NOT a transliterator and must not become one.
+          const uniqueToken = crypto.randomUUID().slice(0, 8);
+          const nameSegment = file.name
+            .replace(/\s+/g, '_')
+            .replace(/[^a-zA-Z0-9._-]/g, '');
+          // A name made entirely of stripped characters leaves nothing — the token alone carries it.
+          const filePath = `${jobData.id}/${uniqueToken}${nameSegment ? `-${nameSegment}` : ''}`;
+          console.log(`📁 Uploading file: ${file.name} → ${filePath} (${file.type}, ${file.size} bytes)`);
 
           const { data: uploadData, error: uploadError } = await supabase.storage
             .from('job-files')
             .upload(filePath, file);
 
           if (uploadError) {
-            console.error('❌ File upload error:', uploadError);
-            console.error('   Original file:', file.name);
-            console.error('   Sanitized name:', sanitizedName);
-            console.error('   Path:', filePath);
-            console.error('   Bucket: job-files');
-            toast.error(`Failed to upload ${file.name}: ${uploadError.message}`);
+            console.error('❌ File upload error:', uploadError, { original: file.name, filePath });
+            lostFiles.push(file.name);
             continue;
           }
 
@@ -274,14 +288,19 @@ const useFormSubmission = () => {
 
           const { error: dbError } = await supabase.from('job_files').insert({
             job_id: jobData.id,
-            file_name: file.name,  // Keep original name for display
-            file_path: filePath,    // Use sanitized path for storage
+            file_name: file.name,  // the client's ORIGINAL name, untouched — this is what is displayed
+            file_path: filePath,   // opaque storage key; nothing reconstructs a display name from it
             file_type: file.type,
             file_size: file.size,
           });
 
           if (dbError) {
-            console.error('❌ Database insert error for file:', dbError);
+            // A row-insert failure is JUST AS BAD as an upload failure, and it used to be a bare
+            // console.error. The bytes are in storage but no row points at them, so the file is
+            // invisible to the dashboard and the folder panel FOREVER, and the client is told
+            // nothing. It now surfaces exactly like a failed upload.
+            console.error('❌ Database insert error for file:', dbError, { original: file.name, filePath });
+            lostFiles.push(file.name);
           } else {
             console.log('✅ File reference saved to database');
           }
@@ -289,7 +308,15 @@ const useFormSubmission = () => {
       }
 
       setIsSubmitted(true);
-      void 0 /* success: silent (Ben) */;
+
+      // The confirmation must NOT read as an unqualified success while a file is missing.
+      if (lostFiles.length > 0) {
+        toast.error(
+          `Your request was submitted, but ${lostFiles.length} attachment${lostFiles.length === 1 ? '' : 's'} did not upload: ` +
+            `${lostFiles.join(', ')}. Please email ${lostFiles.length === 1 ? 'it' : 'them'} to us so we have everything.`,
+          { duration: 30000 },
+        );
+      }
 
       // REMOVED: Automatic ClickUp task creation on form submission
       // ClickUp tasks should be created manually from the dashboard

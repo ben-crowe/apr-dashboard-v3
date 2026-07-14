@@ -871,14 +871,17 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
                           </div>
                         );
                       }
+                      // An empty slot is a PLACEHOLDER, not an item. It used to print its own index —
+                      // a number that means nothing to the user and reads as if the slot were labelled
+                      // or occupied (Ben: "numbers aren't necessary… it just looks strange"). It now
+                      // holds nothing and sits back: fainter border, fainter fill, no text at all.
                       return (
                         <div
                           key={`hole-${k}`}
                           data-testid="empty-slot"
-                          className="flex aspect-[4/3] items-center justify-center rounded-[5px] border border-slate-200 bg-slate-100 text-[10px] font-semibold text-muted-foreground dark:border-white/10 dark:bg-white/5"
-                        >
-                          {k + 1}
-                        </div>
+                          aria-hidden
+                          className="aspect-[4/3] rounded-[5px] border border-slate-200/70 bg-slate-100/50 dark:border-white/[0.06] dark:bg-white/[0.02]"
+                        />
                       );
                     })}
                   </div>

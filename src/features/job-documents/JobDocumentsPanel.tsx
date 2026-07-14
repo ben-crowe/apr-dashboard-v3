@@ -86,11 +86,33 @@ function isAmber(d: JobDocument): boolean {
 /** The unfile sentinel. Not a folder name, so it can never collide with one. */
 const UNSORTED = '__un';
 
+const PDF_NAME = /\.pdf$/i;
+
 /** The picture on a card (big) or in a folder slot (small). */
 function Art({ doc, big }: { doc: JobDocument; big: boolean }) {
   if (IMAGE_TYPES.test(doc.type) && doc.storagePath) {
     return <img src={publicUrl(doc.storagePath)} alt={doc.name} className="h-full w-full object-cover" />;
   }
+
+  // A PDF gets a REAL first-page thumbnail, not a type badge. Every card looked identical before
+  // this, which defeats the point of a sorter — you could not tell two documents apart without
+  // opening each one. The browser's own PDF viewer does the rendering (the same one the previewer
+  // uses), so this costs no new dependency. `pointer-events-none` is load-bearing: without it the
+  // frame swallows the click and the card no longer opens. The viewer chrome is suppressed via the
+  // URL fragment; a browser that ignores it still shows the page, which is the thing we want.
+  if (PDF_NAME.test(doc.name) && doc.storagePath && !doc.sharepointOnly) {
+    return (
+      <iframe
+        data-testid="pdf-thumb"
+        src={`${publicUrl(doc.storagePath)}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+        title={doc.name}
+        tabIndex={-1}
+        aria-hidden
+        className="pointer-events-none h-full w-full border-0 bg-white"
+      />
+    );
+  }
+
   if (doc.sharepointOnly) {
     return (
       <div className="flex flex-col items-center justify-center gap-1 text-blue-600">

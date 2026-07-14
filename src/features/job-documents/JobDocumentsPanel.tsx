@@ -54,6 +54,7 @@ import {
   FolderOpen,
   FolderPlus,
   Loader2,
+  Maximize2,
   Upload,
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -111,14 +112,20 @@ function Art({ doc, big }: { doc: JobDocument; big: boolean }) {
   // URL fragment; a browser that ignores it still shows the page, which is the thing we want.
   if (PDF_NAME.test(doc.name) && doc.storagePath && !doc.sharepointOnly) {
     return (
-      <iframe
-        data-testid="pdf-thumb"
-        src={`${publicUrl(doc.storagePath)}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
-        title={doc.name}
-        tabIndex={-1}
-        aria-hidden
-        className="pointer-events-none h-full w-full border-0 bg-white"
-      />
+      // The frame is overshot and CLIPPED: the browser's PDF viewer draws its own scrollbar down the
+      // right edge and the URL fragment does not reliably suppress it. Widening the frame past the
+      // card and hiding the overflow pushes that scrollbar out of sight. The fragment stays as a hint
+      // for engines that DO honour it.
+      <span className="block h-full w-full overflow-hidden">
+        <iframe
+          data-testid="pdf-thumb"
+          src={`${publicUrl(doc.storagePath)}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+          title={doc.name}
+          tabIndex={-1}
+          aria-hidden
+          className="pointer-events-none h-full w-[calc(100%+18px)] border-0 bg-white"
+        />
+      </span>
     );
   }
 
@@ -709,12 +716,35 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
                         type="button"
                         data-testid="thumb-open"
                         onClick={() => setPreviewIdx(i)}
-                        className={`relative flex items-center justify-center overflow-hidden bg-muted ${
+                        aria-label={`Open ${doc.name}`}
+                        className={`group relative flex items-center justify-center overflow-hidden bg-muted ${
                           gsize === 1 ? 'h-[260px]' : gsize === 2 ? 'h-[150px]' : 'h-[104px]'
                         }`}
-                        title="Open"
                       >
                         <Art doc={doc} big />
+
+                        {/* ⚑ THE SHIELD — DO NOT REMOVE. The PDF thumbnail is a real <iframe> running the
+                            BROWSER'S OWN PDF VIEWER. On hover that viewer draws its own chrome ON TOP of
+                            our card: a zoom-in/zoom-out/rotate/DOWNLOAD toolbar and a scrollbar. Ben's
+                            words: "this massive magnifying glass and whatnot… looks ridiculous."
+                            `pointer-events-none` on the iframe is NOT enough — the engine still reacts to
+                            the cursor being over that region. This transparent layer sits ABOVE the frame
+                            and takes the pointer itself, so the viewer never sees the hover and never
+                            draws its toolbar. Clicks pass to the button because this is inside it. */}
+                        <span aria-hidden className="absolute inset-0 z-10" />
+
+                        {/* The hover affordance the card SHOULD have had: a soft wash and one expand
+                            circle saying "this opens". Nothing else — the download and zoom belong in the
+                            previewer, not on a thumbnail. */}
+                        <span
+                          aria-hidden
+                          data-testid="thumb-hover"
+                          className="absolute inset-0 z-20 flex items-center justify-center bg-slate-900/0 opacity-0 transition-all duration-150 group-hover:bg-slate-900/35 group-hover:opacity-100"
+                        >
+                          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow-sm">
+                            <Maximize2 className="h-4 w-4" />
+                          </span>
+                        </span>
                         {amber && (
                           <span
                             data-testid="amber-mark"

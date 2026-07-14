@@ -210,6 +210,7 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
   const [previewIdx, setPreviewIdx] = useState<number | null>(null);
   const [uploading, setUploading] = useState(false);
   const [creatingFolders, setCreatingFolders] = useState(false);
+  const [showFolderHelp, setShowFolderHelp] = useState(false);
   const foldRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const pickerRef = useRef<HTMLInputElement | null>(null);
 
@@ -351,6 +352,66 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
         <span className="text-[11px] text-muted-foreground">
           Drag onto a folder or its tab · or use the dropdown on a file
         </span>
+        {/* ── THE FOLDER SET — one small button, sitting WITH the folder tabs because that is what it
+               governs. It replaced a full-width coloured banner that shouted the same information at
+               the user on every single page load (Ben: "way too in your face").
+
+               Two states, the same logic the old LOE ribbon button had:
+                 folders exist  -> GREEN, active, opens them in SharePoint.
+                 no folders yet -> DIM, and it CREATES the set. Filing stays blocked until then.
+
+               The explanation is not gone, it is BEHIND the "?" — press it and it appears. An
+               explanation the user can summon is worth more than one they have to read every time, and
+               permanently-visible instructional text stops being read at all. ── */}
+        {!loading && (
+          <div className="flex items-center gap-1" data-testid="folder-set-control">
+            <button
+              type="button"
+              data-testid={foldersExist ? 'open-folders' : 'create-folders'}
+              onClick={() => {
+                if (foldersExist) folderUrl && window.open(folderUrl, '_blank', 'noopener');
+                else void makeFolders();
+              }}
+              disabled={
+                foldersExist ? !folderUrl : creatingFolders || !sharepointReachable
+              }
+              title={
+                foldersExist
+                  ? 'Folders are set up — open them in SharePoint'
+                  : sharepointReachable
+                    ? 'Create this job’s SharePoint folders'
+                    : 'SharePoint is unreachable'
+              }
+              className={`flex items-center gap-1.5 whitespace-nowrap rounded-md border px-2 py-1 text-[11px] font-medium transition-colors disabled:opacity-50 ${
+                foldersExist
+                  ? 'border-emerald-500/60 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-400/40 dark:bg-emerald-500/10 dark:text-emerald-300'
+                  : 'border-border bg-transparent text-muted-foreground hover:border-foreground/40 hover:text-foreground'
+              }`}
+            >
+              {creatingFolders ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : foldersExist ? (
+                <FolderOpen className="h-3.5 w-3.5" />
+              ) : (
+                <FolderPlus className="h-3.5 w-3.5" />
+              )}
+              <span>{creatingFolders ? 'Creating…' : foldersExist ? 'Folders' : 'Create folder set'}</span>
+              {foldersExist && <CheckCircle2 className="h-3 w-3" />}
+            </button>
+
+            <button
+              type="button"
+              data-testid="folder-help"
+              aria-label="What is the folder set?"
+              aria-expanded={showFolderHelp}
+              onClick={() => setShowFolderHelp((v) => !v)}
+              className="flex h-5 w-5 items-center justify-center rounded-full border border-border text-[10px] text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground"
+            >
+              ?
+            </button>
+          </div>
+        )}
+
         <div className="ml-auto flex flex-wrap items-center justify-end gap-1" data-testid="folder-ribbon">
           {JOB_SUBFOLDERS.map((f) => {
             const items = byFolder[f];
@@ -394,72 +455,26 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
         </div>
       </div>
 
-      {/* ── THE FOLDER SET — ONE control, ALWAYS present, and it lives HERE because this is the screen
-             where folders are USED. It was in the letter-of-engagement ribbon, which is not where
-             anyone filing a document would think to look.
-
-             It is always visible ON PURPOSE. The first version only appeared when the folders were
-             MISSING — so on a job that HAD folders there was no way to reach them from this screen at
-             all, which is the very thing moving the button was meant to fix. A control that hides once
-             its job is done leaves the user with nothing.
-
-             Two states, mirroring the button it replaces: create the set, or open the existing one.
-             Never re-create — the server connects to an existing set rather than making a second. ── */}
-      {!loading && (
+      {/* The explanation, ON DEMAND. It is the same text the banner used to shout on every page load —
+          it now appears only when the "?" is pressed, and it says what is TRUE right now rather than
+          both states at once. */}
+      {showFolderHelp && (
         <div
-          data-testid="folder-set-bar"
-          className={`mb-2 flex flex-wrap items-center gap-3 rounded-[9px] border px-3 py-2 ${
-            foldersExist
-              ? 'border-emerald-500/50 bg-emerald-50 dark:bg-emerald-500/10'
-              : 'border-amber-500/50 bg-amber-50 dark:bg-amber-500/10'
-          }`}
+          data-testid="folder-help-box"
+          role="note"
+          className="mb-2 rounded-[9px] border border-border bg-muted/60 px-3 py-2 text-xs text-muted-foreground"
         >
           {foldersExist ? (
-            <FolderOpen className="h-4 w-4 shrink-0 text-emerald-700 dark:text-emerald-400" />
+            <>
+              This job’s five SharePoint folders exist. Filing a document into one of them copies it
+              into the client’s real folder in SharePoint. <b>Folders</b> opens them.
+            </>
           ) : (
-            <FolderPlus className="h-4 w-4 shrink-0 text-amber-700 dark:text-amber-400" />
-          )}
-
-          <div
-            className={`flex-1 text-xs ${
-              foldersExist ? 'text-emerald-900 dark:text-emerald-200' : 'text-amber-900 dark:text-amber-200'
-            }`}
-          >
-            {foldersExist ? (
-              <>
-                <b>SharePoint folders are set up for this job.</b> Filing a document copies it into the
-                client’s folder.
-              </>
-            ) : (
-              <>
-                <b>This job has no SharePoint folders yet.</b> Files can still be added below — they
-                wait, unsorted — but nothing can be filed until the folder set exists.
-              </>
-            )}
-          </div>
-
-          {foldersExist ? (
-            <button
-              type="button"
-              data-testid="open-folders"
-              onClick={() => folderUrl && window.open(folderUrl, '_blank', 'noopener')}
-              disabled={!folderUrl}
-              title={folderUrl ? 'Open this job’s folders in SharePoint' : 'No folder link stored for this job'}
-              className="whitespace-nowrap rounded-md border border-emerald-600/60 bg-emerald-100 px-2.5 py-1 text-xs font-medium text-emerald-900 transition-colors hover:bg-emerald-200 disabled:opacity-50 dark:bg-emerald-500/20 dark:text-emerald-100"
-            >
-              Open in SharePoint
-            </button>
-          ) : (
-            <button
-              type="button"
-              data-testid="create-folders"
-              onClick={makeFolders}
-              disabled={creatingFolders || !sharepointReachable}
-              title={sharepointReachable ? 'Create this job’s five SharePoint folders' : 'SharePoint is unreachable'}
-              className="whitespace-nowrap rounded-md border border-amber-600/60 bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-900 transition-colors hover:bg-amber-200 disabled:opacity-50 dark:bg-amber-500/20 dark:text-amber-100"
-            >
-              {creatingFolders ? 'Creating…' : 'Create folder set'}
-            </button>
+            <>
+              This job has no SharePoint folders yet, so there is nowhere to file a document — filing is
+              disabled until you press <b>Create folder set</b>. Files can still be added below; they
+              wait in the unsorted pile.
+            </>
           )}
         </div>
       )}

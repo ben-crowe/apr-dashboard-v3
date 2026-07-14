@@ -358,10 +358,16 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
         <div className="pb-1.5 text-[11px] text-muted-foreground">
           Drag onto a folder or its tab · or use the dropdown on a file
         </div>
-        <div
-          className="flex min-w-0 items-center justify-end gap-1 overflow-x-auto whitespace-nowrap"
-          data-testid="folder-ribbon"
-        >
+        {/* ⚠ THE SCROLLER CLIPS. `overflow-x-auto` establishes a clipping box in BOTH axes, so anything
+            that hangs outside it — the help tooltip, which floats ABOVE the row — gets cut off. So only
+            the FOLDER NAMES scroll; the divider, the button and the tooltip live OUTSIDE the scroller,
+            pinned to the right. That is also better behaviour: the action stays put while the names
+            scroll under it, instead of scrolling away with them. */}
+        <div className="flex items-center justify-end">
+          <div
+            className="flex min-w-0 items-center justify-end gap-1 overflow-x-auto whitespace-nowrap"
+            data-testid="folder-ribbon"
+          >
           {/* A folder tab is DORMANT until the folder set exists — it is a name for a folder that has
               not been created, so it must not look like something you can act on. Dormant = dimmed and
               inert (no hover, not a drop target). The moment the set is created every tab brightens and
@@ -421,6 +427,7 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
               </button>
             );
           })}
+          </div>
 
           {/* A gap and a hairline rule (Ben). The folder names are places you FILE INTO; the button is
               an ACTION ON the set. Sitting flush together they read as one list of six things, and the
@@ -480,52 +487,65 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
                 {foldersExist && <CheckCircle2 className="h-3 w-3" />}
               </button>
 
-              {/* The help mark. Tiny and nearly invisible until you go near it: it BRIGHTENS on hover
-                  and the explanation appears with it — no click needed. Click still works, and it also
-                  responds to keyboard focus, because a hover-only control does not exist for anyone
-                  navigating by keyboard. */}
-              <button
-                type="button"
-                data-testid="folder-help"
-                aria-label="What is the folder set?"
-                aria-expanded={showFolderHelp}
-                onMouseEnter={() => setShowFolderHelp(true)}
-                onMouseLeave={() => setShowFolderHelp(false)}
-                onFocus={() => setShowFolderHelp(true)}
-                onBlur={() => setShowFolderHelp(false)}
-                onClick={() => setShowFolderHelp((v) => !v)}
-                className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-border text-[9px] font-semibold leading-none text-muted-foreground transition-colors hover:border-foreground hover:bg-muted hover:text-foreground focus:border-foreground focus:text-foreground"
-              >
-                ?
-              </button>
+              {/* The help mark, and its TOOLTIP. The tooltip FLOATS — it is absolutely positioned and
+                  therefore takes NO space in the layout. The first version was an in-flow block that
+                  PUSHED THE PAGE DOWN when it appeared, which is not a tooltip, it is a panel (Ben).
+                  It hangs ABOVE the row (bottom-full) and is right-aligned to the mark, so it opens
+                  back over the folder names rather than off the edge of the panel.
+                  Short lines, not one long sentence — a tooltip is read at a glance or not at all. */}
+              <span className="relative flex shrink-0 items-center">
+                <button
+                  type="button"
+                  data-testid="folder-help"
+                  aria-label="What is the folder set?"
+                  aria-describedby={showFolderHelp ? 'folder-help-tip' : undefined}
+                  onMouseEnter={() => setShowFolderHelp(true)}
+                  onMouseLeave={() => setShowFolderHelp(false)}
+                  onFocus={() => setShowFolderHelp(true)}
+                  onBlur={() => setShowFolderHelp(false)}
+                  className="flex h-4 w-4 items-center justify-center rounded-full border border-border text-[9px] font-semibold leading-none text-muted-foreground transition-colors hover:border-foreground hover:bg-muted hover:text-foreground focus:border-foreground focus:text-foreground"
+                >
+                  ?
+                </button>
+
+                {showFolderHelp && (
+                  <span
+                    id="folder-help-tip"
+                    data-testid="folder-help-box"
+                    role="tooltip"
+                    className="pointer-events-none absolute bottom-full right-0 z-30 mb-1.5 w-60 rounded-md border border-border/70 bg-popover/95 px-2.5 py-2 text-[11px] leading-snug text-popover-foreground shadow-md backdrop-blur-sm"
+                  >
+                    {foldersExist ? (
+                      <>
+                        <span className="block font-semibold">Folders are set up.</span>
+                        <span className="mt-1 block text-muted-foreground">
+                          Filing a document copies it to the client’s SharePoint folder.
+                        </span>
+                        <span className="mt-1 block text-muted-foreground">
+                          Press <b>Folders</b> to open them.
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="block font-semibold">No folders yet.</span>
+                        <span className="mt-1 block text-muted-foreground">
+                          There is nowhere to file a document, so filing is off.
+                        </span>
+                        <span className="mt-1 block text-muted-foreground">
+                          Files can still be added — they wait, unsorted.
+                        </span>
+                        <span className="mt-1 block text-muted-foreground">
+                          Press <b>Create folder set</b> to start.
+                        </span>
+                      </>
+                    )}
+                  </span>
+                )}
+              </span>
             </div>
           )}
         </div>
       </div>
-
-      {/* The explanation, ON DEMAND. It is the same text the banner used to shout on every page load —
-          it now appears only when the "?" is pressed, and it says what is TRUE right now rather than
-          both states at once. */}
-      {showFolderHelp && (
-        <div
-          data-testid="folder-help-box"
-          role="note"
-          className="mb-2 rounded-[9px] border border-border bg-muted/60 px-3 py-2 text-xs text-muted-foreground"
-        >
-          {foldersExist ? (
-            <>
-              This job’s five SharePoint folders exist. Filing a document into one of them copies it
-              into the client’s real folder in SharePoint. <b>Folders</b> opens them.
-            </>
-          ) : (
-            <>
-              This job has no SharePoint folders yet, so there is nowhere to file a document — filing is
-              disabled until you press <b>Create folder set</b>. Files can still be added below; they
-              wait in the unsorted pile.
-            </>
-          )}
-        </div>
-      )}
 
       {/* ── PROGRESS — the point of the screen. ── */}
       <div className="flex items-center gap-3 px-1 py-2">

@@ -53,6 +53,13 @@ export interface JobDocumentsState {
   error: string | null;
   /** False when the SharePoint listing could not be fetched — a folder may hold more than we can see. */
   sharepointReachable: boolean;
+  /**
+   * Whether this job's five SharePoint folders have been CREATED yet. This is a DIFFERENT fact from
+   * `sharepointReachable` and conflating them is a real defect: a job whose folder set was never
+   * created reads as "SharePoint not connected", which sends the reader hunting a connection fault
+   * that does not exist. Filing is blocked while this is false — there is nowhere to file TO.
+   */
+  foldersExist: boolean;
 }
 
 interface FileRow {
@@ -76,6 +83,7 @@ export function useJobDocuments(jobId: string | null) {
     loading: true,
     error: null,
     sharepointReachable: false,
+    foldersExist: false,
   });
 
   const load = useCallback(async () => {
@@ -118,15 +126,22 @@ export function useJobDocuments(jobId: string | null) {
       else if (byFolder[doc.filedBucket]) byFolder[doc.filedBucket].push(doc);
     }
 
-    // 2. SHAREPOINT — merged in when reachable. Undeployed today, so this fails and we carry on.
+    // 2. SHAREPOINT — merged in when reachable.
     let sharepointReachable = false;
+    let foldersExist = false;
     try {
       const { data: sp, error: spErr } = await supabase.functions.invoke('job-folder-docs', {
         body: { jobId, action: 'list' },
       });
       const listing = sp as { foldersExist?: boolean; buckets?: { name: string; items: { name: string; size: number; webUrl: string }[] }[] } | null;
-      if (!spErr && listing?.foldersExist && listing.buckets) {
+      // A CLEAN ANSWER of "no folders yet" means SharePoint answered us — it is reachable. Only a
+      // thrown call or an error IS unreachable. Reading a missing folder set as a dead connection is
+      // how a perfectly healthy job gets reported as broken.
+      if (!spErr && listing) {
         sharepointReachable = true;
+        foldersExist = !!listing.foldersExist;
+      }
+      if (!spErr && listing?.foldersExist && listing.buckets) {
         for (const bucket of listing.buckets) {
           const folder = bucket.name as JobSubfolder;
           if (!byFolder[folder]) continue;
@@ -156,9 +171,10 @@ export function useJobDocuments(jobId: string | null) {
     } catch {
       // SharePoint unreachable. Not an error for this screen — the database half still works.
       sharepointReachable = false;
+      foldersExist = false;
     }
 
-    setState({ inbox, byFolder, loading: false, error: null, sharepointReachable });
+    setState({ inbox, byFolder, loading: false, error: null, sharepointReachable, foldersExist });
   }, [jobId]);
 
   useEffect(() => {
@@ -284,5 +300,28 @@ export function useJobDocuments(jobId: string | null) {
     [jobId, load],
   );
 
-  return { ...state, reload: load, fileInto, unfile, addFiles };
+  /**
+   * Create this job's five SharePoint folders.
+   *
+   * Sends ONLY { jobId } — the same single-argument call the LOE ribbon's button makes. The edge
+   * function composes the folder name the one canonical way. A client-side name built here would be
+   * a SECOND way of composing it, and the last time two ways existed they disagreed and a DUPLICATE
+   * folder set was created in the client's SharePoint. One caller shape, one name.
+   *
+   * Idempotent server-side: an existing set is CONNECTED to, never re-created.
+   */
+  const createFolders = useCallback(async (): Promise<{ ok: boolean; url?: string; error?: string }> => {
+    if (!jobId) return { ok: false, error: 'No job.' };
+
+    const { data, error } = await supabase.functions.invoke('create-job-folders', { body: { jobId } });
+    if (error) return { ok: false, error: error.message };
+    if ((data as { configured?: boolean })?.configured === false)
+      return { ok: false, error: 'SharePoint is not configured yet.' };
+    if (!(data as { success?: boolean })?.success) return { ok: false, error: 'Could not create the folders.' };
+
+    await load();
+    return { ok: true, url: (data as { parentWebUrl?: string }).parentWebUrl };
+  }, [jobId, load]);
+
+  return { ...state, reload: load, fileInto, unfile, addFiles, createFolders };
 }

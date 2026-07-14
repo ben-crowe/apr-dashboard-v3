@@ -46,7 +46,7 @@ import { JOB_SUBFOLDERS, JOB_SUBFOLDER_SHORT_LABELS, type JobSubfolder } from '@
 import { useJobDocuments, type JobDocument, STORAGE_BUCKET } from './useJobDocuments';
 import { ImageEditorModal } from '@/features/image-configurator/components/ImageEditorModal';
 import type { JobImage } from '@/features/image-configurator/types';
-import { AlertCircle, CheckCircle2, CloudOff, FileText, Loader2, Upload } from 'lucide-react';
+import { AlertCircle, CheckCircle2, CloudOff, FileText, FolderPlus, Loader2, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 
 const IMAGE_TYPES = /^image\//;
@@ -177,8 +177,19 @@ function MoveSelect({
 }
 
 export function JobDocumentsPanel({ jobId }: { jobId: string }) {
-  const { inbox, byFolder, loading, error, sharepointReachable, reload, fileInto, unfile, addFiles } =
-    useJobDocuments(jobId);
+  const {
+    inbox,
+    byFolder,
+    loading,
+    error,
+    sharepointReachable,
+    foldersExist,
+    reload,
+    fileInto,
+    unfile,
+    addFiles,
+    createFolders,
+  } = useJobDocuments(jobId);
 
   /** null = the Unsorted pile. A folder name = that folder, opened IN THE LEFT GALLERY. */
   const [view, setView] = useState<JobSubfolder | null>(null);
@@ -189,8 +200,29 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
   const [flash, setFlash] = useState<string | null>(null);
   const [previewIdx, setPreviewIdx] = useState<number | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [creatingFolders, setCreatingFolders] = useState(false);
   const foldRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const pickerRef = useRef<HTMLInputElement | null>(null);
+
+  /**
+   * THE GATE. You cannot file a document into a folder that does not exist. Until the job's five
+   * SharePoint folders are created, every filing route is disabled — the dropdowns, dragging a card
+   * onto a folder, and dragging onto a folder tab. Adding files to the UNSORTED pile stays allowed:
+   * unsorted is our own storage and needs SharePoint for nothing.
+   *
+   * Without this, a filing would set the folder in our database and then fail to copy anything, and
+   * the file would sit in the amber "filed but not mirrored" state forever with no way to resolve it.
+   */
+  const canFile = foldersExist;
+
+  const makeFolders = async () => {
+    if (creatingFolders) return;
+    setCreatingFolders(true);
+    const res = await createFolders();
+    setCreatingFolders(false);
+    if (res.ok) toast.success('SharePoint folders ready — you can file documents now');
+    else toast.error(res.error ?? 'Could not create the folders');
+  };
 
   /**
    * The one place a file from the appraiser's own machine enters. Both the drop and the file-picker
@@ -217,6 +249,17 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
 
   const move = async (doc: JobDocument, folder: JobSubfolder) => {
     if (!doc.id) return;
+
+    // THE GATE, AT THE ONE PLACE EVERY FILING ROUTE PASSES THROUGH — the dropdown, a card dragged
+    // onto a folder, and a card dragged onto a folder tab all end up here. Disabling the three
+    // controls in the UI is a courtesy; THIS is the check that cannot be walked around.
+    // Filing with no folder set would write the folder into our database and then have nowhere to
+    // copy the file to, stranding it in the amber "filed but not mirrored" state permanently.
+    if (!canFile) {
+      toast.error('Create the SharePoint folder set first — there is nowhere to file this yet.');
+      return;
+    }
+
     setBusyId(doc.id);
     const res = await fileInto(doc, folder);
     setBusyId(null);
@@ -341,6 +384,33 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
           })}
         </div>
       </div>
+
+      {/* ── THE FOLDER SET — this lives HERE, in the document screen, because this is where folders
+             are USED. It sat in the letter-of-engagement ribbon, which is not where anyone filing a
+             document would look for it. Until the set exists there is nothing to file into, so the
+             screen says so plainly and every filing route below is disabled. ── */}
+      {!loading && !foldersExist && (
+        <div
+          data-testid="no-folders-yet"
+          className="mb-2 flex flex-wrap items-center gap-3 rounded-[9px] border border-amber-500/50 bg-amber-50 px-3 py-2 dark:bg-amber-500/10"
+        >
+          <FolderPlus className="h-4 w-4 shrink-0 text-amber-700 dark:text-amber-400" />
+          <div className="flex-1 text-xs text-amber-900 dark:text-amber-200">
+            <b>This job has no SharePoint folders yet.</b> Files can still be added below — they wait,
+            unsorted — but nothing can be filed until the folder set exists.
+          </div>
+          <button
+            type="button"
+            data-testid="create-folders"
+            onClick={makeFolders}
+            disabled={creatingFolders || !sharepointReachable}
+            title={sharepointReachable ? 'Create this job’s five SharePoint folders' : 'SharePoint is unreachable'}
+            className="whitespace-nowrap rounded-md border border-amber-600/60 bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-900 transition-colors hover:bg-amber-200 disabled:opacity-50 dark:bg-amber-500/20 dark:text-amber-100"
+          >
+            {creatingFolders ? 'Creating…' : 'Create folder set'}
+          </button>
+        </div>
+      )}
 
       {/* ── PROGRESS — the point of the screen. ── */}
       <div className="flex items-center gap-3 px-1 py-2">
@@ -490,7 +560,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                     <div
                       key={doc.id ?? `sp-${doc.name}`}
                       data-testid="doc-thumb"
-                      draggable={!!doc.id}
+                      draggable={!!doc.id && canFile}
                       onDragStart={() => setDragDoc(doc)}
                       onDragEnd={() => {
                         setDragDoc(null);
@@ -532,7 +602,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                             doc={doc}
                             onMove={(f) => void move(doc, f)}
                             onUnfile={() => void putBack(doc)}
-                            disabled={busyId === doc.id}
+                            disabled={busyId === doc.id || !canFile}
                           />
                         )}
                       </div>
@@ -706,6 +776,7 @@ export function JobDocumentsPanel({ jobId }: { jobId: string }) {
                       void putBack(preview);
                       setPreviewIdx(null);
                     }}
+                    disabled={!canFile}
                   />
                 </div>
               )}

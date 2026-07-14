@@ -168,7 +168,7 @@ The `/cli-agent-all` catalogue is the documented front door. **I searched it for
 | Job | Tool | Why |
 |---|---|---|
 | View / drive / read a page, check the app renders | **cmux browser** (`cmux browser surface:N ...`) | works, visible in the workspace — Ben can watch. Caught the app rendering after a dead-code deletion, which `tsc` could not. |
-| **Anything needing the OS file picker** (file upload) | **Playwright, `channel: 'chrome'`** | cmux browser **cannot attach files** — the picker is outside its boundary. Confirmed independently by two seats. |
+| **File upload** | **cmux browser — YES IT CAN.** | ⚠️ **CORRECTED 2026-07-13.** I claimed it could not, having read the command list and seen no upload verb. That was an *inference*, not a test, and it was **wrong**. Carry the file in as base64, rebuild it as a `File` in the page, put it on the input, **dispatch a `change` event** — the app receives the real bytes. Proven live. The OS file-picker window is out of reach; you are bypassing it, which is more reliable. **A LIMITATION IS ALSO A CLAIM (Law 3). "It cannot do X" needs a probe exactly as much as "it does X."** |
 | DB / storage ground truth | **Supabase REST via curl** | no catalogued command exists — see the gap below. |
 
 > Playwright's own bundled browsers are **not installed** here. Launch with `channel: 'chrome'` or it fails.

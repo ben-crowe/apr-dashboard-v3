@@ -173,6 +173,9 @@ export const JobListProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const { data: supabaseJobs, error } = await supabase
         .from('job_submissions')
         .select('*')
+        // Item 7B — same active-list filter as fetchJobs. This is the query that runs right after an
+        // archive (ArchiveJobDialog -> onDone -> refetchJobs), so without it an archived job reappears.
+        .is('archived_at', null)
         .order('created_at', { ascending: false });
       
       if (error) {

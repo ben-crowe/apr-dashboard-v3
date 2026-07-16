@@ -44,6 +44,7 @@ import {
 } from "@/components/ui/tooltip";
 import { deriveValueScenarios, STATUS_TO_SCENARIOS, deriveApproaches, derivePropertyRights } from "@/utils/loe/loeCascade";
 import ValueScenarioNarratives from "./ValueScenarioNarratives";
+import { QuoteFieldState, ActionNeededMarker, resolveQuoteFieldState } from "./loe-quote/FieldStateDisplay";
 
 // Derived field read-only style (Value Scenarios, Property Rights, Approaches to Value)
 const derivedFieldStyle: React.CSSProperties = {
@@ -2002,17 +2003,27 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           <TwoColumnFields>
             <CompactField label="Purpose">
               {/* Free-text (user input). Placeholder is self-describing — says it's free text + where it maps —
-                  rather than pre-filling a fake purpose sentence. Matches the mock. */}
-              <Input
-                type="text"
-                name="purpose"
-                value={jobDetails.purpose || ''}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="Purpose of the assignment (free text)"
-                title="Free text — fills the LOE 'Purpose of the Assignment' paragraph (wiring pending)."
-                className="h-7 text-sm max-w-[300px]"
-              />
+                  rather than pre-filling a fake purpose sentence. Matches the mock.
+                  Item 4 — a user-input field that should be filled: when empty it carries the amber
+                  left-edge + "action needed" marker (the ONLY meaning a plain blank now has). */}
+              {(() => {
+                const purposeAction = resolveQuoteFieldState('purpose', jobDetails).state === 'action';
+                return (
+                  <span className="inline-flex items-center gap-2.5">
+                    <Input
+                      type="text"
+                      name="purpose"
+                      value={jobDetails.purpose || ''}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      placeholder="Purpose of the assignment (free text)"
+                      title="Free text — fills the LOE 'Purpose of the Assignment' paragraph (wiring pending)."
+                      className={`h-7 text-sm max-w-[300px]${purposeAction ? ' border-l-[3px] border-l-amber-500' : ''}`}
+                    />
+                    {purposeAction && <ActionNeededMarker />}
+                  </span>
+                );
+              })()}
             </CompactField>
           </TwoColumnFields>
         </SectionGroup>
@@ -2310,45 +2321,58 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 </FieldInfo>
               }
             >
-              <Input
-                type="date"
-                name="retainerPaidDate"
-                value={jobDetails.retainerPaidDate || ''}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className="h-7 text-sm max-w-[160px]"
-              />
+              {/* Item 4 — Retainer Paid is CONDITIONAL: N/A when the job has no retainer, auto-fills
+                  when a retainer exists but is unpaid, filled (editable) once paid. */}
+              <QuoteFieldState field="retainerPaidDate" jobDetails={jobDetails}>
+                <Input
+                  type="date"
+                  name="retainerPaidDate"
+                  value={jobDetails.retainerPaidDate || ''}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className="h-7 text-sm max-w-[160px]"
+                />
+              </QuoteFieldState>
             </CompactField>
+            {/* Item 4 — Amount Paid auto-fills from the payment webhook; empty shows the chip. */}
             <CompactField label="Amount Paid">
-              <Input
-                type="text"
-                name="paymentAmount"
-                value={editingPaymentAmount !== null ? editingPaymentAmount : (jobDetails.paymentAmount ? `$${formatCurrency(jobDetails.paymentAmount)}` : '')}
-                onChange={handleCurrencyChange}
-                onBlur={handleCurrencyBlur}
-                onFocus={() => setEditingPaymentAmount(jobDetails.paymentAmount ? jobDetails.paymentAmount.toString() : '')}
-                className="h-7 text-sm max-w-[160px]"
-              />
+              <QuoteFieldState field="paymentAmount" jobDetails={jobDetails}>
+                <Input
+                  type="text"
+                  name="paymentAmount"
+                  value={editingPaymentAmount !== null ? editingPaymentAmount : (jobDetails.paymentAmount ? `$${formatCurrency(jobDetails.paymentAmount)}` : '')}
+                  onChange={handleCurrencyChange}
+                  onBlur={handleCurrencyBlur}
+                  onFocus={() => setEditingPaymentAmount(jobDetails.paymentAmount ? jobDetails.paymentAmount.toString() : '')}
+                  className="h-7 text-sm max-w-[160px]"
+                />
+              </QuoteFieldState>
             </CompactField>
+            {/* Item 4 — Paid Date auto-fills from the payment webhook; empty shows the chip. */}
             <CompactField label="Paid Date">
-              <Input
-                type="date"
-                name="paymentPaidDate"
-                value={jobDetails.paymentPaidDate || ''}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className="h-7 text-sm max-w-[160px]"
-              />
+              <QuoteFieldState field="paymentPaidDate" jobDetails={jobDetails}>
+                <Input
+                  type="date"
+                  name="paymentPaidDate"
+                  value={jobDetails.paymentPaidDate || ''}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className="h-7 text-sm max-w-[160px]"
+                />
+              </QuoteFieldState>
             </CompactField>
+            {/* Item 4 — Signed Date is stamped by DocuSeal at signing; empty shows the chip. */}
             <CompactField label="Signed Date" status={fieldStates['signedDate']}>
-              <Input
-                type="date"
-                name="signedDate"
-                value={jobDetails.signedDate || ''}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className="h-7 text-sm max-w-[160px]"
-              />
+              <QuoteFieldState field="signedDate" jobDetails={jobDetails}>
+                <Input
+                  type="date"
+                  name="signedDate"
+                  value={jobDetails.signedDate || ''}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className="h-7 text-sm max-w-[160px]"
+                />
+              </QuoteFieldState>
             </CompactField>
           </TwoColumnFields>
         </SectionGroup>

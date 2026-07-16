@@ -58,6 +58,7 @@
   <div class="regcount" id="regcount"></div>
   <div class="fbar">
     <button class="fb on" data-f="all">All</button>
+    <button class="fb" data-f="v3">V3 → V4</button>
     <button class="fb" data-f="g">Wired</button>
     <button class="fb" data-f="a">Not wired</button>
     <button class="fb" data-f="z">V4-only / settings</button>
@@ -67,15 +68,15 @@
 
   <h2>S1 — Client Intake</h2>
   <div class="h2sub">V3-origin client + property + contact fields, then the extras that only exist on V4.</div>
-  <table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:27%">V4 field (label + field id)</th><th style="width:20%">V3 (field id)</th><th style="width:18%">Valta (client)</th><th style="width:13%">Status</th><th style="width:13%">Field Type</th></tr></thead><tbody id="s1"></tbody></table>
+  <table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:20%">V3 field</th><th style="width:27%">V4 field</th><th style="width:18%">Valta (client)</th><th style="width:13%">Status</th><th style="width:13%">Field Type</th></tr></thead><tbody id="s1"></tbody></table>
 
   <h2>S2 — LOE Prep</h2>
   <div class="h2sub">The V3 LOE quote fields that map in, then the V4-only report-builder fields (intentional — for the 79-page report, not conflicts).</div>
-  <table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:27%">V4 field (label + field id)</th><th style="width:20%">V3 (field id)</th><th style="width:18%">Valta (client)</th><th style="width:13%">Status</th><th style="width:13%">Field Type</th></tr></thead><tbody id="s2"></tbody></table>
+  <table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:20%">V3 field</th><th style="width:27%">V4 field</th><th style="width:18%">Valta (client)</th><th style="width:13%">Status</th><th style="width:13%">Field Type</th></tr></thead><tbody id="s2"></tbody></table>
 
   <h2>Admin — User Settings (appraiser + firm)</h2>
   <div class="h2sub">Ben's call (2026-07-16): these are NOT job-mapped fields — the appraiser is the app's user, and the app owner prefills this profile once; it auto-fills into every job. Destination: a user-settings area — possibly its own tab on the field-testing page (/test-input) — to be built. Moved here out of S1/S2 so the mapping tables stay per-job only. Note: firm details exist TWICE in the registry (appraiser-* and company-* ids, same labels) — duplication to reconcile when the settings area is built.</div>
-  <table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:27%">V4 field (settings-managed)</th><th style="width:20%">V3 (field id)</th><th style="width:18%">Valta (client)</th><th style="width:13%">Status</th><th style="width:13%">Field Type</th></tr></thead><tbody id="s3"></tbody></table>
+  <table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:20%">V3 field</th><th style="width:27%">V4 field (settings-managed)</th><th style="width:18%">Valta (client)</th><th style="width:13%">Status</th><th style="width:13%">Field Type</th></tr></thead><tbody id="s3"></tbody></table>
 
   <div class="foot">
     Sources: fieldRegistry.ts (client-intake + loe-prep sections) · useLoadJobIntoReport.ts (V3→report bridge) · v3OriginFields.ts (authoritative V3-origin id list). Labels reflect live code on branch ops-canvas. Next: V3 dashboard Building-Information-and-below verified against the registry (second table).
@@ -198,14 +199,14 @@ function fill(id,rows){
   document.getElementById(id).innerHTML=rows.map(r=>
     '<tr class="'+cls[r[3]]+'" data-s="'+r[3]+'" data-valta="'+(VALTA[r[1]]?1:0)+'"><td style="text-align:center">'+(REG.has(r[1])?'<span class="regok">✓</span>':'<span class="regq">?</span>')+'</td>'+
     '<td style="text-align:right;color:var(--text-3);font-size:11px">'+(NUM[r[1]]||'—')+'</td>'+
+    '<td class="src">'+(function(){if(!V3ID[r[1]]&&(!r[2]||r[2]==='—'))return '—';const lbl=(r[2]&&/^[A-Z]/.test(r[2]))?r[2]:r[0];const id3=V3ID[r[1]]?V3ID[r[1]].replace(/_/g,'-'):null;return '<span class="lab">'+lbl+'</span>'+(id3?'<span class="id">'+id3+'</span>':'')+((r[2]&&!/^[A-Z]/.test(r[2])&&r[2]!=='—')?'<span class="fnote">'+r[2]+'</span>':'');})()+'</td>'+
     '<td><span class="lab">'+r[0]+'</span><span class="id">'+r[1]+'</span>'+(OPTS[r[1]]?'<span class="opts">'+OPTS[r[1]].map(o=>'<span class="opt">'+o+'</span>').join('')+'</span>':'')+'</td>'+
-    '<td class="src">'+(V3ID[r[1]]?'<span class="id" style="margin-top:0">'+V3ID[r[1]]+'</span>':(r[2]&&r[2]!=='—'?r[2]:'—'))+'</td>'+
     '<td class="src">'+(VALTA[r[1]]?VALTA[r[1]].l+'<span class="id">'+VALTA[r[1]].n+'</span>':'—')+'</td>'+
     '<td>'+tag[r[3]]+'</td><td class="rev"><span class="ftype">'+(TYPES[r[1]]||'—')+'</span>'+((r[4]&&r[4]!=='Matches V3')?'<span class="fnote">'+r[4]+'</span>':'')+'</td></tr>').join('');
 }
 fill('s1',S1); fill('s2',S2); fill('s3',S3);
 const all=[...S1,...S2,...S3];
 const ok=all.filter(r=>REG.has(r[1])).length;
-document.querySelectorAll('.fb').forEach(b=>b.onclick=()=>{document.querySelectorAll('.fb').forEach(x=>x.classList.remove('on'));b.classList.add('on');const f=b.dataset.f;document.querySelectorAll('tbody tr').forEach(tr=>{tr.style.display=(f==='all'||(f==='valta'?tr.dataset.valta==='1':tr.dataset.s===f))?'':'none';});});
+document.querySelectorAll('.fb').forEach(b=>b.onclick=()=>{document.querySelectorAll('.fb').forEach(x=>x.classList.remove('on'));b.classList.add('on');const f=b.dataset.f;document.querySelectorAll('tbody tr').forEach(tr=>{tr.style.display=(f==='all'||(f==='valta'?tr.dataset.valta==='1':(f==='v3'?(tr.dataset.s==='g'||tr.dataset.s==='a'):tr.dataset.s===f)))?'':'none';});});
 document.getElementById('regcount').textContent='Registry check: '+ok+' of '+all.length+' rows confirmed in fieldRegistry.ts ('+(all.length-ok)+' unmatched: single-id lookup only — bundled rows and V4-only aliases show ?).';
 </script>

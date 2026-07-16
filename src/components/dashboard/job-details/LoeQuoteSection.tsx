@@ -1648,16 +1648,31 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 </Button>
               )
             ) : (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={true}
-                className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
-              >
-                <FileSignature className="h-4 w-4 mr-1" />
-                Create Document/Email
-              </Button>
+              // No Valcre job yet — the button is disabled. This branch used to give NO reason at all
+              // (the guided-walk pain point: greyed with no explanation). Wrap it in the SAME tooltip
+              // pattern the sibling disabled branches use, so hovering explains why. Enable/disable
+              // logic is unchanged — this only adds the hint.
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        disabled={true}
+                        className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
+                      >
+                        <FileSignature className="h-4 w-4 mr-1" />
+                        Create Document/Email
+                      </Button>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="max-w-sm">
+                    <p className="text-sm">Create the Valcre job first — the job number unlocks this.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
           </div>
 

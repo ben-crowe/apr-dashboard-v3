@@ -34,6 +34,9 @@
   .t-green{background:var(--green-bg);color:var(--green-tx);}
   .t-amber{background:var(--amber-bg);color:var(--amber-tx);}
   .t-zinc{background:var(--zinc-bg);color:var(--zinc-tx);}
+  .regok{color:var(--green-tx);font-weight:700;}
+  .regq{color:var(--amber-tx);font-weight:700;}
+  .regcount{font-size:12px;color:var(--text-2);margin:-6px 0 14px;}
   .foot{font-size:11px;color:var(--text-3);margin-top:24px;padding-top:12px;border-top:1px solid var(--border);}
 </style>
 <div class="wrap">
@@ -43,15 +46,21 @@
     <span><i class="dot d-green"></i> Maps from V3 &amp; carries through (wired)</span>
     <span><i class="dot d-amber"></i> Is a V3 field but bridge not wired yet</span>
     <span><i class="dot d-zinc"></i> Extra on V4 test page — not a V3 field</span>
+    <span><b class="regok">✓</b> id exists in fieldRegistry.ts &nbsp;·&nbsp; <b class="regq">?</b> not found as a single id (checked 2026-07-16)</span>
   </div>
+  <div class="regcount" id="regcount"></div>
 
   <h2>S1 — Client Intake</h2>
   <div class="h2sub">V3-origin client + property + contact fields, then the extras that only exist on V4.</div>
-  <table><thead><tr><th style="width:31%">Current field on V4 test page</th><th style="width:31%">V3 field it maps to</th><th style="width:20%">Status</th><th style="width:18%">Action</th></tr></thead><tbody id="s1"></tbody></table>
+  <table><thead><tr><th style="width:5%">Reg</th><th style="width:28%">Current field on V4 test page</th><th style="width:31%">V3 field it maps to</th><th style="width:20%">Status</th><th style="width:18%">Action</th></tr></thead><tbody id="s1"></tbody></table>
 
   <h2>S2 — LOE Prep</h2>
   <div class="h2sub">The V3 LOE quote fields that map in, then the V4-only report-builder fields (intentional — for the 79-page report, not conflicts).</div>
-  <table><thead><tr><th style="width:31%">Current field on V4 test page</th><th style="width:31%">V3 field it maps to</th><th style="width:20%">Status</th><th style="width:18%">Action</th></tr></thead><tbody id="s2"></tbody></table>
+  <table><thead><tr><th style="width:5%">Reg</th><th style="width:28%">Current field on V4 test page</th><th style="width:31%">V3 field it maps to</th><th style="width:20%">Status</th><th style="width:18%">Action</th></tr></thead><tbody id="s2"></tbody></table>
+
+  <h2>Admin — User Settings (appraiser + firm)</h2>
+  <div class="h2sub">Ben's call (2026-07-16): these are NOT job-mapped fields — the appraiser is the app's user, and the app owner prefills this profile once; it auto-fills into every job. Destination: a user-settings area — possibly its own tab on the field-testing page (/test-input) — to be built. Moved here out of S1/S2 so the mapping tables stay per-job only. Note: firm details exist TWICE in the registry (appraiser-* and company-* ids, same labels) — duplication to reconcile when the settings area is built.</div>
+  <table><thead><tr><th style="width:5%">Reg</th><th style="width:28%">Field (settings-managed)</th><th style="width:31%">V3 field it maps to</th><th style="width:20%">Status</th><th style="width:18%">Action</th></tr></thead><tbody id="s3"></tbody></table>
 
   <div class="foot">
     Sources: fieldRegistry.ts (client-intake + loe-prep sections) · useLoadJobIntoReport.ts (V3→report bridge) · v3OriginFields.ts (authoritative V3-origin id list). Labels reflect live code on branch ops-canvas. Next: V3 dashboard Building-Information-and-below verified against the registry (second table).
@@ -91,12 +100,6 @@ const S1=[
  ['Client Name','client-name','—','z','Extra — V4 alias, not on V3'],
  ['Client Attention Line','client-attention','—','z','Extra — not on V3'],
  ['Client Salutation','client-salutation','—','z','Extra — not on V3'],
- ['Company Name (firm)','company-name','—','z','Extra — appraiser firm block, not client intake'],
- ['Company Address','company-address','—','z','Extra — appraiser firm block'],
- ['Company City/State/Zip','company-city-state-zip','—','z','Extra — appraiser firm block'],
- ['Company Phone','company-phone','—','z','Extra — appraiser firm block'],
- ['Company Email','company-email','—','z','Extra — appraiser firm block'],
- ['Company Website','company-website','—','z','Extra — appraiser firm block'],
  ['Client Job Number','company-jobnumber','—','z','Extra — not on V3'],
 ];
 const S2=[
@@ -110,15 +113,49 @@ const S2=[
  ['Retainer Amount','retainer-amount','Retainer Amount','a','V3 field — bridge not wired'],
  ['Payment Terms','payment-terms','Payment Terms','a','V3 field — bridge not wired'],
  ['Appraiser Comments','appraiser-comments','Appraiser Comments','a','V3 field — bridge not wired'],
- ['Appraiser block (name, credentials, AIC, license, inspection… ~30 fields)','appraiser-*','—','z','V4-only report fields — intentional, not conflicts'],
  ['Assignment / transaction / zoning status, CMHC, use, valuation-type, report boilerplate (~22 fields)','assignment-type · transaction-status · zoning-status · report-*','—','z','V4-only report fields — intentional, not conflicts'],
+];
+const REG=new Set(["appraisal-fee", "appraiser-address", "appraiser-aic", "appraiser-aic-number", "appraiser-bio-paragraph1", "appraiser-bio-paragraph2", "appraiser-city", "appraiser-comments", "appraiser-company", "appraiser-credentials", "appraiser-designation", "appraiser-email", "appraiser-headshot", "appraiser-license", "appraiser-license-expiry", "appraiser-name", "appraiser-name-credentials", "appraiser-phone", "appraiser-postal", "appraiser-province", "appraiser-rics", "appraiser-role", "appraiser-title", "appraiser-website", "asset-condition", "authorized-use", "client-attention", "client-city", "client-company-name", "client-email", "client-first-name", "client-full-name", "client-last-name", "client-organization-address", "client-phone", "client-postal", "client-province", "client-salutation", "client-title", "company-address", "company-city-state-zip", "company-email", "company-jobnumber", "company-name", "company-phone", "company-website", "contact-email", "contact-first-name", "contact-full-name", "contact-last-name", "contact-phone", "delivery-date", "intake-notes", "interest-appraised", "job-number", "payment-terms", "property-address", "property-city", "property-name", "property-postal", "property-province", "property-subtype", "property-type", "report-type", "retainer-amount", "scope-of-work", "status-of-improvements", "tenancy", "valuation-premises"]);
+const S3=[
+ ['Company Address','appraiser-address','—','z','Settings-managed — app owner prefills'],
+ ['AIC Number','appraiser-aic','—','z','Settings-managed — app owner prefills'],
+ ['AIC Member Number','appraiser-aic-number','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Bio Paragraph 1','appraiser-bio-paragraph1','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Bio Paragraph 2','appraiser-bio-paragraph2','—','z','Settings-managed — app owner prefills'],
+ ['Company City','appraiser-city','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Comments','appraiser-comments','—','z','Settings-managed — app owner prefills'],
+ ['Company Name','appraiser-company','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Credentials','appraiser-credentials','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Designation','appraiser-designation','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Email','appraiser-email','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Headshot','appraiser-headshot','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser License','appraiser-license','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser License Expiry','appraiser-license-expiry','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Name','appraiser-name','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Name & Credentials','appraiser-name-credentials','—','z','Settings-managed — app owner prefills'],
+ ['Company Phone','appraiser-phone','—','z','Settings-managed — app owner prefills'],
+ ['Company Postal Code','appraiser-postal','—','z','Settings-managed — app owner prefills'],
+ ['Company Province','appraiser-province','—','z','Settings-managed — app owner prefills'],
+ ['RICS Membership Number','appraiser-rics','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Role','appraiser-role','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Title','appraiser-title','—','z','Settings-managed — app owner prefills'],
+ ['Company Website','appraiser-website','—','z','Settings-managed — app owner prefills'],
+ ['Company Name','company-name','—','z','Settings-managed — app owner prefills'],
+ ['Company Address','company-address','—','z','Settings-managed — app owner prefills'],
+ ['Company City/State/Zip','company-city-state-zip','—','z','Settings-managed — app owner prefills'],
+ ['Company Phone','company-phone','—','z','Settings-managed — app owner prefills'],
+ ['Company Email','company-email','—','z','Settings-managed — app owner prefills'],
+ ['Company Website','company-website','—','z','Settings-managed — app owner prefills'],
 ];
 const cls={g:'green',a:'amber',z:'zinc'};
 const tag={g:'<span class="tag t-green">Wired</span>',a:'<span class="tag t-amber">V3 · not wired</span>',z:'<span class="tag t-zinc">Extra / V4-only</span>'};
 function fill(id,rows){
   document.getElementById(id).innerHTML=rows.map(r=>
-    '<tr class="'+cls[r[3]]+'"><td><span class="lab">'+r[0]+'</span><span class="id">'+r[1]+'</span></td>'+
+    '<tr class="'+cls[r[3]]+'"><td style="text-align:center">'+(REG.has(r[1])?'<span class="regok">✓</span>':'<span class="regq">?</span>')+'</td><td><span class="lab">'+r[0]+'</span><span class="id">'+r[1]+'</span></td>'+
     '<td class="src">'+r[2]+'</td><td>'+tag[r[3]]+'</td><td class="rev">'+r[4]+'</td></tr>').join('');
 }
-fill('s1',S1); fill('s2',S2);
+fill('s1',S1); fill('s2',S2); fill('s3',S3);
+const all=[...S1,...S2,...S3];
+const ok=all.filter(r=>REG.has(r[1])).length;
+document.getElementById('regcount').textContent='Registry check: '+ok+' of '+all.length+' rows confirmed in fieldRegistry.ts ('+(all.length-ok)+' unmatched: single-id lookup only — bundled rows and V4-only aliases show ?).';
 </script>

@@ -28,7 +28,16 @@ export function useSaveJobDetails(jobId: string) {
           // LoeQuoteSection job-prep fields. autoSaveField writes them to job_loe_details, so this
           // Save-path must target the same table (no split-brain write A / read B).
           'assignmentType', 'desktopReport', 'valueTimeframe',
-          'approachesToValue', 'transactionStatus', 'zoningStatus'
+          'approachesToValue', 'transactionStatus', 'zoningStatus',
+          // Item 3 (2026-07-15) — these seven job-prep fields were read back from job_loe_details
+          // (useJobData maps report_format/analysis_level/current_use/proposed_use/cmhc_financing/
+          // previously_appraised/purpose) and written on manual change by autoSaveField, but were
+          // MISSING from this bulk-save allowlist. So the per-job "Fill with Test Data" set them in
+          // local state (they showed briefly) and this save silently dropped them → the next read
+          // came back NULL and they blanked. reportType/assignmentType were already listed, which is
+          // exactly why those two filled and these did not. All seven columns exist (string | null).
+          'reportFormat', 'analysisLevel', 'currentUse', 'proposedUse',
+          'cmhcFinancing', 'previouslyAppraised', 'purpose'
         ];
 
         const propertyInfoFields = [

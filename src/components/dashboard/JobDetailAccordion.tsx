@@ -111,6 +111,14 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         tenancy: 'Multi-Tenant',
         // valueTimeframe intentionally NOT filled — the mock skips it (FILL_SKIP) and the scenario
         // dash-rule shows it as "—". Filling it diverged from the mock.
+        // Purpose (2026-07-15, Item 3): was never set by the fill, so it stayed blank. It is NOT a
+        // manual field (spec-binding) — it must fill. Free text; the LOE "Purpose of the Assignment".
+        purpose: 'First mortgage financing — market value of the leased fee interest, as-is.',
+        // The three notes boxes (2026-07-15, Item 3): the fill set the Section-1 `notes` field but not
+        // these three job_loe_details comment fields, so they stayed blank. They are should-fill.
+        appraiserComments: 'Internal: straightforward industrial refinance; ample recent SE-submarket comps.',
+        deliveryComments: 'Deliver PDF to the client contact; hard copy only on request.',
+        paymentComments: '100% of the fee due on signing per standard terms.',
         scopeOfWork: 'Income Approach',
         reportType: 'Appraisal Report',
         reportFormat: 'Comprehensive',
@@ -183,7 +191,8 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
       return;
     }
     const jobKeys = ['clientFirstName','clientLastName','clientTitle','clientOrganization','clientPhone','clientEmail','clientAddress','clientCity','clientProvince','clientPostal','propertyName','propertyAddress','propertyCity','propertyProvince','propertyPostal','propertyType','intendedUse','assetCondition','valuationPremises','propertyContactFirstName','propertyContactLastName','propertyContactEmail','propertyContactPhone','notes'];
-    const detailKeys = ['propertySubtype','tenancy','propertyRightsAppraised','valueTimeframe','scopeOfWork','reportType','reportFormat','assignmentType','analysisLevel','appraisalFee','retainerAmount','effectiveDate','requestDate','deliveryDate','deliveryTime','clientDocuments','previouslyAppraised','currentUse','proposedUse','cmhcFinancing','transactionStatus','zoningStatus','valuationPremises','statusOfImprovements','authorizedUse','valueScenarios','approachesToValue','yearBuilt','buildingSize','numberOfUnits','parkingSpaces','legalDescription','zoningClassification','zoneAbbreviation','landUseDesignation','floodZone','utilities','parcelNumber','grossLandSf','assessedValue','taxes','assessmentYear','landAssessmentValue','improvedAssessmentValue','totalAssessmentValue'];
+    // Item 3 (2026-07-15): purpose + the three comment boxes added so Clear wipes what Fill now sets — Fill/Clear stay symmetric.
+    const detailKeys = ['propertySubtype','tenancy','propertyRightsAppraised','valueTimeframe','scopeOfWork','reportType','reportFormat','assignmentType','analysisLevel','appraisalFee','retainerAmount','effectiveDate','requestDate','deliveryDate','deliveryTime','clientDocuments','previouslyAppraised','currentUse','proposedUse','cmhcFinancing','transactionStatus','zoningStatus','valuationPremises','statusOfImprovements','authorizedUse','valueScenarios','approachesToValue','purpose','appraiserComments','deliveryComments','paymentComments','yearBuilt','buildingSize','numberOfUnits','parkingSpaces','legalDescription','zoningClassification','zoneAbbreviation','landUseDesignation','floodZone','utilities','parcelNumber','grossLandSf','assessedValue','taxes','assessmentYear','landAssessmentValue','improvedAssessmentValue','totalAssessmentValue'];
     if (onUpdateJob) onUpdateJob(Object.fromEntries(jobKeys.map((k) => [k, ''])) as any);
     if (onUpdateDetails) onUpdateDetails(Object.fromEntries(detailKeys.map((k) => [k, ''])) as any);
     setTestFilled(false); // back to real-job behavior — cascade derives naturally again

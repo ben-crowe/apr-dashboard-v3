@@ -40,6 +40,9 @@
   .fnote{display:block;font-size:10.5px;color:var(--text-3);margin-top:2px;}
   .regok{color:var(--green-tx);font-weight:700;}
   .regq{color:var(--amber-tx);font-weight:700;}
+  .fbar{margin:2px 0 16px;display:flex;gap:6px;}
+  .fb{font:600 11px system-ui;padding:5px 12px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--text-2);cursor:pointer;}
+  .fb.on{background:#18181b;color:#fff;border-color:#18181b;}
   .regcount{font-size:12px;color:var(--text-2);margin:-6px 0 14px;}
   .foot{font-size:11px;color:var(--text-3);margin-top:24px;padding-top:12px;border-top:1px solid var(--border);}
 </style>
@@ -53,18 +56,26 @@
     <span><b class="regok">✓</b> id exists in fieldRegistry.ts &nbsp;·&nbsp; <b class="regq">?</b> not found as a single id (checked 2026-07-16)</span>
   </div>
   <div class="regcount" id="regcount"></div>
+  <div class="fbar">
+    <button class="fb on" data-f="all">All</button>
+    <button class="fb" data-f="g">Wired</button>
+    <button class="fb" data-f="a">Not wired</button>
+    <button class="fb" data-f="z">V4-only / settings</button>
+    <button class="fb" data-f="valta">Valta-matched</button>
+  </div>
+
 
   <h2>S1 — Client Intake</h2>
   <div class="h2sub">V3-origin client + property + contact fields, then the extras that only exist on V4.</div>
-  <table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:26%">V3 field (source)</th><th style="width:31%">V4 field it maps into</th><th style="width:20%">Status</th><th style="width:18%">Field Type</th></tr></thead><tbody id="s1"></tbody></table>
+  <table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:27%">V4 field (label + field id)</th><th style="width:20%">V3 (field id)</th><th style="width:18%">Valta (client)</th><th style="width:13%">Status</th><th style="width:13%">Field Type</th></tr></thead><tbody id="s1"></tbody></table>
 
   <h2>S2 — LOE Prep</h2>
   <div class="h2sub">The V3 LOE quote fields that map in, then the V4-only report-builder fields (intentional — for the 79-page report, not conflicts).</div>
-  <table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:26%">V3 field (source)</th><th style="width:31%">V4 field it maps into</th><th style="width:20%">Status</th><th style="width:18%">Field Type</th></tr></thead><tbody id="s2"></tbody></table>
+  <table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:27%">V4 field (label + field id)</th><th style="width:20%">V3 (field id)</th><th style="width:18%">Valta (client)</th><th style="width:13%">Status</th><th style="width:13%">Field Type</th></tr></thead><tbody id="s2"></tbody></table>
 
   <h2>Admin — User Settings (appraiser + firm)</h2>
   <div class="h2sub">Ben's call (2026-07-16): these are NOT job-mapped fields — the appraiser is the app's user, and the app owner prefills this profile once; it auto-fills into every job. Destination: a user-settings area — possibly its own tab on the field-testing page (/test-input) — to be built. Moved here out of S1/S2 so the mapping tables stay per-job only. Note: firm details exist TWICE in the registry (appraiser-* and company-* ids, same labels) — duplication to reconcile when the settings area is built.</div>
-  <table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:26%">V3 field (source)</th><th style="width:31%">V4 field (settings-managed)</th><th style="width:20%">Status</th><th style="width:18%">Field Type</th></tr></thead><tbody id="s3"></tbody></table>
+  <table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:27%">V4 field (settings-managed)</th><th style="width:20%">V3 (field id)</th><th style="width:18%">Valta (client)</th><th style="width:13%">Status</th><th style="width:13%">Field Type</th></tr></thead><tbody id="s3"></tbody></table>
 
   <div class="foot">
     Sources: fieldRegistry.ts (client-intake + loe-prep sections) · useLoadJobIntoReport.ts (V3→report bridge) · v3OriginFields.ts (authoritative V3-origin id list). Labels reflect live code on branch ops-canvas. Next: V3 dashboard Building-Information-and-below verified against the registry (second table).
@@ -176,6 +187,7 @@ const S3=[
  ['Company Email','company-email','—','z','Settings-managed — app owner prefills'],
  ['Company Website','company-website','—','z','Settings-managed — app owner prefills'],
 ];
+const VALTA={"job-number": {"n": "JobNumber", "l": "Job Number"}, "client-company-name": {"n": "ClientCompanyName", "l": "Client Company Name"}, "client-organization-address": {"n": "ClientOrganizationAddress", "l": "Client Organization Address"}, "client-first-name": {"n": "ClientFirstName", "l": "Client First Name"}, "client-last-name": {"n": "ClientLastName", "l": "Client Last Name"}, "client-title": {"n": "ClientTitle", "l": "Client Title"}, "client-phone": {"n": "ClientPhone", "l": "Client Phone"}, "client-email": {"n": "ClientEmail", "l": "Client Email"}, "property-name": {"n": "PropertyName", "l": "Property Name"}, "property-address": {"n": "PropertyAddress", "l": "Property Address"}, "property-type": {"n": "PropertyType", "l": "Property Type"}, "property-subtype": {"n": "PropertySubtype", "l": "Property Subtype"}, "tenancy": {"n": "Tenancy", "l": "Tenancy"}, "interest-appraised": {"n": "InterestAppraised", "l": "Interest Appraised (Property Rights)"}, "authorized-use": {"n": "AuthorizedUse", "l": "Authorized Use"}, "value-scenarios": {"n": "ValueScenarios", "l": "Value Scenarios"}, "approaches-to-value": {"n": "ApproachestoValue", "l": "Approaches to Value"}, "report-type": {"n": "ReportType", "l": "Report Type"}, "value-timeframe": {"n": "Valuetimeframe", "l": "Value Timeframe"}, "report-inspectiondate": {"n": "InspectionDate", "l": "Inspection Date"}, "appraisal-fee": {"n": "Fee", "l": "Fee"}, "contact-first-name": {"n": "ContactFirstName", "l": "Subject Property Contact \u2014 First Name"}, "contact-last-name": {"n": "ContactLastName", "l": "Subject Property Contact \u2014 Last Name"}, "contact-email": {"n": "ContactEmail", "l": "Subject Property Contact \u2014 Email"}, "contact-phone": {"n": "ContactPhone", "l": "Subject Property Contact \u2014 Phone"}};
 const NUM={"job-number": 1, "appraisal-status": 3, "subject-property-name": 4, "client-company-name": 5, "state-of-improvements": 7, "status-of-improvements": 8, "current-use-improvements": 9, "proposed-use-improvements": 10, "interest-appraised": 11, "authorized-use": 12, "value-scenarios": 13, "assignment-type": 15, "report-type": 16, "desktop-report": 17, "value-timeframe": 18, "report-inspectiondate": 19, "delivery-time": 21, "client-documents": 28, "previously-appraised": 29, "transaction-status": 30, "zoning-status": 31, "land-metric": 32, "cmhc-financing": 33, "value-scenario1": 34, "value-scenario2": 35, "value-scenario3": 36, "client-organization-address": 58, "client-first-name": 59, "client-last-name": 60, "client-title": 61, "client-phone": 62, "client-email": 63, "property-name": 64, "property-address": 65, "property-type": 66, "property-subtype": 67};
 const TYPES={"report-limcond": "textarea", "scope-of-work": "textarea", "report-values": "currency", "report-valuationincome": "currency", "contact-phone": "text", "report-extraordinary": "textarea", "contact-first-name": "text", "property-province": "text", "appraiser-city": "text", "report-date1": "date", "report-date": "date", "company-email": "text", "payment-terms": "text", "company-address": "text", "report-intendeduser": "text", "appraiser-bio-paragraph2": "textarea", "company-city-state-zip": "text", "report-dateinspection": "date", "company-jobnumber": "text", "property-address": "text", "appraiser-headshot": "image", "appraiser-license-expiry": "date", "appraiser-company": "text", "report-legal": "textarea", "appraiser-rics": "text", "job-number": "text", "appraiser-comments": "textarea", "appraiser-role": "dropdown", "report-hypothetical": "textarea", "report-scope": "textarea", "client-salutation": "text", "appraiser-license": "text", "report-valuescenario1": "currency", "appraiser-bio-paragraph1": "textarea", "status-of-improvements": "dropdown", "client-email": "text", "client-last-name": "text", "property-city": "text", "authorized-use": "dropdown", "assignment-type": "dropdown", "property-type": "dropdown", "client-postal": "text", "appraiser-aic-number": "text", "intake-notes": "textarea", "client-organization-address": "text", "client-title": "text", "report-compliance": "text", "contact-email": "text", "report-intendeduse": "textarea", "report-effectivedate": "date", "appraiser-designation": "text", "report-type": "dropdown", "client-company-name": "text", "zoning-status": "dropdown", "valuation-type": "dropdown", "appraiser-address": "text", "valuation-premises": "dropdown", "company-website": "text", "property-postal": "text", "client-province": "text", "client-first-name": "text", "report-inspectiondate": "date", "tenancy": "dropdown", "appraiser-aic": "text", "report-purpose": "textarea", "appraiser-postal": "text", "company-phone": "text", "cmhc-financing": "dropdown", "client-phone": "text", "client-name": "\u2014", "client-city": "text", "appraiser-email": "text", "appraiser-phone": "text", "appraisal-fee": "currency", "appraiser-name": "text", "appraiser-website": "text", "property-subtype": "dropdown", "report-interest": "text", "appraiser-credentials": "text", "appraiser-title": "text", "report-valuationcost": "currency", "retainer-amount": "currency", "company-name": "text", "report-valuationsales": "currency", "contact-full-name": "text", "client-attention": "text", "appraiser-name-credentials": "text", "contact-last-name": "text", "interest-appraised": "dropdown", "transaction-status": "multi-select", "client-full-name": "text", "property-name": "text", "asset-condition": "dropdown", "delivery-date": "date", "appraiser-province": "text"};
 const V3ID={"client-first-name": "client_first_name", "client-last-name": "client_last_name", "client-email": "client_email", "client-phone": "client_phone", "client-company-name": "client_organization", "client-organization-address": "client_address", "client-city": "client_address", "client-province": "client_address", "client-postal": "client_address", "subject-street": "property_address", "authorized-use": "intended_use", "contact-first-name": "property_contact_first_name", "contact-last-name": "property_contact_last_name", "contact-phone": "property_contact_phone", "contact-email": "property_contact_email"};
@@ -184,14 +196,16 @@ const cls={g:'green',a:'amber',z:'zinc'};
 const tag={g:'<span class="tag t-green">Wired</span>',a:'<span class="tag t-amber">V3 · not wired</span>',z:'<span class="tag t-zinc">Extra / V4-only</span>'};
 function fill(id,rows){
   document.getElementById(id).innerHTML=rows.map(r=>
-    '<tr class="'+cls[r[3]]+'"><td style="text-align:center">'+(REG.has(r[1])?'<span class="regok">✓</span>':'<span class="regq">?</span>')+'</td>'+
+    '<tr class="'+cls[r[3]]+'" data-s="'+r[3]+'" data-valta="'+(VALTA[r[1]]?1:0)+'"><td style="text-align:center">'+(REG.has(r[1])?'<span class="regok">✓</span>':'<span class="regq">?</span>')+'</td>'+
     '<td style="text-align:right;color:var(--text-3);font-size:11px">'+(NUM[r[1]]||'—')+'</td>'+
-    '<td class="src">'+r[2]+(V3ID[r[1]]?'<span class="id">'+V3ID[r[1]]+'</span>':'')+'</td>'+
     '<td><span class="lab">'+r[0]+'</span><span class="id">'+r[1]+'</span>'+(OPTS[r[1]]?'<span class="opts">'+OPTS[r[1]].map(o=>'<span class="opt">'+o+'</span>').join('')+'</span>':'')+'</td>'+
+    '<td class="src">'+(V3ID[r[1]]?'<span class="id" style="margin-top:0">'+V3ID[r[1]]+'</span>':(r[2]&&r[2]!=='—'?r[2]:'—'))+'</td>'+
+    '<td class="src">'+(VALTA[r[1]]?VALTA[r[1]].l+'<span class="id">'+VALTA[r[1]].n+'</span>':'—')+'</td>'+
     '<td>'+tag[r[3]]+'</td><td class="rev"><span class="ftype">'+(TYPES[r[1]]||'—')+'</span>'+((r[4]&&r[4]!=='Matches V3')?'<span class="fnote">'+r[4]+'</span>':'')+'</td></tr>').join('');
 }
 fill('s1',S1); fill('s2',S2); fill('s3',S3);
 const all=[...S1,...S2,...S3];
 const ok=all.filter(r=>REG.has(r[1])).length;
+document.querySelectorAll('.fb').forEach(b=>b.onclick=()=>{document.querySelectorAll('.fb').forEach(x=>x.classList.remove('on'));b.classList.add('on');const f=b.dataset.f;document.querySelectorAll('tbody tr').forEach(tr=>{tr.style.display=(f==='all'||(f==='valta'?tr.dataset.valta==='1':tr.dataset.s===f))?'':'none';});});
 document.getElementById('regcount').textContent='Registry check: '+ok+' of '+all.length+' rows confirmed in fieldRegistry.ts ('+(all.length-ok)+' unmatched: single-id lookup only — bundled rows and V4-only aliases show ?).';
 </script>

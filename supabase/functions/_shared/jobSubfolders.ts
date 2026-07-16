@@ -24,6 +24,21 @@ export const JOB_SUBFOLDERS = [
 /** One of the five folder names. */
 export type JobSubfolder = (typeof JOB_SUBFOLDERS)[number];
 
+// Nested subfolders scaffolded INSIDE certain parent folders at job creation (Item 7A).
+//
+// LOCKED-VERBATIM — the same discipline as the five parent names above. These strings are
+// written into the client's live SharePoint; casing, numbering and spacing are part of the name.
+// Do NOT tidy them. A parent folder not listed here gets no nested subfolders.
+//
+// 'Previous Appraisal' inside CLIENT SUPPLIED is deliberately NOT here: it is an OPTIONAL,
+// per-job folder tied to Ben's still-open "previously appraised" decision, not part of the
+// unconditional scaffold. Add it only once that decision lands.
+export const JOB_SUBSUBFOLDERS: Partial<Record<JobSubfolder, string[]>> = {
+  '1. REPORT': ['Old'],
+  '2. CLIENT SUPPLIED': ['Old', 'Emails'],
+  '3. WORK FILES (TTSZ, PICS, COMPS)': ['1. TTSZ', '2. PICTURES', '3. COMPS'],
+};
+
 /** Short labels for tabs, where the full name will not fit. DISPLAY ONLY — never a second name list. */
 export const JOB_SUBFOLDER_SHORT_LABELS: Record<JobSubfolder, string> = {
   '1. REPORT': '1. Report',

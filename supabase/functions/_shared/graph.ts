@@ -181,8 +181,8 @@ export async function ensureFolder(
 // directly. Re-export alone compiles as an unresolved name and breaks folder creation.
 // The re-export is kept as well so every existing
 // `import { JOB_SUBFOLDERS } from '../_shared/graph.ts'` keeps working unchanged.
-import { JOB_SUBFOLDERS } from './jobSubfolders.ts';
-export { JOB_SUBFOLDERS };
+import { JOB_SUBFOLDERS, JOB_SUBSUBFOLDERS } from './jobSubfolders.ts';
+export { JOB_SUBFOLDERS, JOB_SUBSUBFOLDERS };
 export type { JobSubfolder } from './jobSubfolders.ts';
 
 export interface JobFolderArgs {
@@ -197,6 +197,9 @@ export interface JobFolderResult {
   parentCreated: boolean;        // false = connected to the client's existing folder
   parentWebUrl?: string;
   subfolders: { name: string; id: string; created: boolean; webUrl?: string }[];
+  // Item 7A: the nested folders scaffolded inside certain parent subfolders (Old, Emails,
+  // 1. TTSZ, etc.). `parent` names which of the five it sits inside. Empty for parents with none.
+  nestedSubfolders: { parent: string; name: string; id: string; created: boolean; webUrl?: string }[];
   connectedOnly: boolean;        // true = nothing was created (pure connect to existing)
 }
 
@@ -236,17 +239,38 @@ export async function createJobFolders(args: JobFolderArgs): Promise<JobFolderRe
   const parent = await ensureFolder(driveId, `2.Jobs/${year}`, parentFolderName);
 
   const subfolders: { name: string; id: string; created: boolean; webUrl?: string }[] = [];
+  const nestedSubfolders: { parent: string; name: string; id: string; created: boolean; webUrl?: string }[] = [];
   for (const name of JOB_SUBFOLDERS) {
     const sub = await ensureFolder(driveId, parentPath, name);
     subfolders.push({ name, id: sub.id, created: sub.created, webUrl: sub.webUrl });
+
+    // Item 7A — scaffold the nested subfolders inside this parent, if any are defined for it.
+    // ensureFolder is idempotent (connect-if-exists, create-if-missing, 409-race-safe), so
+    // re-running on a job that already has some of these never errors or duplicates.
+    const nested = JOB_SUBSUBFOLDERS[name];
+    if (nested) {
+      const subPath = `${parentPath}/${name}`;
+      for (const childName of nested) {
+        const child = await ensureFolder(driveId, subPath, childName);
+        nestedSubfolders.push({
+          parent: name,
+          name: childName,
+          id: child.id,
+          created: child.created,
+          webUrl: child.webUrl,
+        });
+      }
+    }
   }
-  const connectedOnly = !parent.created && subfolders.every((s) => !s.created);
+  const connectedOnly =
+    !parent.created && subfolders.every((s) => !s.created) && nestedSubfolders.every((s) => !s.created);
   return {
     parentPath,
     parentId: parent.id,
     parentCreated: parent.created,
     parentWebUrl: parent.webUrl,
     subfolders,
+    nestedSubfolders,
     connectedOnly,
   };
 }

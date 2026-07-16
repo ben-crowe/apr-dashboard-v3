@@ -21,6 +21,8 @@ Kebab, ordered **owner → object → part**: `client-address-street`, `client-a
 
 No dropdown value anywhere carries its own id — the display string IS the stored value (root of the Hotel mess). Rework gives every value a stable kebab id + display label, on the V4 side. Renames become label-only.
 
+**ONE LIST, DEFINED ONCE (Ben, same session):** V4's S1/S2 are RECEIVERS — humans pick in V3 (intake form); V4 accepts what the bridge delivers. So each dropdown's value list is defined ONCE in the registry (with the per-value ids above) and BOTH the V3 picker and the V4 receiver reference that single list. Trimming to the client's wish list is then one edit in one place, and V3 can never offer a value V4 doesn't accept — same list by construction. Do not paint pick-lists onto receiver fields as if they were entry points.
+
 ## THE BUILD (APR team, normal gates)
 
 1. **Merge the crosswalk prototype INTO the Master Registry (Valta) page** (`public/master-registry-valta.html`) — keep the master page's tabs (Field Registry / Logic Fields / Scenarios / Mock Dashboard / Live Dashboard) and its group navigation (Job / Contact / Property / Building / Parcel) and Ben's dropdown toggles; bring in the prototype's columns: Reg-check | # | V3 (bold label + dash id, amber ≠ where it differs from V4) | V4 (bold label + id + values one-per-line indented) | Valta (client label + PascalCase id) | Valcre (dotted API name) | Status | Field Type. Master page is an early version: clean up, never delete.

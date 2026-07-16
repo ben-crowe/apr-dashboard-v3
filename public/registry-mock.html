@@ -1,0 +1,101 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Master Registry (Valta) — layout mock</title>
+<style>
+  :root{--text:#18181b;--text-2:#52525b;--text-3:#a1a1aa;--bg:#f4f4f5;--card:#fff;--border:#e4e4e7;--accent:#4f46e5;}
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:14px;color:var(--text);background:var(--bg);padding:24px 32px;margin:0;line-height:1.5;}
+  .wrap{max-width:1200px;margin:0 auto;}
+  .mockbar{background:#eef2ff;border:1px solid #c7d2fe;border-radius:8px;padding:12px 16px;margin-bottom:18px;font-size:12.5px;color:#3730a3;}
+  .mockbar b{color:#312e81;}
+  h1{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:0 0 2px;}
+  h1 .paren{color:var(--text-3);font-weight:500;font-size:16px;}
+  .sub{font-size:12.5px;color:var(--text-3);margin-bottom:14px;}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0 20px;padding:10px 12px;background:var(--card);border:1px solid var(--border);border-radius:8px;}
+  .filters .flabel{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);font-weight:600;margin-right:4px;}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;padding:5px 11px;border-radius:999px;border:1px solid var(--border);background:#fafafa;color:var(--text-2);cursor:default;}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
+  .chip .box{width:12px;height:12px;border:1.5px solid currentColor;border-radius:3px;display:inline-block;}
+  .chip.on .box{background:#fff;border-color:#fff;}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.05);}
+  th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-3);text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);font-weight:600;background:#fafafa;}
+  td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;font-size:13px;}
+  tr:last-child td{border-bottom:none;}
+  .lab{font-weight:600;display:block;}
+  .id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--text-2);display:block;margin-top:1px;}
+  .valta{background:linear-gradient(90deg,rgba(79,70,229,.04),transparent);}
+  .rename{background:#fef3c7;color:#92400e;border-radius:3px;padding:0 4px;}
+  .none{color:#cbd5e1;font-style:italic;}
+  .cf{color:#b45309;}
+  .grp{background:#f8fafc;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-2);}
+  .divider{border-left:2px solid #c7d2fe;}
+  .note{display:inline-block;background:#4f46e5;color:#fff;font-size:10px;font-weight:700;border-radius:50%;width:16px;height:16px;text-align:center;line-height:16px;margin-left:5px;vertical-align:top;}
+  .notes{margin-top:22px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 18px;}
+  .notes h3{margin:0 0 10px;font-size:13px;}
+  .notes ol{margin:0;padding-left:22px;}
+  .notes li{margin-bottom:8px;font-size:12.5px;color:var(--text-2);}
+  .notes b{color:var(--text);}
+</style>
+<div class="wrap">
+  <div class="mockbar"><b>LAYOUT MOCK — not wired.</b> This is the assumed <b>final Valta registry</b>. The left "Our Dashboard" column is the reconciliation lane — amber = our name doesn't match Valta yet, so rename ours. Once every row matches, our name = Valta's name and that column drops away. Valcre never changes. Spot-check data from the client v03 registry. Notes at the bottom.</div>
+
+  <h1>Master Registry <span class="paren">(Valta) · kebab-id standard</span> <span class="note">1</span></h1>
+  <div class="sub">One registry — every Valta field. Our ids use the <b>kebab convention</b> (client-first-name) from the V4 report-builder registry — the more versatile id we'd push the client to adopt. The views below are filters, not separate tabs.</div>
+
+  <div class="filters">
+    <span class="flabel">Show</span>
+    <span class="chip on"><span class="box"></span>All</span>
+    <span class="chip"><span class="box"></span>V3 Dashboard</span>
+    <span class="chip"><span class="box"></span>V4 Dashboard</span>
+    <span class="chip"><span class="box"></span>Intake</span>
+    <span class="chip"><span class="box"></span>LOE / e-sign</span>
+    <span class="chip"><span class="box"></span>Dropdowns only</span>
+    <span class="note">2</span>
+  </div>
+
+  <table>
+    <thead><tr>
+      <th style="width:4%">#</th>
+      <th style="width:27%">Our Dashboard <span style="font-weight:400;text-transform:none;color:#a1a1aa">(V3/V4 · kebab id)</span> <span class="note">3</span></th>
+      <th style="width:27%" class="divider">Valta Field <span style="font-weight:400;text-transform:none;color:#a1a1aa">(client)</span> <span class="note">4</span></th>
+      <th style="width:24%" class="divider">Valcre <span class="note">5</span></th>
+      <th style="width:9%">Maps</th>
+      <th style="width:9%">Control</th>
+    </tr></thead>
+    <tbody>
+      <tr class="grp"><td></td><td colspan="5">Client (Contact)</td></tr>
+      <tr class="valta"><td>1</td><td><span class="lab">Client First Name</span><span class="id">client-first-name</span></td><td class="divider"><span class="lab">Client First Name</span><span class="id">ClientFirstName</span></td><td class="divider"><span class="lab">First Name</span><span class="id">Contact.FirstName</span></td><td>✓</td><td>Text</td></tr>
+      <tr class="valta"><td>2</td><td><span class="lab">Client Phone</span><span class="id">client-phone</span></td><td class="divider"><span class="lab">Client Phone</span><span class="id">ClientPhone</span></td><td class="divider"><span class="lab">Phone</span><span class="id">Contact.PhoneNumber</span></td><td>✓</td><td>Text</td></tr>
+      <tr class="valta"><td>3</td><td><span class="lab"><span class="rename">Company Name</span></span><span class="id">client-company-name</span></td><td class="divider"><span class="lab">Client Company Name</span><span class="id">ClientCompanyName</span></td><td class="divider"><span class="lab">Company Name</span><span class="id">Contact.Company</span></td><td>✓</td><td>Text</td></tr>
+      <tr class="valta"><td>4</td><td><span class="lab"><span class="rename">Street Address</span></span><span class="id">client-organization-address</span></td><td class="divider"><span class="lab">Client Organization Address</span><span class="id">ClientOrganizationAddress</span></td><td class="divider"><span class="none">— composite</span></td><td>partial</td><td>Text</td></tr>
+
+      <tr class="grp"><td></td><td colspan="5">Property</td></tr>
+      <tr class="valta"><td>5</td><td><span class="lab">Property Name</span><span class="id">property-name</span></td><td class="divider"><span class="lab">Property Name</span><span class="id">PropertyName</span></td><td class="divider"><span class="lab">Name</span><span class="id">Property.Name</span></td><td>✓</td><td>Text</td></tr>
+      <tr class="valta"><td>6</td><td><span class="lab">Property Address</span><span class="id">property-address</span></td><td class="divider"><span class="lab">Property Address</span><span class="id">PropertyAddress</span></td><td class="divider"><span class="lab">Street Address</span><span class="id">Property.AddressStreet</span></td><td>✓</td><td>Text</td></tr>
+      <tr class="valta"><td>7</td><td><span class="lab">Property Type</span><span class="id">property-type</span></td><td class="divider"><span class="lab">Property Type</span><span class="id">PropertyType</span></td><td class="divider"><span class="lab">Property Type</span><span class="id">Property.Types</span></td><td>✓</td><td>Dropdown</td></tr>
+
+      <tr class="grp"><td></td><td colspan="5">Job</td></tr>
+      <tr class="valta"><td>8</td><td><span class="lab"><span class="rename">Valcre Job ID (VAL#)</span></span><span class="id">job-number</span></td><td class="divider"><span class="lab">Job Number</span><span class="id">JobNumber</span></td><td class="divider"><span class="lab">Job Number</span><span class="id">Job.Number</span></td><td>✓</td><td>Text</td></tr>
+      <tr class="valta"><td>9</td><td><span class="lab"><span class="rename">Appraisal Status</span></span><span class="id">appraisal-status</span></td><td class="divider"><span class="lab">Job Status</span><span class="id">JobStatus</span></td><td class="divider"><span class="lab">Status</span><span class="id">Job.Status</span></td><td>✓</td><td>Dropdown</td></tr>
+
+      <tr class="grp"><td></td><td colspan="5">Assignment dropdowns (custom fields)</td></tr>
+      <tr class="valta"><td>10</td><td><span class="lab">Status of Improvements</span><span class="id">status-of-improvements</span></td><td class="divider"><span class="lab">Status of Improvements</span><span class="id">StatusofImprovements</span></td><td class="divider"><span class="lab cf">custom field</span><span class="id cf">CF12407</span></td><td>✓</td><td>Dropdown <span class="note">6</span></td></tr>
+      <tr class="valta"><td>11</td><td><span class="lab"><span class="rename">Property Rights Appraised</span></span><span class="id">interest-appraised</span></td><td class="divider"><span class="lab">Interest Appraised</span><span class="id">InterestAppraised</span></td><td class="divider"><span class="lab cf">custom field</span><span class="id cf">CF12412</span></td><td>✓</td><td>Multi-select</td></tr>
+      <tr class="valta"><td>12</td><td><span class="lab">Scope of Work</span><span class="id">scope-of-work</span></td><td class="divider"><span class="lab">Scope of Work</span><span class="id">ScopeOfWork</span></td><td class="divider"><span class="none">— no Valcre field</span></td><td>—</td><td>Text</td></tr>
+    </tbody>
+  </table>
+
+  <div class="notes">
+    <h3>My layout notes</h3>
+    <ol>
+      <li><b>Three name columns during reconciliation:</b> our dashboard field (V3/V4) first, then Valta (the client's requested names), then Valcre. Sitting ours beside Valta shows which of our names to change. Amber = mismatch to fix (Company Name → Client Company Name, Valcre Job ID → Job Number, Appraisal Status → Job Status, Property Rights Appraised → Interest Appraised). Once aligned, ours = Valta and the first column collapses away.</li>
+      <li><b>One title, "Master Registry (Valta)."</b> Replaces the two confusing tabs. It reads as one registry — the client's Valta master list — in Valta's own naming, not our improved V4 ids.</li>
+      <li><b>Views are filter chips, not tabs.</b> Dashboard / V3 / V4 / Intake / LOE become multi-select checkboxes that subset the same rows. Every field still lives in the one registry; the chips just organize what you see. Multi-select so you can view V3 + V4 together.</li>
+      <li><b>Valta Field = Label on top, id underneath.</b> Two only — the redundant third "Field Name" is gone. The id is Valta's own (PascalCase, e.g. ClientFirstName).</li>
+      <li><b>Valcre sits immediately beside Valta</b> (the divider line), so the two ids are side by side for quick eyeballing — not pushed off to the far right. Same shape: Label on top, Valcre id (dotted) under.</li>
+      <li><b>Maps column</b> — ✓ when the field has a Valcre target, "partial" for composites, "—" when it has no Valcre field at all (report-only fields). Blank Valcre cell = doesn't map.</li>
+      <li><b>Dropdowns are the ugly ones.</b> Their Valcre id is a bare custom-field code (CF-number) with no readable name — flagged in amber so it's obvious those are the ones stuck with Valcre's custom-field scheme.</li>
+      <li><b>Endgame — our kebab id becomes the standard.</b> Once names align, the pitch is the client adopts our kebab convention as the master id (he'd defer to the better one anyway). Then there are two ids per field by design: the client's id folds into ours, and ours maps outward to wherever it needs to go — Valcre, the LOE template, e-sign, etc. Ours proves the more versatile, single id that every downstream system maps from.</li>
+    </ol>
+  </div>
+</div>

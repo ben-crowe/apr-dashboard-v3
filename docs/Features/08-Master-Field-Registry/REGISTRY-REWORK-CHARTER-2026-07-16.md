@@ -33,6 +33,19 @@ No dropdown value anywhere carries its own id — the display string IS the stor
 6. **Explorer page rework notes (field-registry-v6.html):** System column goes; the two confusing tabs (Valta dashboard / Valcre) go; V3/V4 chips become the checkbox filters above; keep Ben's dropdown toggle pattern. Early version: clean up, never delete.
 7. **Terminology, locked:** human words = **label**; kebab = **field id**. Never "field name".
 
+
+## PER-COLUMN DROPDOWN VALUES (Ben, added same session — KEY requirement)
+
+Each column shows its OWN system's values, indented under its own field:
+- **V3 column:** V3's values. **V4 column:** V4's values.
+- **Client (Valta) column:** EXACTLY the values from his Excel sheet's named ranges (e.g. ListPropertyType = 9 values incl Hotel) — verbatim, even where they differ from V3/V4. This is the key line: his column mirrors his sheet, never ours.
+- **Valcre column:** Valcre's values, truncated with "…" when the list runs long.
+The side-by-side value lists are where every dropdown dispute becomes visible (Hotel proved it).
+
+## KNOWN EXTRACTION TRAP (bit us live — do not reintroduce)
+
+When scraping fieldRegistry.ts for a field's options, BOUND the scan to that field's own entry (stop at the next `id:`) — an unbounded forward scan attaches the NEXT field's options to fields that have none (property-address briefly showed the property-type list). Same class: master-registry row numbers must come from the RENDERED page, not array order.
+
 ## STILL HELD (do not build — resolves inside this rework with Ben)
 
 - Property-type VALUE SET (Hotel/Hospitality/Multifamily spellings, Seniors/Other). Receipt on file: the client's signed XLSX named range `ListPropertyType` ('Dropdown Lists'!$B$2:$B$10) = Multifamily, Self-Storage, Retail, Industrial, Office, Land, **Hotel**, Seniors, Other — Hospitality appears nowhere in the client file; it is our app's invention. Two contradicting 2026-06-17 records (registry annotation vs DROPDOWN-RECONCILIATION-FINDINGS) must be reconciled.

@@ -42,7 +42,13 @@
 // file FILED and visible with an amber mark. Never lost, never bounced back to the pile.
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { JOB_SUBFOLDERS, JOB_SUBFOLDER_SHORT_LABELS, type JobSubfolder } from '@shared/jobSubfolders';
+import { createPortal } from 'react-dom';
+import {
+  JOB_SUBFOLDERS,
+  JOB_SUBFOLDER_SHORT_LABELS,
+  JOB_SUBSUBFOLDERS,
+  type JobSubfolder,
+} from '@shared/jobSubfolders';
 import { useJobDocuments, type JobDocument, STORAGE_BUCKET } from './useJobDocuments';
 import { ImageEditorModal } from '@/features/image-configurator/components/ImageEditorModal';
 import type { JobImage } from '@/features/image-configurator/types';
@@ -53,6 +59,7 @@ import {
   FileText,
   FolderOpen,
   FolderPlus,
+  Info,
   Loader2,
   Maximize2,
   Upload,
@@ -257,6 +264,107 @@ function MoveSelect({
         </option>
       )}
     </select>
+  );
+}
+
+// ── Item 9 — per-folder "what belongs in here" contents, authored ONCE ────────────────────────────
+// The five-folder strip showed only the mother-folder names. This lists what belongs inside each,
+// from a SINGLE source: folders that create real nested subfolders (Item 7A's JOB_SUBSUBFOLDERS) list
+// those verbatim — imported, never re-typed, so the tooltip and the folders SharePoint actually
+// creates can never drift. Folders with no nested subfolders fall back to the in-house bracket
+// convention already baked into their own name ("(Invoice, LOE)", "(LOR)").
+
+type FolderContentLine = { name: string; gloss?: string };
+
+// Plain-language gloss for the abbreviated subfolder names. Reference text only — NEVER a second name
+// list; the names themselves always come from JOB_SUBSUBFOLDERS / the folder's own bracket.
+const SUBFOLDER_GLOSS: Record<string, string> = {
+  '1. TTSZ': 'takeoffs & site zoning',
+  '2. PICTURES': 'site photos',
+  '3. COMPS': 'comparables',
+};
+
+// Folders with NO nested subfolders still get a tooltip — authored once from the bracket in their name.
+const FOLDER_BRACKET_CONTENTS: Partial<Record<JobSubfolder, FolderContentLine[]>> = {
+  '4. CLIENT BILLING (Invoice, LOE)': [
+    { name: 'Invoice' },
+    { name: 'LOE', gloss: 'letter of engagement' },
+  ],
+  '5. LETTER OF RELIANCE (LOR)': [{ name: 'LOR', gloss: 'letter of reliance' }],
+};
+
+/** The definitive contents for one folder: the real subfolders if it has any, else its bracket set. */
+function folderContents(folder: JobSubfolder): FolderContentLine[] {
+  const sub = JOB_SUBSUBFOLDERS[folder];
+  if (sub) return sub.map((name) => ({ name, gloss: SUBFOLDER_GLOSS[name] }));
+  return FOLDER_BRACKET_CONTENTS[folder] ?? [];
+}
+
+/**
+ * The "ⓘ contents" hint on a folder card, and its hover-tooltip listing what belongs inside.
+ *
+ * The tooltip is PORTALLED to <body> with fixed positioning off the hint's own rect: the folder well
+ * is a vertical scroller (overflow-y-auto clips BOTH axes), so a tooltip rendered in-flow under the
+ * card would be cut off. A portal escapes the clip; hover-only + zero layout shift matches the design.
+ * stopPropagation on the hint keeps a hover/click here from opening the folder (the card is clickable).
+ */
+function FolderContentsHint({ lines }: { lines: FolderContentLine[] }) {
+  const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+  const ref = useRef<HTMLButtonElement | null>(null);
+
+  const show = () => {
+    const r = ref.current?.getBoundingClientRect();
+    if (r) setPos({ top: r.bottom + 8, left: r.left });
+    setOpen(true);
+  };
+  const hide = () => setOpen(false);
+
+  if (!lines.length) return null;
+
+  return (
+    <>
+      <button
+        ref={ref}
+        type="button"
+        data-testid="folder-contents-hint"
+        aria-label="What belongs in this folder"
+        onMouseEnter={show}
+        onMouseLeave={hide}
+        onFocus={show}
+        onBlur={hide}
+        onClick={(e) => e.stopPropagation()}
+        className="inline-flex items-center gap-1 rounded text-[10px] text-muted-foreground transition-colors hover:text-foreground focus:text-foreground"
+      >
+        <Info className="h-3 w-3" /> contents
+      </button>
+      {open &&
+        pos &&
+        createPortal(
+          <div
+            role="tooltip"
+            data-testid="folder-contents-tip"
+            style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 50 }}
+            className="pointer-events-none w-52 rounded-md border border-border/70 bg-popover/95 px-3 py-2 text-popover-foreground shadow-md backdrop-blur-sm"
+          >
+            <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+              Belongs in here
+            </div>
+            <ul className="m-0 list-none p-0">
+              {lines.map((l) => (
+                <li key={l.name} className="flex items-center gap-2 py-0.5 text-[11.5px] text-foreground">
+                  <span className="h-1 w-1 shrink-0 rounded-[1px] bg-muted-foreground/70" />
+                  <span>
+                    {l.name}
+                    {l.gloss ? <span className="text-muted-foreground"> — {l.gloss}</span> : null}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>,
+          document.body,
+        )}
+    </>
   );
 }
 
@@ -950,10 +1058,17 @@ export function JobDocumentsPanel({ jobId, folderUrl }: { jobId: string; folderU
                     })}
                   </div>
 
-                  {/* ONE short line per empty folder. NOT a paragraph, and not five times over. */}
-                  {items.length === 0 && (
-                    <div className="mt-2 text-[11px] text-muted-foreground">Empty — drag a file here</div>
-                  )}
+                  {/* Footer — the empty hint (when empty) plus the "contents" hover hint (Item 9, on
+                      EVERY folder, not only the two whose names had room for a bracket). ONE short
+                      line, never a paragraph and never five times over. */}
+                  <div className="mt-2 flex items-center justify-between gap-2">
+                    {items.length === 0 ? (
+                      <span className="text-[11px] text-muted-foreground">Empty — drag a file here</span>
+                    ) : (
+                      <span aria-hidden />
+                    )}
+                    <FolderContentsHint lines={folderContents(folder)} />
+                  </div>
                 </div>
               );
             })}

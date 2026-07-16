@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "generate-viewer": "tsx scripts/generate-standalone-viewer.ts",
     "seed:test-job": "tsx scripts/seed-test-job.ts",
-    "drift-gate:prebuild": "node scripts/gen-v3-actual-manifest.mjs && node scripts/v3-drift-gate.mjs --manifest docs/Features/08-Master-Field-Registry/GENERATED-v3-actual-manifest.json --approved docs/Features/08-Master-Field-Registry/accepted-gaps.json && node scripts/loe-chip-drift-gate.mjs",
+    "drift-gate:prebuild": "node scripts/gen-v3-actual-manifest.mjs && node scripts/v3-drift-gate.mjs --manifest docs/Features/08-Master-Field-Registry/GENERATED-v3-actual-manifest.json --approved docs/Features/08-Master-Field-Registry/accepted-gaps.json",
     "drift-gate": "node scripts/v3-drift-gate.mjs",
     "drift-gate:test": "node scripts/v3-drift-gate.test.mjs"
   },

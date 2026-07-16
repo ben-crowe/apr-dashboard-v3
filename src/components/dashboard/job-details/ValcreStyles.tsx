@@ -1,7 +1,6 @@
 // Valcre-style consistent design for all sections
 import React from "react";
 import { Loader2, Check, AlertTriangle } from "lucide-react";
-import { ContractBoundChip } from "./ContractBoundChip";
 
 // Per-field sync status indicator (PRD: saving → saved-local → synced-to-Valcre → sync-failed).
 // 'saved' = persisted to Supabase (grey); 'synced' = readback-CONFIRMED in Valcre (blue);
@@ -90,18 +89,13 @@ export const CompactField = ({
   children,
   fullWidth = false,
   className = "",
-  status,
-  loeField
+  status
 }: {
   label?: string | React.ReactNode;
   children: React.ReactNode;
   fullWidth?: boolean;
   className?: string;
   status?: FieldSyncStatus;
-  // Item 8 (2026-07-16) — when set, renders the "in LOE" chip after the label IF this field is
-  // contract-bound (ContractBoundChip self-gates on the derived mapping set; a non-bound key shows
-  // nothing). Sits between the label and the input so it never disturbs the label column.
-  loeField?: string;
 }) => (
   <div className={`flex items-center gap-2 py-0.5 ${fullWidth ? 'md:col-span-2' : ''} ${className}`}>
     {label && (
@@ -109,7 +103,6 @@ export const CompactField = ({
         {typeof label === 'string' ? `${label}:` : label}
       </label>
     )}
-    {loeField && <ContractBoundChip field={loeField} />}
     <div className="flex-1">
       {children}
     </div>

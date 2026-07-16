@@ -63,7 +63,11 @@ export function mapJobToDocuSealFields(
     {
       name: "notes",
       value: jobDetails.specialInstructions || job.notes || "",
-      jobFields: ["specialInstructions", "notes"], // fallback source — specialInstructions, else notes
+      // Chip-backing field is `notes` (the Client Comments input on the job page). The value still
+      // falls back to specialInstructions in code, but specialInstructions has NO on-page input, so it
+      // is not a chip-able field — declaring it here would put it in the derived set with no chip to
+      // match, and the build-time drift gate (chip set === derived set) could never pass.
+      jobField: "notes",
     },
     { name: "property_address", value: job.propertyAddress, jobField: "propertyAddress" },
     { name: "scope_of_work", value: jobDetails.scopeOfWork || "", jobField: "scopeOfWork" },

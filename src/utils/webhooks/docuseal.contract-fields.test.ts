@@ -13,9 +13,11 @@ import type { DetailJob, JobDetails } from "@/types/job";
 // FAILS the build until the set and this list are reconciled. That is what makes "the chip follows the
 // mapping" real and falsifiable.
 
-// The agreed contract-bound job-page fields (coarch2 ruling 2026-07-16). 17 marked fields, 19 backing
-// keys — client_name is a composite (clientFirstName + clientLastName) and the LOE `notes` field is a
-// fallback composite (specialInstructions || notes), so those two marked fields contribute two keys each.
+// The agreed contract-bound job-page fields (coarch2 ruling 2026-07-16). 18 fields = 18 chips. Only
+// client_name is a composite (clientFirstName + clientLastName → two chipped inputs). The LOE `notes`
+// field falls back to specialInstructions in code, but its chip-backing field is `notes` (the Client
+// Comments input); specialInstructions has NO on-page field, so it is not a chip-able field and is not
+// in this set — that is what lets the build-time drift gate assert chip set === derived set.
 const EXPECTED_CONTRACT_BOUND_FIELDS = [
   // Client identity + contact
   "clientOrganization",
@@ -25,8 +27,7 @@ const EXPECTED_CONTRACT_BOUND_FIELDS = [
   "clientPhone",
   "clientTitle",
   "clientEmail",
-  // Property + client comments (LOE `notes` ← specialInstructions || notes)
-  "specialInstructions",
+  // Property + client comments (LOE `notes` chip-backs the Client Comments input)
   "notes",
   "propertyAddress",
   "scopeOfWork",

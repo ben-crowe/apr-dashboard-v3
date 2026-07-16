@@ -8,8 +8,10 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { SectionTitle } from "./job-details/ValcreStyles";
+import { SectionTitle, CompactField } from "./job-details/ValcreStyles";
 import LoeQuoteSection from "./job-details/LoeQuoteSection";
+import { MultiSelect } from "@/components/ui/multi-select";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { isValcreJobNumber } from "@/config/valcre";
 import { useTestMode } from "@/contexts/TestModeContext";
@@ -60,6 +62,32 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
     const next = !allSectionsOpen;
     setAllSectionsOpen(next);
     setOpenAllSignal((s) => ({ open: next, n: (s?.n || 0) + 1 }));
+  };
+
+  // Item 6 relocate — "Documents to Request" (the clientDocuments MultiSelect) now renders up here,
+  // beside the document organizer, moved out of LoeQuoteSection's section 11. clientDocuments is NOT in
+  // useSaveJobDetails' bulk-save allowlist, so this focused upsert is the ONLY path that persists it —
+  // it mirrors LoeQuoteSection.autoSaveField's job_loe_details upsert (same column, same onConflict).
+  // The stored shape stays the comma-joined string (useJobData reads it back as loeData.client_documents);
+  // clientDocuments is app-side only (not a Valcre-sync field), so there is no Valcre push here.
+  const handleClientDocumentsChange = async (values: string[]) => {
+    if (!onUpdateDetails) return;
+    const stringValue = values.join(',');
+    onUpdateDetails({ clientDocuments: stringValue }); // immediate local reflect
+    const { error } = await supabase
+      .from('job_loe_details')
+      .upsert(
+        {
+          job_id: job.id,
+          client_documents: stringValue === '' ? null : stringValue,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'job_id' },
+      );
+    if (error) {
+      console.error('Failed to save Documents to Request:', error);
+      if (isLiveValcreJob) toast.error('Failed to save Documents to Request');
+    }
   };
 
   const handleFillTestData = () => {
@@ -278,6 +306,31 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
           </div>
         </CollapsibleTrigger>
         <CollapsibleContent className="p-4">
+          {/* Item 6 relocate — "Documents to Request" sits WITH the document organizer, moved out of
+              LoeQuoteSection's section 11. Which documents to request FROM the client belongs beside the
+              panel that sorts what the client sends back. Persists via handleClientDocumentsChange
+              (the only clientDocuments save path). */}
+          <div className="mb-4">
+            <CompactField label="Documents to Request">
+              <MultiSelect
+                value={(jobDetails as any).clientDocuments || ''}
+                onChange={handleClientDocumentsChange}
+                options={[
+                  'Previous Appraisal',
+                  'Property Details',
+                  'Proforma',
+                  'Unit Mix',
+                  'Rent Roll',
+                  'Historical Operating Expenses',
+                  'Development Permit Drawings',
+                  'Contact for Property Tour',
+                  'Purchase & Sale Agreement',
+                  'Environmental Reports',
+                  'Property Condition Reports',
+                ]}
+              />
+            </CompactField>
+          </div>
           <JobDocumentsPanel jobId={job.id} folderUrl={(job as any)?.sharepointFolderUrl ?? null} />
         </CollapsibleContent>
       </Collapsible>

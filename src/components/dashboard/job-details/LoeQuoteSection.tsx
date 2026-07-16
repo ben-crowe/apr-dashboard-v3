@@ -2491,30 +2491,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         {/* 11. Property Information Request */}
         <SectionGroup title="Property Information Request">
           <TwoColumnFields>
-            {/* Label is "Documents to Request", NOT "Client Documents" (Item 6, 2026-07-15). The old
-                label collided with the "Client Documents" heading on the document-organizer panel
-                above — same two words for two different things. The field KEY stays clientDocuments
-                (the save/sync path is unchanged); only the on-screen label moved. */}
-            <CompactField label="Documents to Request">
-              {/* Registry ListClientDocuments (field-registry-v6.html:948) — Select multiple. Options verbatim (11). */}
-              <MultiSelect
-                value={(jobDetails as any).clientDocuments || ''}
-                onChange={values => handleMultiSelectChange(values, 'clientDocuments')}
-                options={[
-                  'Previous Appraisal',
-                  'Property Details',
-                  'Proforma',
-                  'Unit Mix',
-                  'Rent Roll',
-                  'Historical Operating Expenses',
-                  'Development Permit Drawings',
-                  'Contact for Property Tour',
-                  'Purchase & Sale Agreement',
-                  'Environmental Reports',
-                  'Property Condition Reports',
-                ]}
-              />
-            </CompactField>
+            {/* "Documents to Request" (clientDocuments) was RELOCATED 2026-07-16 (Item 6) up beside the
+                document organizer in JobDetailAccordion.tsx — it belongs with the panel that sorts the
+                documents the client sends back, not a page below here. "Previously Appraised" stays
+                (held Ben decision). */}
             <CompactField label="Previously Appraised">
               <Select value={(jobDetails as any).previouslyAppraised || ''} onValueChange={value => handleSelectChange(value, 'previouslyAppraised')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">

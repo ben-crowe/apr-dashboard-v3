@@ -57,7 +57,15 @@ const JobDetailView: React.FC<JobDetailViewProps> = ({ jobId, onBack }) => {
     navigate('/test-input');
   };
 
-  if (isLoading) {
+  // Skeleton ONLY on the first load of THIS job (or a real job switch) — never on a SAME-JOB refetch.
+  // fetchJobDetail sets isLoading=true on every refetch (useJobData.ts:16). The old unconditional gate
+  // swapped the whole accordion for the skeleton on the post-creation refetch, UNMOUNTING it and
+  // dropping its local useState — the cascade picker's "Insert from data" toggle, its picked scenario,
+  // and the yellow mapped-field display all reset while the DB-persisted cascade RESULTS survived
+  // (Item 2, the self-contradicting picker). Keeping the accordion mounted across a same-job refetch
+  // preserves that state; `job.id !== jobId` still shows the skeleton on a genuine job SWITCH, paired
+  // with key={jobId} on the accordion below (which resets the state cleanly on a different job).
+  if (isLoading && (!job || job.id !== jobId)) {
     return <JobDetailSkeleton onBack={onBack} />;
   }
 
@@ -112,6 +120,13 @@ const JobDetailView: React.FC<JobDetailViewProps> = ({ jobId, onBack }) => {
       </div>
 
       <JobDetailAccordion
+        // key={jobId} — the cascade picker's state (insertFromData toggle, picked scenario, yellow
+        // mapped fields) lives in local useState here and in LoeQuoteSection. Keying the accordion to
+        // the job id resets ALL of it when the user opens a DIFFERENT job (no stale scenario bleeding
+        // from job A onto job B — the worse bug the retain must avoid), while the same-job refetch
+        // (which no longer unmounts, per the skeleton gate above) KEEPS it. This is the spec's
+        // "keyed to job id" retain: retain across the same job's refetch, reset on a different job.
+        key={jobId}
         job={job}
         jobDetails={jobDetails}
         onUpdateDetails={handleUpdateDetails}

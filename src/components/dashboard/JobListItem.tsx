@@ -1,16 +1,23 @@
 
 import React, { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { ChevronRight, Trash2 } from "lucide-react";
+import { ChevronRight, MoreVertical, Eye, Pencil, Archive } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatJobNumber } from "@/utils/formatters";
 import { JobSubmission } from "@/types/job";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { ArchiveJobDialog } from "./job-list/ArchiveJobDialog";
 
 interface JobListItemProps {
   job: JobSubmission;
   onSelect: () => void;
+  // Called after an archive or permanent delete so the list refetches (job leaves the active list).
   onDelete?: () => void;
 }
 
@@ -31,94 +38,97 @@ const statusLabels = {
 };
 
 const JobListItem: React.FC<JobListItemProps> = ({ job, onSelect, onDelete }) => {
-  const [isDeleting, setIsDeleting] = useState(false);
+  // Item 7B — the top-level Trash2 delete is gone. The row's action menu offers View / Edit / Archive,
+  // with Archive the primary new action; a true permanent delete lives inside the archive dialog behind
+  // its own confirm, so nobody deletes files and folders by reflex.
+  const [archiveOpen, setArchiveOpen] = useState(false);
   const formattedDate = formatDistanceToNow(new Date(job.createdAt), {
     addSuffix: true,
   });
 
-  // Format job ID and property information
   const jobIdentifier = formatJobNumber(job.jobNumber, job);
 
-  const handleDelete = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent selecting the job
-    
-    if (!confirm(`Delete job for ${job.clientFirstName} ${job.clientLastName}?`)) {
-      return;
-    }
-
-    setIsDeleting(true);
-    
-    try {
-      // Delete related records first
-      await supabase.from('job_loe_details').delete().eq('job_id', job.id);
-      await supabase.from('job_details').delete().eq('job_id', job.id);
-      await supabase.from('job_files').delete().eq('job_id', job.id);
-      
-      // Then delete the main job
-      const { error } = await supabase
-        .from('job_submissions')
-        .delete()
-        .eq('id', job.id);
-
-      if (error) throw error;
-      
-      void 0 /* success: silent (Ben) */;
-      if (onDelete) onDelete();
-      
-    } catch (error: any) {
-      console.error('Error deleting job:', error);
-      toast.error('Failed to delete job');
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
   return (
-    <div 
-      onClick={onSelect}
-      className="flex items-center px-3 py-2 hover:bg-secondary/50 rounded-md cursor-pointer border-b border-border/30 group transition-colors"
-    >
-      {/* Status indicator */}
+    <>
       <div
-        className={cn(
-          "w-1.5 h-1.5 rounded-sm mr-3 flex-shrink-0 opacity-70",
-          statusColors[job.status as keyof typeof statusColors] || "bg-gray-400"
-        )}
-      />
-      
-      {/* Job ID and Address - main column */}
-      <div className="flex-grow min-w-0">
-        <div className="font-medium text-sm truncate" title={jobIdentifier}>
-          {jobIdentifier}
-        </div>
-        <div className="text-xs text-muted-foreground truncate">
-          {job.clientFirstName} {job.clientLastName}
-        </div>
-      </div>
-      
-      {/* Date */}
-      <div className="text-xs text-muted-foreground whitespace-nowrap px-4 ml-2">
-        {formattedDate}
-      </div>
-      
-      {/* Status */}
-      <div className="text-xs font-medium whitespace-nowrap w-24 text-right">
-        {statusLabels[job.status as keyof typeof statusLabels] || "Unknown"}
-      </div>
-      
-      {/* Delete button */}
-      <button
-        onClick={handleDelete}
-        disabled={isDeleting}
-        className="ml-2 p-1 rounded hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50"
-        aria-label="Delete job"
+        onClick={onSelect}
+        className="flex items-center px-3 py-2 hover:bg-secondary/50 rounded-md cursor-pointer border-b border-border/30 group transition-colors"
       >
-        <Trash2 className="h-4 w-4 text-destructive" />
-      </button>
-      
-      {/* Action indicator */}
-      <ChevronRight className="h-4 w-4 text-muted-foreground ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
-    </div>
+        {/* Status indicator */}
+        <div
+          className={cn(
+            "w-1.5 h-1.5 rounded-sm mr-3 flex-shrink-0 opacity-70",
+            statusColors[job.status as keyof typeof statusColors] || "bg-gray-400"
+          )}
+        />
+
+        {/* Job ID and Address - main column */}
+        <div className="flex-grow min-w-0">
+          <div className="font-medium text-sm truncate" title={jobIdentifier}>
+            {jobIdentifier}
+          </div>
+          <div className="text-xs text-muted-foreground truncate">
+            {job.clientFirstName} {job.clientLastName}
+          </div>
+        </div>
+
+        {/* Date */}
+        <div className="text-xs text-muted-foreground whitespace-nowrap px-4 ml-2">
+          {formattedDate}
+        </div>
+
+        {/* Status */}
+        <div className="text-xs font-medium whitespace-nowrap w-24 text-right">
+          {statusLabels[job.status as keyof typeof statusLabels] || "Unknown"}
+        </div>
+
+        {/* Action menu — View / Edit / Archive (Archive is the primary action) */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              onClick={(e) => e.stopPropagation()}
+              className="ml-2 p-1 rounded hover:bg-secondary opacity-0 group-hover:opacity-100 transition-opacity data-[state=open]:opacity-100"
+              aria-label="Job actions"
+              data-testid="job-actions-trigger"
+            >
+              <MoreVertical className="h-4 w-4 text-muted-foreground" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
+            <DropdownMenuItem onSelect={() => onSelect()}>
+              <Eye className="mr-2 h-4 w-4" /> View job
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => onSelect()}>
+              <Pencil className="mr-2 h-4 w-4" /> Edit
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onSelect={() => setArchiveOpen(true)}
+              data-testid="archive-action"
+              className="text-primary focus:text-primary"
+            >
+              <Archive className="mr-2 h-4 w-4" />
+              <span className="flex flex-col">
+                Archive job
+                <span className="text-[10.5px] text-muted-foreground">
+                  removes it from the active list — keeps the record
+                </span>
+              </span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Action indicator */}
+        <ChevronRight className="h-4 w-4 text-muted-foreground ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+      </div>
+
+      <ArchiveJobDialog
+        job={job}
+        open={archiveOpen}
+        onOpenChange={setArchiveOpen}
+        onDone={() => onDelete?.()}
+      />
+    </>
   );
 };
 

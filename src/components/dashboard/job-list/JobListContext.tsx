@@ -43,6 +43,10 @@ export const JobListProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const { data: supabaseJobs, error } = await supabase
           .from('job_submissions')
           .select('*')
+          // Item 7B — the active dashboard shows only NON-archived jobs. Archive sets archived_at;
+          // restore sets it back to null. This is the ONLY archive filter — do NOT overload status
+          // (validateJobStatus below coerces any non-enum status back to 'submitted').
+          .is('archived_at', null)
           .order('created_at', { ascending: false });
         
         if (error) {

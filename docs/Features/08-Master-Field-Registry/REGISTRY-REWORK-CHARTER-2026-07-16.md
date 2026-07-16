@@ -21,7 +21,7 @@ Kebab, ordered **owner → object → part**: `client-address-street`, `client-a
 
 No dropdown value anywhere carries its own id — the display string IS the stored value (root of the Hotel mess). Rework gives every value a stable kebab id + display label, on the V4 side. Renames become label-only.
 
-**ONE LIST, DEFINED ONCE (Ben, same session):** V4's S1/S2 are RECEIVERS — humans pick in V3 (intake form); V4 accepts what the bridge delivers. So each dropdown's value list is defined ONCE in the registry (with the per-value ids above) and BOTH the V3 picker and the V4 receiver reference that single list. Trimming to the client's wish list is then one edit in one place, and V3 can never offer a value V4 doesn't accept — same list by construction. Do not paint pick-lists onto receiver fields as if they were entry points.
+**ONE LIST, DEFINED ONCE (Ben, same session):** V4's S1/S2 are RECEIVERS — humans pick in V3 (intake form); V4 accepts what the bridge delivers. So each dropdown's value list is defined ONCE in the registry (with the per-value ids above) and BOTH the V3 picker and the V4 receiver reference that single list. Trimming to the client's wish list is then one edit in one place, and V3 can never offer a value V4 doesn't accept — same list by construction. Receivers still SHOW what they accept (that is real information) — the rule is NO SUPERSET: V4 never displays a bigger list than V3 offers. Same list both sides by construction; if the accepted set ever differs from the offered set, render it as a FLAGGED mismatch (like the amber ≠ id marks), never as a silently longer list.
 
 ## THE BUILD (APR team, normal gates)
 

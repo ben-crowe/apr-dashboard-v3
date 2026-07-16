@@ -151,16 +151,20 @@ export const fieldMappings: JobDataMapping[] = [
     getValue: (job) => parseAddress(job.client_address).street,
   },
   {
+    // Unit-4 bridge cleanup: read the real DB columns, NOT parseAddress(client_address).
+    // client_address holds only the STREET, so parsing it for city/province/postal yields
+    // empty — the populated values live in their own job_submissions columns (written by the
+    // intake form). Same fix already applied to client-city-state-zip below.
     fieldId: 'client-city',
-    getValue: (job) => parseAddress(job.client_address).city,
+    getValue: (job) => job.client_city || undefined,
   },
   {
     fieldId: 'client-province',
-    getValue: (job) => parseAddress(job.client_address).province,
+    getValue: (job) => job.client_province || undefined,
   },
   {
     fieldId: 'client-postal',
-    getValue: (job) => parseAddress(job.client_address).postal,
+    getValue: (job) => job.client_postal_code || undefined,
   },
   {
     // TWIN-DISCONNECT FIX: the report template's "Prepared For" block reads the COMBINED

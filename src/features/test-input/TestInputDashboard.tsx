@@ -13,6 +13,7 @@ import { testDataSet1 } from "@/features/report-builder/data/TestDataSet1";
 import { composeReportFields } from "@/features/report-builder/testSeam/composeReportFields";
 import { V3_ORIGIN_FIELD_IDS, isV3OriginField } from "@/features/report-builder/testSeam/v3OriginFields";
 import { ClientDocumentsSection } from "@/features/client-documents/ClientDocumentsSection";
+import FirmIdentityTab from "./FirmIdentityTab";
 import { useLoadJobIntoReport } from "@/features/report-builder/hooks/useLoadJobIntoReport";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -236,6 +237,7 @@ const TestInputDashboard: React.FC = () => {
 
   // Section display order for TDD dashboard
   const sectionDisplayOrder = [
+    "firm-identity", // S0 - FIRM & APPRAISER IDENTITY (proposed first; Ben rules the name/position)
     "client-intake", // S1 - CLIENT INTAKE (V3)
     "loe-prep", // S2 - LOE PREP (V3)
     "client-documents", // S3 - CLIENT DOCUMENTS (UI-only placeholder card)
@@ -1507,7 +1509,7 @@ const TestInputDashboard: React.FC = () => {
 
         {/* Sections */}
         <div className="space-y-2">
-          {[...allSections, "client-documents"]
+          {["firm-identity", ...allSections, "client-documents"]
             .filter((sectionId) => !hiddenSections.includes(sectionId))
             .sort((a, b) => {
               const indexA = sectionDisplayOrder.indexOf(a);
@@ -1521,6 +1523,12 @@ const TestInputDashboard: React.FC = () => {
               return 0;
             })
             .map((sectionId) => {
+              // S0 — Firm & Appraiser Identity: the firm's own identity fields (set once, reused on
+              // every job), built to the Ben-approved mockup. Bespoke component (like Client
+              // Documents below), not a registry section. Proposed first; Ben rules name/position.
+              if (sectionId === "firm-identity") {
+                return <FirmIdentityTab key="firm-identity" />;
+              }
               // S3 — Client Documents: the job's SharePoint folder buckets (list + drag-drop
               // upload) via the server-side job-folder-docs edge function. The dashboard wrapper
               // resolves the job (currentJobId from a Create-Report entry, or a standalone picker).

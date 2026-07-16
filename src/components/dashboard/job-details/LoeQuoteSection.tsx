@@ -2490,7 +2490,11 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         {/* 11. Property Information Request */}
         <SectionGroup title="Property Information Request">
           <TwoColumnFields>
-            <CompactField label="Client Documents">
+            {/* Label is "Documents to Request", NOT "Client Documents" (Item 6, 2026-07-15). The old
+                label collided with the "Client Documents" heading on the document-organizer panel
+                above — same two words for two different things. The field KEY stays clientDocuments
+                (the save/sync path is unchanged); only the on-screen label moved. */}
+            <CompactField label="Documents to Request">
               {/* Registry ListClientDocuments (field-registry-v6.html:948) — Select multiple. Options verbatim (11). */}
               <MultiSelect
                 value={(jobDetails as any).clientDocuments || ''}

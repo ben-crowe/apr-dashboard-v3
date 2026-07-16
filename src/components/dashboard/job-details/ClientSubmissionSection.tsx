@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { SectionProps } from "./types";
 import { supabase } from "@/integrations/supabase/client";
 import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, SectionGroup, TwoColumnFields, CompactField, FieldSyncStatus } from "./ValcreStyles";
+import { ContractBoundChip } from "./ContractBoundChip";
 import { sendToValcre } from "@/utils/webhooks/valcre";
 import { isValcreJobNumber } from "@/config/valcre";
 import {
@@ -459,37 +460,37 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         {/* Client Information Group */}
         <SectionGroup title="Client Information">
           <TwoColumnFields className="md:!grid-cols-[1fr_1fr] md:!max-w-[1100px] pr-8">
-            <CompactField label="First Name" status={fieldStates['clientFirstName']}>
+            <CompactField label="First Name" status={fieldStates['clientFirstName']} loeField="clientFirstName">
               <div className="relative">
                 <Input value={job.clientFirstName || ''} onChange={(e) => onUpdateJob?.({clientFirstName: e.target.value})} onBlur={(e) => handleBlur('clientFirstName', e.target.value)} placeholder="First name" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
-            <CompactField label="Last Name" status={fieldStates['clientLastName']}>
+            <CompactField label="Last Name" status={fieldStates['clientLastName']} loeField="clientLastName">
               <div className="relative">
                 <Input value={job.clientLastName || ''} onChange={(e) => onUpdateJob?.({clientLastName: e.target.value})} onBlur={(e) => handleBlur('clientLastName', e.target.value)} placeholder="Last name" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
-            <CompactField label="Title" status={fieldStates['clientTitle']}>
+            <CompactField label="Title" status={fieldStates['clientTitle']} loeField="clientTitle">
               <div className="relative">
                 <Input value={job.clientTitle || ''} onChange={(e) => onUpdateJob?.({clientTitle: e.target.value})} onBlur={(e) => handleBlur('clientTitle', e.target.value)} placeholder="Title" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
-            <CompactField label="Organization" status={fieldStates['clientOrganization']}>
+            <CompactField label="Organization" status={fieldStates['clientOrganization']} loeField="clientOrganization">
               <div className="relative">
                 <Input value={job.clientOrganization || ''} onChange={(e) => onUpdateJob?.({clientOrganization: e.target.value})} onBlur={(e) => handleBlur('clientOrganization', e.target.value)} placeholder="Organization" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
-            <CompactField label="Phone" status={fieldStates['clientPhone']}>
+            <CompactField label="Phone" status={fieldStates['clientPhone']} loeField="clientPhone">
               <div className="relative">
                 <Input type="tel" value={job.clientPhone ? formatPhoneNumber(job.clientPhone) : ''} onChange={(e) => { const numbersOnly = e.target.value.replace(/\D/g, ''); onUpdateJob?.({clientPhone: numbersOnly}); }} onBlur={(e) => handleBlur('clientPhone', e.target.value.replace(/\D/g, ''))} placeholder="Phone" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
-            <CompactField label="Email" status={fieldStates['clientEmail']}>
+            <CompactField label="Email" status={fieldStates['clientEmail']} loeField="clientEmail">
               <div className="relative">
                 <Input value={job.clientEmail || ''} onChange={(e) => onUpdateJob?.({clientEmail: e.target.value})} onBlur={(e) => handleBlur('clientEmail', e.target.value)} placeholder="Email" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
@@ -499,7 +500,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
           {/* Address — four parts (Street / City / Province / Postal) → Valcre AddressStreet/AddressCity/AddressState/AddressPostalCode */}
           <div className="mt-4 mb-5">
             <TwoColumnFields>
-              <CompactField label="Street Address" status={fieldStates['clientAddress']}>
+              <CompactField label="Street Address" status={fieldStates['clientAddress']} loeField="clientAddress">
                 <Input
                   value={job.clientAddress || ''}
                   onChange={(e) => onUpdateJob?.({clientAddress: e.target.value})}
@@ -548,7 +549,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
-            <CompactField label="Property Type" status={fieldStates['propertyType']}>
+            <CompactField label="Property Type" status={fieldStates['propertyType']} loeField="propertyType">
               <Select
                 value={job.propertyType?.split(',')[0]?.trim() || ''}
                 onValueChange={(value) => {
@@ -634,7 +635,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
           {/* Address — four parts (Street / City / Province / Postal) → Valcre Property AddressStreet/AddressCity/AddressState/AddressPostalCode */}
           <div className="mt-4 mb-5">
             <TwoColumnFields>
-              <CompactField label="Street Address" status={fieldStates['propertyAddress']}>
+              <CompactField label="Street Address" status={fieldStates['propertyAddress']} loeField="propertyAddress">
                 <Input
                   value={job.propertyAddress || ''}
                   onChange={(e) => onUpdateJob?.({propertyAddress: e.target.value})}
@@ -674,7 +675,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
           </div>
           {/* Three selects — use same TwoColumnFields grid so edges align */}
           <TwoColumnFields className="md:!grid-cols-[1fr_1fr] md:!max-w-[1100px] pr-8">
-            <CompactField label="Authorized Use">
+            <CompactField label="Authorized Use" loeField="intendedUse">
               <Select
                 value={job.intendedUse || ''}
                 onValueChange={(value) => {
@@ -710,7 +711,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 </SelectContent>
               </Select>
             </CompactField>
-            <CompactField label="Valuation Premises">
+            <CompactField label="Valuation Premises" loeField="valuationPremises">
               <Select
                 value={job.valuationPremises || ''}
                 onValueChange={(value) => {
@@ -788,7 +789,10 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         </SectionGroup>
 
         {/* Client Comments Section */}
-        <SectionGroup title="Client Comments">
+        {/* Item 8 — job.notes flows into the LOE (DocuSeal `notes` field, specialInstructions||notes),
+            so the group carries the "in LOE" chip. It's a free-text group, not a CompactField, so the
+            chip rides the group title. */}
+        <SectionGroup title={<span className="inline-flex items-center gap-2">Client Comments<ContractBoundChip field="notes" /></span>}>
           <div className="ml-8">
             <Textarea
               value={job.notes || ''}

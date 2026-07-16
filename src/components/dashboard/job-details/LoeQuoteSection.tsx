@@ -1956,7 +1956,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         {/* 1. Job Info */}
         <SectionGroup title="Job Info">
           <TwoColumnFields>
-            <CompactField label="Job Number">
+            <CompactField label="Job Number" loeField="jobNumber">
               <Input
                 value={jobDetails?.jobNumber || ''}
                 readOnly
@@ -2081,7 +2081,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   'Computed from Status of Improvements + your Authorized Use (from Section 1).');
               })()}
             </CompactField>
-            <CompactField label="Property Rights" status={fieldStates['propertyRightsAppraised']}>
+            <CompactField label="Property Rights" status={fieldStates['propertyRightsAppraised']} loeField="propertyRightsAppraised">
               {/* Source-driven (yellow) from Type / Subtype / Tenancy — maps in only when "Insert from
                   data" is on, exactly like the mock; otherwise reads "from Tenancy (1.11)". */}
               {(() => {
@@ -2162,7 +2162,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         {/* 5. Scope of Work */}
         <SectionGroup title="Scope of Work">
           <TwoColumnFields>
-            <CompactField label="Scope of Work">
+            <CompactField label="Scope of Work" loeField="scopeOfWork">
               <MultiSelect
                 value={(jobDetails as any).scopeOfWork || ''}
                 onChange={values => handleMultiSelectChange(values, 'scopeOfWork')}
@@ -2190,7 +2190,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         {/* 6. Report Type & Assignment Type */}
         <SectionGroup title="Report Type & Assignment Type">
           <TwoColumnFields>
-            <CompactField label="Report Type">
+            <CompactField label="Report Type" loeField="reportType">
               <Select value={jobDetails.reportType || ''} onValueChange={value => handleSelectChange(value, 'reportType')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
@@ -2262,7 +2262,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         {/* 7. Fees & Terms */}
         <SectionGroup title="Fees & Terms">
           <TwoColumnFields>
-            <CompactField label="Appraisal Fee">
+            <CompactField label="Appraisal Fee" loeField="appraisalFee">
               <Input
                 type="text"
                 name="appraisalFee"
@@ -2281,6 +2281,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   payment up front) only applies to the occasional large job. Otherwise leave at 0.
                 </FieldInfo>
               }
+              loeField="retainerAmount"
             >
               <Input
                 type="text"

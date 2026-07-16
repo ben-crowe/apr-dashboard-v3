@@ -34,6 +34,7 @@
   .t-green{background:var(--green-bg);color:var(--green-tx);}
   .t-amber{background:var(--amber-bg);color:var(--amber-tx);}
   .t-zinc{background:var(--zinc-bg);color:var(--zinc-tx);}
+  .opts{display:block;font-size:10.5px;color:var(--text-2);margin-top:3px;line-height:1.6;background:#fafafa;border:1px solid var(--border);border-radius:5px;padding:3px 7px;}
   .regok{color:var(--green-tx);font-weight:700;}
   .regq{color:var(--amber-tx);font-weight:700;}
   .regcount{font-size:12px;color:var(--text-2);margin:-6px 0 14px;}
@@ -52,15 +53,15 @@
 
   <h2>S1 — Client Intake</h2>
   <div class="h2sub">V3-origin client + property + contact fields, then the extras that only exist on V4.</div>
-  <table><thead><tr><th style="width:5%">Reg</th><th style="width:28%">Current field on V4 test page</th><th style="width:31%">V3 field it maps to</th><th style="width:20%">Status</th><th style="width:18%">Action</th></tr></thead><tbody id="s1"></tbody></table>
+  <table><thead><tr><th style="width:5%">Reg</th><th style="width:28%">V3 field (source)</th><th style="width:31%">V4 field it maps into</th><th style="width:20%">Status</th><th style="width:18%">Action</th></tr></thead><tbody id="s1"></tbody></table>
 
   <h2>S2 — LOE Prep</h2>
   <div class="h2sub">The V3 LOE quote fields that map in, then the V4-only report-builder fields (intentional — for the 79-page report, not conflicts).</div>
-  <table><thead><tr><th style="width:5%">Reg</th><th style="width:28%">Current field on V4 test page</th><th style="width:31%">V3 field it maps to</th><th style="width:20%">Status</th><th style="width:18%">Action</th></tr></thead><tbody id="s2"></tbody></table>
+  <table><thead><tr><th style="width:5%">Reg</th><th style="width:28%">V3 field (source)</th><th style="width:31%">V4 field it maps into</th><th style="width:20%">Status</th><th style="width:18%">Action</th></tr></thead><tbody id="s2"></tbody></table>
 
   <h2>Admin — User Settings (appraiser + firm)</h2>
   <div class="h2sub">Ben's call (2026-07-16): these are NOT job-mapped fields — the appraiser is the app's user, and the app owner prefills this profile once; it auto-fills into every job. Destination: a user-settings area — possibly its own tab on the field-testing page (/test-input) — to be built. Moved here out of S1/S2 so the mapping tables stay per-job only. Note: firm details exist TWICE in the registry (appraiser-* and company-* ids, same labels) — duplication to reconcile when the settings area is built.</div>
-  <table><thead><tr><th style="width:5%">Reg</th><th style="width:28%">Field (settings-managed)</th><th style="width:31%">V3 field it maps to</th><th style="width:20%">Status</th><th style="width:18%">Action</th></tr></thead><tbody id="s3"></tbody></table>
+  <table><thead><tr><th style="width:5%">Reg</th><th style="width:28%">V3 field (source)</th><th style="width:31%">V4 field (settings-managed)</th><th style="width:20%">Status</th><th style="width:18%">Action</th></tr></thead><tbody id="s3"></tbody></table>
 
   <div class="foot">
     Sources: fieldRegistry.ts (client-intake + loe-prep sections) · useLoadJobIntoReport.ts (V3→report bridge) · v3OriginFields.ts (authoritative V3-origin id list). Labels reflect live code on branch ops-canvas. Next: V3 dashboard Building-Information-and-below verified against the registry (second table).
@@ -172,12 +173,15 @@ const S3=[
  ['Company Email','company-email','—','z','Settings-managed — app owner prefills'],
  ['Company Website','company-website','—','z','Settings-managed — app owner prefills'],
 ];
+const OPTS={"tenancy": ["Multi-Tenant", "Owner Occupied", "Partial Owner Occupied", "Single-Tenant", "Unkown", "Vacant"], "transaction-status": ["Not Applicable", "Listed", "Under Contract"], "property-name": ["Agriculture", "Building", "Healthcare", "Hotel", "Industrial", "Land", "Manufactured Housing", "Multifamily", "Office", "Retail", "Self-Storage", "Single-Family", "Seniors", "Special Purpose", "Unknown", "Other"], "authorized-use": ["First Mortgage Financing", "Financial Reporting", "Insurance", "Internal Decision-Making", "Acquisition-Disposition", "Estate Planning", "Litigation", "GST"], "appraiser-role": ["Primary Appraiser", "Co-Appraiser", "Review Appraiser"], "assignment-type": ["Single Property", "Multiple Properties"], "client-salutation": ["Agriculture", "Building", "Healthcare", "Hotel", "Industrial", "Land", "Manufactured Housing", "Multifamily", "Office", "Retail", "Self-Storage", "Single-Family", "Seniors", "Special Purpose", "Unknown", "Other"], "asset-condition": ["Excellent", "Very Good", "Good", "Fair", "Poor"], "retainer-amount": ["Comprehensive", "Summary", "Restricted", "Form", "Letter"], "report-compliance": ["As Is", "As Stabilized", "As Complete", "As Proposed"], "report-purpose": ["As Is", "As Stabilized", "As Complete", "As Proposed"], "valuation-premises": ["Market Value", "Market Rent", "Investment Value", "Insurable Value", "Liquidation Value"], "job-number": ["Comprehensive", "Summary", "Restricted", "Form", "Letter"], "valuation-type": ["Current", "Retrospective", "Prospective"], "property-type": ["Agriculture", "Building", "Healthcare", "Hotel", "Industrial", "Land", "Manufactured Housing", "Multifamily", "Office", "Retail", "Self-Storage", "Single-Family", "Seniors", "Special Purpose", "Unknown", "Other"], "appraisal-fee": ["Comprehensive", "Summary", "Restricted", "Form", "Letter"], "status-of-improvements": ["Improved - Completed", "Improved - Renovated", "Improved - Under Renovation", "Improved - Proposed Renovation", "Proposed - Vacant Land", "Proposed - Improved Land (Demolition Required)", "Proposed - Under Construction"], "payment-terms": ["Comprehensive", "Summary", "Restricted", "Form", "Letter"], "zoning-status": ["In Place", "To Be Rezoned"], "cmhc-financing": ["Yes", "No"], "appraiser-license-expiry": ["Primary Appraiser", "Co-Appraiser", "Review Appraiser"], "property-address": ["Agriculture", "Building", "Healthcare", "Hotel", "Industrial", "Land", "Manufactured Housing", "Multifamily", "Office", "Retail", "Self-Storage", "Single-Family", "Seniors", "Special Purpose", "Unknown", "Other"], "property-subtype": ["Low-Rise", "Mid-Rise", "High-Rise", "Garden", "Walk-Up", "Townhouse", "Mixed-Use"], "interest-appraised": ["Fee Simple Estate", "Leased Fee Estate", "Leasehold Interest"], "report-scope": ["As Is", "As Stabilized", "As Complete", "As Proposed"], "delivery-date": ["Comprehensive", "Summary", "Restricted", "Form", "Letter"], "report-type": ["Comprehensive", "Summary", "Restricted", "Form", "Letter"]};
 const cls={g:'green',a:'amber',z:'zinc'};
 const tag={g:'<span class="tag t-green">Wired</span>',a:'<span class="tag t-amber">V3 · not wired</span>',z:'<span class="tag t-zinc">Extra / V4-only</span>'};
 function fill(id,rows){
   document.getElementById(id).innerHTML=rows.map(r=>
-    '<tr class="'+cls[r[3]]+'"><td style="text-align:center">'+(REG.has(r[1])?'<span class="regok">✓</span>':'<span class="regq">?</span>')+'</td><td><span class="lab">'+r[0]+'</span><span class="id">'+r[1]+'</span></td>'+
-    '<td class="src">'+r[2]+'</td><td>'+tag[r[3]]+'</td><td class="rev">'+r[4]+'</td></tr>').join('');
+    '<tr class="'+cls[r[3]]+'"><td style="text-align:center">'+(REG.has(r[1])?'<span class="regok">✓</span>':'<span class="regq">?</span>')+'</td>'+
+    '<td class="src">'+r[2]+'</td>'+
+    '<td><span class="lab">'+r[0]+'</span><span class="id">'+r[1]+'</span>'+(OPTS[r[1]]?'<span class="opts">▾ '+OPTS[r[1]].join(' · ')+'</span>':'')+'</td>'+
+    '<td>'+tag[r[3]]+'</td><td class="rev">'+(r[4]==='Matches V3'?'':r[4])+'</td></tr>').join('');
 }
 fill('s1',S1); fill('s2',S2); fill('s3',S3);
 const all=[...S1,...S2,...S3];

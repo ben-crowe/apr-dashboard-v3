@@ -94,7 +94,7 @@ const S1=[
  ['Client City','client-city','Client City','g','Matches V3'],
  ['Client Province','client-province','Client Province','g','Matches V3'],
  ['Postal Code','client-postal','Postal Code','g','Matches V3'],
- ['Client Full Name','client-full-name','computed from First + Last','g','Computed — keep'],
+ ['Client Full Name','client-full-name','','g','Computed — First + Last'],
  ['Property Name','property-name','Property Name','g','Matches V3'],
  ['Property Address','property-address','Property Address','g','Matches V3'],
  ['Property Type','property-type','Property Type','g','Matches V3'],
@@ -104,7 +104,7 @@ const S1=[
  ['Contact Last Name','contact-last-name','property_contact_last_name','g','Matches V3'],
  ['Contact Email','contact-email','property_contact_email','g','Matches V3'],
  ['Contact Phone','contact-phone','property_contact_phone','g','Matches V3'],
- ['Contact Full Name','contact-full-name','computed from Contact First + Last','g','Computed — keep'],
+ ['Contact Full Name','contact-full-name','','g','Computed — Contact First + Last'],
  ['Client Title','client-title','Client Title','a','V3 field — bridge not wired'],
  ['Valuation Premises','valuation-premises','Valuation Premises','a','V3 field — bridge not wired'],
  ['Asset Condition','asset-condition','Asset Condition','a','V3 field — bridge not wired'],
@@ -200,7 +200,7 @@ function fill(id,rows){
   document.getElementById(id).innerHTML=rows.map(r=>
     '<tr class="'+cls[r[3]]+'" data-s="'+r[3]+'" data-valta="'+(VALTA[r[1]]?1:0)+'"><td style="text-align:center">'+(REG.has(r[1])?'<span class="regok">✓</span>':'<span class="regq">?</span>')+'</td>'+
     '<td style="text-align:right;color:var(--text-3);font-size:11px">'+(NUM[r[1]]||'—')+'</td>'+
-    '<td class="src">'+(function(){if(!V3ID[r[1]]&&(!r[2]||r[2]==='—'))return '—';const lbl=(r[2]&&/^[A-Z]/.test(r[2]))?r[2]:r[0];const id3=V3ID[r[1]]?V3ID[r[1]].replace(/_/g,'-'):null;return '<span class="lab">'+lbl+'</span>'+(id3?'<span class="id">'+id3+'</span>':'')+((r[2]&&!/^[A-Z]/.test(r[2])&&r[2]!=='—')?'<span class="fnote">'+r[2]+'</span>':'');})()+'</td>'+
+    '<td class="src">'+(function(){if(!V3ID[r[1]]&&(!r[2]||r[2]==='—'))return '—';const lbl=(r[2]&&/^[A-Z]/.test(r[2]))?r[2]:r[0];const id3=V3ID[r[1]]?V3ID[r[1]].replace(/_/g,'-'):null;return '<span class="lab">'+lbl+'</span>'+(id3?'<span class="id">'+id3+(id3!==r[1]?' <b style="color:var(--amber-tx)">≠</b>':'')+'</span>':'')+((r[2]&&!/^[A-Z]/.test(r[2])&&r[2]!=='—')?'<span class="fnote">'+r[2]+'</span>':'');})()+'</td>'+
     '<td><span class="lab">'+r[0]+'</span><span class="id">'+r[1]+'</span>'+(OPTS[r[1]]?'<span class="opts">'+OPTS[r[1]].map(o=>'<span class="opt">'+o+'</span>').join('')+'</span>':'')+'</td>'+
     '<td class="src">'+(VALTA[r[1]]?VALTA[r[1]].l+'<span class="id">'+VALTA[r[1]].n+'</span>':'—')+'</td>'+
     '<td class="src">'+(VALCRE[r[1]]?'<span class="id" style="margin-top:0">'+VALCRE[r[1]]+'</span>':'—')+'</td>'+

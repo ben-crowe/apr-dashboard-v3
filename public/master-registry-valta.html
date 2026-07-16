@@ -495,6 +495,43 @@
   .in-field-picker-item { padding: 4px 8px; font-size: 11px; color: var(--text-2); cursor: pointer; border-radius: calc(var(--radius) - 4px); }
   .in-field-picker-item:hover { background: var(--hover); color: var(--text); }
   .in-field-picker-item .fn { font-weight: 600; color: var(--text); font-family: 'SF Mono','Consolas',monospace; font-size: 10px; margin-right: 6px; }
+
+  /* ═══ V3 ↔ V4 Crosswalk — merged from prototype s-tab-crosswalk.html (scoped under .cx) ═══ */
+  .cx { --cx-green:#22c55e;--cx-amber:#d97706;--cx-zinc:#a1a1aa;
+    --cx-green-bg:#dcfce7;--cx-amber-bg:#fef3c7;--cx-zinc-bg:#e4e4e7;
+    --cx-green-tx:#166534;--cx-amber-tx:#92400e;--cx-zinc-tx:#3f3f46; }
+  .cx .cx-intro { font-size:12.5px;color:var(--text-3);margin-bottom:12px;line-height:1.5; }
+  .cx .legend { display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--text-2);margin:10px 0 14px; }
+  .cx .legend span { display:inline-flex;align-items:center;gap:6px; }
+  .cx .dot { width:10px;height:10px;border-radius:3px;display:inline-block; }
+  .cx .d-green { background:var(--cx-green); } .cx .d-amber { background:var(--cx-amber); } .cx .d-zinc { background:var(--cx-zinc); }
+  .cx h3 { font-size:13px;font-weight:700;margin:22px 0 4px; }
+  .cx .h3sub { font-size:11.5px;color:var(--text-2);margin-bottom:10px; }
+  .cx table { width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.05);margin-bottom:8px; }
+  .cx th { font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-3);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);font-weight:600;background:#fafafa; }
+  .cx td { padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top;font-size:13px; }
+  .cx tr:last-child td { border-bottom:none; }
+  .cx .lab { font-weight:700;color:var(--text); }
+  .cx .id { font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--text-3);display:block;margin-top:1px; }
+  .cx .src { color:var(--text-2); }
+  .cx .rev { font-size:12.5px; }
+  .cx tr.green { background:linear-gradient(90deg,rgba(34,197,94,.05),transparent); }
+  .cx tr.amber { background:linear-gradient(90deg,rgba(217,119,6,.06),transparent); }
+  .cx tr.zinc { background:linear-gradient(90deg,rgba(161,161,170,.07),transparent); }
+  .cx .tag { display:inline-block;font:600 10px/1 system-ui;padding:3px 8px;border-radius:999px;white-space:nowrap; }
+  .cx .t-green { background:var(--cx-green-bg);color:var(--cx-green-tx); }
+  .cx .t-amber { background:var(--cx-amber-bg);color:var(--cx-amber-tx); }
+  .cx .t-zinc { background:var(--cx-zinc-bg);color:var(--cx-zinc-tx); }
+  .cx .opts { display:block;margin-top:3px;padding-left:14px; }
+  .cx .opt { display:block;font-size:11px;color:var(--text-3);line-height:1.65; }
+  .cx .ftype { font-size:12px;color:var(--text-2); }
+  .cx .fnote { display:block;font-size:10.5px;color:var(--text-3);margin-top:2px; }
+  .cx .regok { color:var(--cx-green-tx);font-weight:700; }
+  .cx .regq { color:var(--cx-amber-tx);font-weight:700; }
+  .cx .fbar { margin:2px 0 16px;display:flex;gap:6px;flex-wrap:wrap; }
+  .cx .fb { font:600 11px system-ui;padding:5px 12px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--text-2);cursor:pointer; }
+  .cx .fb.on { background:#18181b;color:#fff;border-color:#18181b; }
+  .cx .regcount { font-size:12px;color:var(--text-2);margin:-6px 0 14px; }
 </style>
 </head>
 <body>
@@ -901,6 +938,40 @@ E  Authorized Use          ──┘</div>
 
 <!-- ═══ FIELD INDEX ═══ -->
 <div class="panel active" id="panel-index">
+
+<!-- ═══ V3 ↔ V4 FIELD CROSSWALK — merged from prototype public/s-tab-crosswalk.html (byte-unchanged source; hand-copied constants) ═══ -->
+<div class="sec cx" id="crosswalkSec" style="cursor:default;">
+  <div class="sec-title" style="cursor:default;">V3 ↔ V4 Field Crosswalk</div>
+  <div class="sec-body" style="display:block;">
+    <div class="cx-intro">Left of each row = the field as it is on the V4 report-builder. The V3 column is the intake/job field that maps into it (source of truth). Amber <b style="color:var(--cx-amber-tx)">≠</b> marks where the V3 field id differs from the V4 id. No names are changed by this view — it is a verification crosswalk.</div>
+    <div class="legend">
+      <span><i class="dot d-green"></i> Maps from V3 &amp; carries through (wired)</span>
+      <span><i class="dot d-amber"></i> Is a V3 field but bridge not wired yet</span>
+      <span><i class="dot d-zinc"></i> V4-only — no V3 field feeds it</span>
+      <span><b class="regok">✓</b> id exists in fieldRegistry.ts &nbsp;·&nbsp; <b class="regq">?</b> not found as a single id (checked 2026-07-16)</span>
+    </div>
+    <div class="regcount" id="cxRegcount"></div>
+    <div class="fbar">
+      <button class="fb on" data-f="all">All</button>
+      <button class="fb" data-f="v4">V4 (all V4 fields)</button>
+      <button class="fb" data-f="v3">V3 (mapped only)</button>
+      <button class="fb" data-f="g">Wired</button>
+      <button class="fb" data-f="a">Not wired</button>
+      <button class="fb" data-f="z">V4-only / settings</button>
+      <button class="fb" data-f="valta">Valta-matched</button>
+    </div>
+    <h3>S1 — Client Intake</h3>
+    <div class="h3sub">V3-origin client + property + contact fields, then the extras that only exist on V4.</div>
+    <div style="overflow-x:auto;"><table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:20%">V3 field</th><th style="width:27%">V4 field</th><th style="width:14%">Valta (client)</th><th style="width:13%">Valcre</th><th style="width:11%">Status</th><th style="width:13%">Field Type</th></tr></thead><tbody id="cxS1"></tbody></table></div>
+    <h3>S2 — LOE Prep</h3>
+    <div class="h3sub">The V3 LOE quote fields that map in, then the V4-only report-builder fields (intentional — for the report, not conflicts).</div>
+    <div style="overflow-x:auto;"><table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:20%">V3 field</th><th style="width:27%">V4 field</th><th style="width:14%">Valta (client)</th><th style="width:13%">Valcre</th><th style="width:11%">Status</th><th style="width:13%">Field Type</th></tr></thead><tbody id="cxS2"></tbody></table></div>
+    <h3>Admin — User Settings (appraiser + firm)</h3>
+    <div class="h3sub">Settings-managed profile fields — the appraiser is the app's user; the app owner prefills this once and it auto-fills into every job. Not job-mapped, so no V3 side.</div>
+    <div style="overflow-x:auto;"><table><thead><tr><th style="width:5%">Reg</th><th style="width:4%">#</th><th style="width:20%">V3 field</th><th style="width:27%">V4 field (settings-managed)</th><th style="width:14%">Valta (client)</th><th style="width:13%">Valcre</th><th style="width:11%">Status</th><th style="width:13%">Field Type</th></tr></thead><tbody id="cxS3"></tbody></table></div>
+  </div>
+</div>
+
 <div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<div style="display:flex;align-items:center;gap:0;margin-left:auto;"><button class="btn btn-ghost" id="auditBtn" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="event.stopPropagation();toggleAuditView()">Audit</button><span class="tip-wrap"><span class="expand-btn" onclick="toggleFullWidth(event)">⋮⋮</span><span class="tip">Expand</span></span><!-- + New Field / ⚙ Manage Columns retired: both were built for the old 11-column layout (insertAddRow/applyColState hardcode that column shape) and are not cleanly adaptable to the new 6-column Our-Dashboard/Valta/Valcre/Maps/Control layout — hidden rather than left broken, per restructure spec. --></div></div><div class="sec-body">
   <!-- Top row: multi-select filter chips + search (registry-mock.html layout) -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
@@ -4405,6 +4476,151 @@ function toggleFullWidth(e) {
   function paint(){ var t=document.getElementById("mrv67"), tb=document.getElementById("fiBody"); if(t&&tb){ tb.innerHTML=t.innerHTML; filt(); } }
   window.renderFields=paint; window.applyFilters=filt; window.filterFields=filt; window.sortFields=function(){}; window.toggleChip=function(){filt();};
   document.addEventListener("DOMContentLoaded", paint); paint();
+})();
+</script>
+<!-- ═══ V3 ↔ V4 Crosswalk data + render — hand-copied from prototype public/s-tab-crosswalk.html JS constants (no XLSX re-scrape); IIFE-scoped so no globals leak ═══ -->
+<script>
+(function(){
+// [v4 label, v4 id, v3 source field, status, action]
+const S1=[
+ ['Client First Name','client-first-name','Client First Name','g','Matches V3'],
+ ['Client Last Name','client-last-name','Client Last Name','g','Matches V3'],
+ ['Client Email','client-email','Client Email','g','Matches V3'],
+ ['Client Phone','client-phone','Client Phone','g','Matches V3'],
+ ['Company Name','client-company-name','Company Name','g','Matches V3 — dup collapsed'],
+ ['Street Address','client-organization-address','Street Address','g','Matches V3'],
+ ['Client City','client-city','Client City','g','Matches V3'],
+ ['Client Province','client-province','Client Province','g','Matches V3'],
+ ['Postal Code','client-postal','Postal Code','g','Matches V3'],
+ ['Client Full Name','client-full-name','','g','Computed — First + Last'],
+ ['Property Name','property-name','Property Name','g','Matches V3'],
+ ['Property Address','property-address','Property Address','g','Matches V3'],
+ ['Property Type','property-type','Property Type','g','Matches V3'],
+ ['Authorized Use','authorized-use','Intended Use','g','Dropdown — maps'],
+ ['Tenancy','tenancy','Tenancy','g','Matches V3'],
+ ['Contact First Name/Department','contact-first-name','property_contact_first_name','g','Matches V3'],
+ ['Contact Last Name','contact-last-name','property_contact_last_name','g','Matches V3'],
+ ['Contact Email','contact-email','property_contact_email','g','Matches V3'],
+ ['Contact Phone','contact-phone','property_contact_phone','g','Matches V3'],
+ ['Contact Full Name','contact-full-name','','g','Computed — Contact First + Last'],
+ ['Client Title','client-title','Client Title','a','V3 field — bridge not wired'],
+ ['Valuation Premises','valuation-premises','Valuation Premises','a','V3 field — bridge not wired'],
+ ['Asset Condition','asset-condition','Asset Condition','a','V3 field — bridge not wired'],
+ ['Property City','property-city','Property City','a','V3 field — bridge not wired'],
+ ['Property Province','property-province','Property Province','a','V3 field — bridge not wired'],
+ ['Property Postal Code','property-postal','Property Postal','a','V3 field — bridge not wired'],
+ ['Property Subtype','property-subtype','Property Subtype','a','V3 field — bridge not wired'],
+ ['Additional Information','intake-notes','Additional Information','a','V3 field — bridge not wired'],
+ ['Client Name','client-name','—','z','Extra — V4 alias, not on V3'],
+ ['Client Attention Line','client-attention','—','z','Extra — not on V3'],
+ ['Client Salutation','client-salutation','—','z','Extra — not on V3'],
+ ['Client Job Number','company-jobnumber','—','z','Extra — not on V3'],
+];
+const S2=[
+ ['Report Type','report-type','Report Type','g','Matches V3'],
+ ['Property Rights Appraised','interest-appraised','Property Rights Appraised','g','Matches V3'],
+ ['Valcre Job ID (VAL#)','job-number','Valcre Job #','g','Matches V3'],
+ ['Scope of Work','scope-of-work','Scope of Work','g','Matches V3'],
+ ['Status of Improvements','status-of-improvements','Status of Improvements','g','Now mapped (FIX-4)'],
+ ['Delivery Date','delivery-date','Delivery Date','a','V3 field — bridge not wired'],
+ ['Appraisal Fee','appraisal-fee','Appraisal Fee','a','V3 field — bridge not wired'],
+ ['Retainer Amount','retainer-amount','Retainer Amount','a','V3 field — bridge not wired'],
+ ['Payment Terms','payment-terms','Payment Terms','a','V3 field — bridge not wired'],
+ ['Appraiser Comments','appraiser-comments','Appraiser Comments','a','V3 field — bridge not wired'],
+ ['Assignment Type','assignment-type','ON the V3 job page — NOT in v3OriginFields.ts','a','Wiring gap — bridge + verify'],
+ ['Transaction Status','transaction-status','ON the V3 job page — NOT in v3OriginFields.ts','a','Wiring gap — bridge + verify'],
+ ['Zoning Status','zoning-status','ON the V3 job page — NOT in v3OriginFields.ts','a','Wiring gap — bridge + verify'],
+ ['CMHC Financing','cmhc-financing','ON the V3 job page — NOT in v3OriginFields.ts','a','Wiring gap — bridge + verify'],
+ ['Valuation Type','valuation-type','ON the V3 job page — NOT in v3OriginFields.ts','a','Wiring gap — bridge + verify'],
+ ['Compliance Standard','report-compliance','—','z','V4-only report boilerplate'],
+ ['Date of Report','report-date','—','z','V4-only report boilerplate — DUP pair (report-date / report-date1)'],
+ ['Report Date','report-date1','—','z','V4-only report boilerplate — DUP pair (report-date / report-date1)'],
+ ['Date of Inspection','report-dateinspection','—','z','V4-only report boilerplate — DUP pair (inspection date x2)'],
+ ['Effective Date','report-effectivedate','—','z','V4-only report boilerplate'],
+ ['Extraordinary Assumptions','report-extraordinary','—','z','V4-only report boilerplate'],
+ ['Hypothetical Conditions','report-hypothetical','—','z','V4-only report boilerplate'],
+ ['Inspection Date','report-inspectiondate','—','z','V4-only report boilerplate — DUP pair (inspection date x2)'],
+ ['Intended Use','report-intendeduse','—','z','V4-only report boilerplate'],
+ ['Intended User','report-intendeduser','—','z','V4-only report boilerplate'],
+ ['Interest Appraised','report-interest','—','z','V4-only report boilerplate'],
+ ['Legal Description','report-legal','—','z','V4-only report boilerplate'],
+ ['Limiting Conditions','report-limcond','—','z','V4-only report boilerplate'],
+ ['Purpose','report-purpose','—','z','V4-only report boilerplate'],
+ ['Scope of Work','report-scope','—','z','V4-only report boilerplate'],
+ ['Report Type','report-type','—','z','V4-only report boilerplate'],
+ ['Valuation - Cost Approach','report-valuationcost','—','z','V4-only report boilerplate'],
+ ['Valuation - Income Approach','report-valuationincome','—','z','V4-only report boilerplate'],
+ ['Valuation - Sales Approach','report-valuationsales','—','z','V4-only report boilerplate'],
+ ['Final Value Conclusion','report-values','—','z','V4-only report boilerplate'],
+ ['Value Scenario 1','report-valuescenario1','—','z','V4-only report boilerplate'],
+];
+const REG=new Set(["appraisal-fee", "appraiser-address", "appraiser-aic", "appraiser-aic-number", "appraiser-bio-paragraph1", "appraiser-bio-paragraph2", "appraiser-city", "appraiser-comments", "appraiser-company", "appraiser-credentials", "appraiser-designation", "appraiser-email", "appraiser-headshot", "appraiser-license", "appraiser-license-expiry", "appraiser-name", "appraiser-name-credentials", "appraiser-phone", "appraiser-postal", "appraiser-province", "appraiser-rics", "appraiser-role", "appraiser-title", "appraiser-website", "asset-condition", "assignment-type", "authorized-use", "client-attention", "client-city", "client-company-name", "client-email", "client-first-name", "client-full-name", "client-last-name", "client-organization-address", "client-phone", "client-postal", "client-province", "client-salutation", "client-title", "cmhc-financing", "company-address", "company-city-state-zip", "company-email", "company-jobnumber", "company-name", "company-phone", "company-website", "contact-email", "contact-first-name", "contact-full-name", "contact-last-name", "contact-phone", "delivery-date", "intake-notes", "interest-appraised", "job-number", "payment-terms", "property-address", "property-city", "property-name", "property-postal", "property-province", "property-subtype", "property-type", "report-compliance", "report-date", "report-date1", "report-dateinspection", "report-effectivedate", "report-extraordinary", "report-hypothetical", "report-inspectiondate", "report-intendeduse", "report-intendeduser", "report-interest", "report-legal", "report-limcond", "report-purpose", "report-scope", "report-type", "report-valuationcost", "report-valuationincome", "report-valuationsales", "report-values", "report-valuescenario1", "retainer-amount", "scope-of-work", "status-of-improvements", "tenancy", "transaction-status", "valuation-premises", "valuation-type", "zoning-status"]);
+const S3=[
+ ['Company Address','appraiser-address','—','z','Settings-managed — app owner prefills'],
+ ['AIC Number','appraiser-aic','—','z','Settings-managed — app owner prefills'],
+ ['AIC Member Number','appraiser-aic-number','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Bio Paragraph 1','appraiser-bio-paragraph1','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Bio Paragraph 2','appraiser-bio-paragraph2','—','z','Settings-managed — app owner prefills'],
+ ['Company City','appraiser-city','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Comments','appraiser-comments','—','z','Settings-managed — app owner prefills'],
+ ['Company Name','appraiser-company','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Credentials','appraiser-credentials','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Designation','appraiser-designation','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Email','appraiser-email','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Headshot','appraiser-headshot','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser License','appraiser-license','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser License Expiry','appraiser-license-expiry','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Name','appraiser-name','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Name & Credentials','appraiser-name-credentials','—','z','Settings-managed — app owner prefills'],
+ ['Company Phone','appraiser-phone','—','z','Settings-managed — app owner prefills'],
+ ['Company Postal Code','appraiser-postal','—','z','Settings-managed — app owner prefills'],
+ ['Company Province','appraiser-province','—','z','Settings-managed — app owner prefills'],
+ ['RICS Membership Number','appraiser-rics','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Role','appraiser-role','—','z','Settings-managed — app owner prefills'],
+ ['Appraiser Title','appraiser-title','—','z','Settings-managed — app owner prefills'],
+ ['Company Website','appraiser-website','—','z','Settings-managed — app owner prefills'],
+ ['Company Name','company-name','—','z','Settings-managed — app owner prefills'],
+ ['Company Address','company-address','—','z','Settings-managed — app owner prefills'],
+ ['Company City/State/Zip','company-city-state-zip','—','z','Settings-managed — app owner prefills'],
+ ['Company Phone','company-phone','—','z','Settings-managed — app owner prefills'],
+ ['Company Email','company-email','—','z','Settings-managed — app owner prefills'],
+ ['Company Website','company-website','—','z','Settings-managed — app owner prefills'],
+];
+const VALCRE={"job-number": "Job.Number", "client-company-name": "Job.Client._DisplayName", "client-organization-address": "Contact.AddressStreet/City/State/PostalCode", "client-first-name": "Contact.FirstName", "client-last-name": "Contact.LastName", "client-title": "Contact.Title", "client-phone": "Contact.PhoneNumber", "client-email": "Contact.Email", "property-name": "Property.Name", "property-address": "Property.AddressStreet", "property-type": "Property.Type (single) + Property.Types (multi)", "property-subtype": "Property.SecondaryType", "tenancy": "CF12408", "interest-appraised": "CF12412", "authorized-use": "CF12413", "value-scenarios": "CF12414", "approaches-to-value": "CF12415", "report-type": "CF12417", "value-timeframe": "CF12419", "report-inspectiondate": "Job.InspectionDate", "appraisal-fee": "Job.Fee"};
+const VALTA={"job-number": {"n": "JobNumber", "l": "Job Number"}, "client-company-name": {"n": "ClientCompanyName", "l": "Client Company Name"}, "client-organization-address": {"n": "ClientOrganizationAddress", "l": "Client Organization Address"}, "client-first-name": {"n": "ClientFirstName", "l": "Client First Name"}, "client-last-name": {"n": "ClientLastName", "l": "Client Last Name"}, "client-title": {"n": "ClientTitle", "l": "Client Title"}, "client-phone": {"n": "ClientPhone", "l": "Client Phone"}, "client-email": {"n": "ClientEmail", "l": "Client Email"}, "property-name": {"n": "PropertyName", "l": "Property Name"}, "property-address": {"n": "PropertyAddress", "l": "Property Address"}, "property-type": {"n": "PropertyType", "l": "Property Type"}, "property-subtype": {"n": "PropertySubtype", "l": "Property Subtype"}, "tenancy": {"n": "Tenancy", "l": "Tenancy"}, "interest-appraised": {"n": "InterestAppraised", "l": "Interest Appraised (Property Rights)"}, "authorized-use": {"n": "AuthorizedUse", "l": "Authorized Use"}, "value-scenarios": {"n": "ValueScenarios", "l": "Value Scenarios"}, "approaches-to-value": {"n": "ApproachestoValue", "l": "Approaches to Value"}, "report-type": {"n": "ReportType", "l": "Report Type"}, "value-timeframe": {"n": "Valuetimeframe", "l": "Value Timeframe"}, "report-inspectiondate": {"n": "InspectionDate", "l": "Inspection Date"}, "appraisal-fee": {"n": "Fee", "l": "Fee"}, "contact-first-name": {"n": "ContactFirstName", "l": "Subject Property Contact — First Name"}, "contact-last-name": {"n": "ContactLastName", "l": "Subject Property Contact — Last Name"}, "contact-email": {"n": "ContactEmail", "l": "Subject Property Contact — Email"}, "contact-phone": {"n": "ContactPhone", "l": "Subject Property Contact — Phone"}};
+const NUM={"job-number": 1, "appraisal-status": 3, "subject-property-name": 4, "client-company-name": 5, "state-of-improvements": 7, "status-of-improvements": 8, "current-use-improvements": 9, "proposed-use-improvements": 10, "interest-appraised": 11, "authorized-use": 12, "value-scenarios": 13, "assignment-type": 15, "report-type": 16, "desktop-report": 17, "value-timeframe": 18, "report-inspectiondate": 19, "delivery-time": 21, "client-documents": 28, "previously-appraised": 29, "transaction-status": 30, "zoning-status": 31, "land-metric": 32, "cmhc-financing": 33, "value-scenario1": 34, "value-scenario2": 35, "value-scenario3": 36, "client-organization-address": 58, "client-first-name": 59, "client-last-name": 60, "client-title": 61, "client-phone": 62, "client-email": 63, "property-name": 64, "property-address": 65, "property-type": 66, "property-subtype": 67};
+const TYPES={"report-limcond": "textarea", "scope-of-work": "textarea", "report-values": "currency", "report-valuationincome": "currency", "contact-phone": "text", "report-extraordinary": "textarea", "contact-first-name": "text", "property-province": "text", "appraiser-city": "text", "report-date1": "date", "report-date": "date", "company-email": "text", "payment-terms": "text", "company-address": "text", "report-intendeduser": "text", "appraiser-bio-paragraph2": "textarea", "company-city-state-zip": "text", "report-dateinspection": "date", "company-jobnumber": "text", "property-address": "text", "appraiser-headshot": "image", "appraiser-license-expiry": "date", "appraiser-company": "text", "report-legal": "textarea", "appraiser-rics": "text", "job-number": "text", "appraiser-comments": "textarea", "appraiser-role": "dropdown", "report-hypothetical": "textarea", "report-scope": "textarea", "client-salutation": "text", "appraiser-license": "text", "report-valuescenario1": "currency", "appraiser-bio-paragraph1": "textarea", "status-of-improvements": "dropdown", "client-email": "text", "client-last-name": "text", "property-city": "text", "authorized-use": "dropdown", "assignment-type": "dropdown", "property-type": "dropdown", "client-postal": "text", "appraiser-aic-number": "text", "intake-notes": "textarea", "client-organization-address": "text", "client-title": "text", "report-compliance": "text", "contact-email": "text", "report-intendeduse": "textarea", "report-effectivedate": "date", "appraiser-designation": "text", "report-type": "dropdown", "client-company-name": "text", "zoning-status": "dropdown", "valuation-type": "dropdown", "appraiser-address": "text", "valuation-premises": "dropdown", "company-website": "text", "property-postal": "text", "client-province": "text", "client-first-name": "text", "report-inspectiondate": "date", "tenancy": "dropdown", "appraiser-aic": "text", "report-purpose": "textarea", "appraiser-postal": "text", "company-phone": "text", "cmhc-financing": "dropdown", "client-phone": "text", "client-name": "—", "client-city": "text", "appraiser-email": "text", "appraiser-phone": "text", "appraisal-fee": "currency", "appraiser-name": "text", "appraiser-website": "text", "property-subtype": "dropdown", "report-interest": "text", "appraiser-credentials": "text", "appraiser-title": "text", "report-valuationcost": "currency", "retainer-amount": "currency", "company-name": "text", "report-valuationsales": "currency", "contact-full-name": "text", "client-attention": "text", "appraiser-name-credentials": "text", "contact-last-name": "text", "interest-appraised": "dropdown", "transaction-status": "multi-select", "client-full-name": "text", "property-name": "text", "asset-condition": "dropdown", "delivery-date": "date", "appraiser-province": "text"};
+const V3ID=Object.assign({"client-first-name": "client_first_name", "client-last-name": "client_last_name", "client-email": "client_email", "client-phone": "client_phone", "client-company-name": "client_organization", "client-organization-address": "client_address", "client-city": "client_address", "client-province": "client_address", "client-postal": "client_address", "subject-street": "property_address", "authorized-use": "intended_use", "contact-first-name": "property_contact_first_name", "contact-last-name": "property_contact_last_name", "contact-phone": "property_contact_phone", "contact-email": "property_contact_email"},{"client-city":"client_city","client-province":"client_province","client-postal":"client_postal_code"});
+const OPTS={"assignment-type": ["Single Property", "Multiple Properties"], "valuation-premises": ["Market Value", "Market Rent", "Investment Value", "Insurable Value", "Liquidation Value"], "report-type": ["Comprehensive", "Summary", "Restricted", "Form", "Letter"], "authorized-use": ["First Mortgage Financing", "Financial Reporting", "Insurance", "Internal Decision-Making", "Acquisition-Disposition", "Estate Planning", "Litigation", "GST"], "transaction-status": ["Not Applicable", "Listed", "Under Contract"], "tenancy": ["Multi-Tenant", "Owner Occupied", "Partial Owner Occupied", "Single-Tenant", "Unkown", "Vacant"], "valuation-type": ["Current", "Retrospective", "Prospective"], "status-of-improvements": ["Improved - Completed", "Improved - Renovated", "Improved - Under Renovation", "Improved - Proposed Renovation", "Proposed - Vacant Land", "Proposed - Improved Land (Demolition Required)", "Proposed - Under Construction"], "property-subtype": ["Low-Rise", "Mid-Rise", "High-Rise", "Garden", "Walk-Up", "Townhouse", "Mixed-Use"], "asset-condition": ["Excellent", "Very Good", "Good", "Fair", "Poor"], "property-type": ["Agriculture", "Building", "Healthcare", "Hotel", "Industrial", "Land", "Manufactured Housing", "Multifamily", "Office", "Retail", "Self-Storage", "Single-Family", "Seniors", "Special Purpose", "Unknown", "Other"], "interest-appraised": ["Fee Simple Estate", "Leased Fee Estate", "Leasehold Interest"], "appraiser-role": ["Primary Appraiser", "Co-Appraiser", "Review Appraiser"], "zoning-status": ["In Place", "To Be Rezoned"], "cmhc-financing": ["Yes", "No"]};
+const cls={g:'green',a:'amber',z:'zinc'};
+const tag={g:'<span class="tag t-green">Wired</span>',a:'<span class="tag t-amber">V3 · not wired</span>',z:'<span class="tag t-zinc">Extra / V4-only</span>'};
+function fill(id,rows){
+  document.getElementById(id).innerHTML=rows.map(r=>
+    '<tr class="'+cls[r[3]]+'" data-s="'+r[3]+'" data-valta="'+(VALTA[r[1]]?1:0)+'"><td style="text-align:center">'+(REG.has(r[1])?'<span class="regok">✓</span>':'<span class="regq">?</span>')+'</td>'+
+    '<td style="text-align:right;color:var(--text-3);font-size:11px">'+(NUM[r[1]]||'—')+'</td>'+
+    '<td class="src">'+(function(){if(!V3ID[r[1]]&&(!r[2]||r[2]==='—'))return '—';const lbl=(r[2]&&/^[A-Z]/.test(r[2]))?r[2]:r[0];const id3=V3ID[r[1]]?V3ID[r[1]].replace(/_/g,'-'):null;return '<span class="lab">'+lbl+'</span>'+(id3?'<span class="id">'+id3+(id3!==r[1]?' <b style="color:var(--cx-amber-tx)">≠</b>':'')+'</span>':'')+((r[2]&&!/^[A-Z]/.test(r[2])&&r[2]!=='—')?'<span class="fnote">'+r[2]+'</span>':'');})()+'</td>'+
+    '<td><span class="lab">'+r[0]+'</span><span class="id">'+r[1]+'</span>'+(OPTS[r[1]]?'<span class="opts">'+OPTS[r[1]].map(o=>'<span class="opt">'+o+'</span>').join('')+'</span>':'')+'</td>'+
+    '<td class="src">'+(VALTA[r[1]]?VALTA[r[1]].l+'<span class="id">'+VALTA[r[1]].n+'</span>':'—')+'</td>'+
+    '<td class="src">'+(VALCRE[r[1]]?'<span class="id" style="margin-top:0">'+VALCRE[r[1]]+'</span>':'—')+'</td>'+
+    '<td>'+tag[r[3]]+'</td><td class="rev"><span class="ftype">'+(TYPES[r[1]]||'—')+'</span>'+((r[4]&&r[4]!=='Matches V3')?'<span class="fnote">'+r[4]+'</span>':'')+'</td></tr>').join('');
+}
+fill('cxS1',S1); fill('cxS2',S2); fill('cxS3',S3);
+const all=[...S1,...S2,...S3];
+const ok=all.filter(r=>REG.has(r[1])).length;
+document.querySelectorAll('.cx .fb').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.cx .fb').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  const f=b.dataset.f;
+  document.querySelectorAll('.cx tbody tr').forEach(tr=>{
+    let show;
+    if(f==='all'||f==='v4') show=true;                                    // V4 filter = ALL V4 rows, incl empty-V3
+    else if(f==='valta') show=tr.dataset.valta==='1';
+    else if(f==='v3') show=(tr.dataset.s==='g'||tr.dataset.s==='a');       // V3 filter = only rows with a V3 side
+    else show=tr.dataset.s===f;
+    tr.style.display=show?'':'none';
+  });
+});
+document.getElementById('cxRegcount').textContent='Registry check: '+ok+' of '+all.length+' rows confirmed in fieldRegistry.ts ('+(all.length-ok)+' unmatched: single-id lookup only — bundled rows and V4-only aliases show ?).';
 })();
 </script>
 </body>

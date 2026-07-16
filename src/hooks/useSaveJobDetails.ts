@@ -75,8 +75,15 @@ export function useSaveJobDetails(jobId: string) {
             if (snakeField in fieldMappings) {
               snakeField = fieldMappings[snakeField];
             }
-            
-            loeDetailsToUpdate[snakeField] = details[field as keyof JobDetails];
+
+            // Empty string → NULL (Item 3 Clear fix, 2026-07-15). Clear-all emits '' for EVERY field,
+            // including date columns (delivery_date, effective_date, *_paid_date, signed_date) and
+            // numeric columns (appraisal_fee, payment_amount). Postgres rejects '' for date/numeric
+            // ("invalid input syntax for type date/numeric") and 400s the WHOLE batch update, so nothing
+            // cleared. NULL is valid for every column type here, and text/enum columns read back the same
+            // whether NULL or '' (the UI uses `value || ''`), so blanket '' → NULL is safe and correct.
+            const loeVal = details[field as keyof JobDetails];
+            loeDetailsToUpdate[snakeField] = loeVal === '' ? null : loeVal;
             hasLoeUpdates = true;
           }
         }
@@ -90,7 +97,11 @@ export function useSaveJobDetails(jobId: string) {
             const snakeField = field
               .replace(/([A-Z])/g, '_$1')
               .toLowerCase();
-            propertyInfoToUpdate[snakeField] = details[field as keyof JobDetails];
+            // Same '' → NULL rule as job_loe_details above — job_property_info has numeric columns
+            // (building_size, number_of_units, parking_spaces, assessed_value, taxes, the assessment
+            // values, gross/usable land) that Clear-all also empties, and '' 400s them identically.
+            const propVal = details[field as keyof JobDetails];
+            propertyInfoToUpdate[snakeField] = propVal === '' ? null : propVal;
             hasPropertyUpdates = true;
           }
         }

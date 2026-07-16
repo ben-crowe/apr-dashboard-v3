@@ -868,7 +868,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           'retainer_paid_date', 'payment_paid_date', 'signed_date',
           'effective_date', 'request_date', 'delivery_date',
         ]);
-        const saveValue = DATE_DB_COLUMNS.has(dbFieldName) ? nullIfEmptyDate(value) : value;
+        // Date columns → null-on-empty via nullIfEmptyDate (Bug A). Every OTHER column also gets '' → null
+        // (Item 3, 2026-07-15): a hand-cleared NUMERIC field (appraisal_fee, payment_amount) emits '' and
+        // Postgres 400s it the same way a blank date does. NULL is valid for every column; text reads back
+        // identically as '' or NULL. This closes the pre-existing "can't clear a single fee field" bug.
+        const saveValue = DATE_DB_COLUMNS.has(dbFieldName)
+          ? nullIfEmptyDate(value)
+          : (value === '' ? null : value);
 
         // Always save to Supabase first
         const { error: supabaseError } = await supabase

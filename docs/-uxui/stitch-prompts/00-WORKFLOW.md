@@ -51,3 +51,17 @@ file is the paste payload.
    DATA but its canvas placement never showed in Ben's client — Ben's
    drag-drop is the delivery, always. Never add screens to Ben's project
    without telling him first; number every screen title.
+
+## ⭐ THE WINNING RECIPE (proven 2026-07-17, job page run 3)
+
+For any page that EXISTS in the app, give Stitch BOTH references in one
+message, with roles assigned:
+- the SCREENSHOT of the real page → owns look (colors, spacing, width, trim)
+- the captured HTML file → owns content (structure, every label, every value)
+- the message: "rebuild this exactly: colors, spacing and page width from
+  the screenshot; structure and every label from the HTML file."
+Result: near-production fidelity, and it CLEANED UP edge/alignment slop our
+real page carries — dual-reference output can exceed the source. Single-
+reference runs are the fallbacks: screenshot-only = fast + interpretive
+(good for idea passes), code-only = faithful incl. flaws (good for a true
+baseline).

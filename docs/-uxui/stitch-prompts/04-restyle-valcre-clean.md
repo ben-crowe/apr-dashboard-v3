@@ -16,30 +16,22 @@ Paste everything below the line into Stitch as an edit applied to ALL screens.
 
 Restyle EVERY screen in this project. Do NOT change any screen's layout,
 sections, content, data, or navigation — same pages, same elements, same
-wiring. Change ONLY the visual design system, to a clean, professional,
-LIGHT-mode aesthetic modeled on modern appraisal software:
+nav chrome, same wiring. Change ONLY the surface treatment, to the clean,
+professional quality of high-end appraisal software:
 
-**Overall:** light mode. Page background a near-white cool gray (#f7f8fa);
-all content surfaces pure white. Airy and calm — generous whitespace,
-almost no visible boxes. Hierarchy comes from typography and spacing, not
-borders and fills.
+**The core change — remove the boxes.** Kill every boxed input, every
+filled/tinted input well, every heavy group container. Hierarchy comes from
+typography, spacing, and hairline dividers — never from borders, fills, or
+background-color changes. Airy and calm, generous whitespace, calm flow.
 
-**Top app bar:** solid brand blue (#1e88c5), full width. White logo mark and
-app name at left, an inset lighter-blue search field in the center, white
-icons and the user name at right.
+**Mode:** light mode, near-white cool gray page (#f7f8fa) with pure white
+surfaces. (Keep the existing nav structure — top bar, tabs, sidebar —
+exactly where they are; just re-surface them in the light palette, flat and
+borderless.)
 
-**Left sidebar (staff pages):** white, flat, borderless — an icon + label
-row per item in medium gray (#5f6b76); the ACTIVE item gets a soft light-blue
-tint (#e3f2fd) with the icon and label in brand blue. A single solid blue
-"+ Create new" style primary button sits at the top of the sidebar. (Screens
-that currently use a top-tab row instead of a sidebar keep their tabs —
-restyle the active tab to brand-blue text with a 2px brand-blue underline on
-white.)
-
-**Typography:** clean modern sans-serif (Roboto/system). Headings in deep
-navy-ink (#263238), semi-bold, modest sizes. Body dark slate (#37474f).
-Secondary text medium gray (#78838d). No uppercase letter-spaced labels —
-plain sentence-case labels.
+**Typography:** clean modern sans-serif. Headings deep navy-ink (#263238),
+semi-bold, modest sizes. Body dark slate (#37474f). Secondary text medium
+gray (#78838d). Plain sentence-case labels — no uppercase letter-spacing.
 
 **Form fields — the big change, NO boxes:** every input becomes
 underline-only, Material style: the label sits left in medium gray, the

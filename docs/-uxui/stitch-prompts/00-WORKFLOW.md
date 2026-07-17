@@ -65,3 +65,13 @@ real page carries — dual-reference output can exceed the source. Single-
 reference runs are the fallbacks: screenshot-only = fast + interpretive
 (good for idea passes), code-only = faithful incl. flaws (good for a true
 baseline).
+
+## Banked design decisions (validated by Stitch runs, Ben-approved direction)
+
+1. **Folder previewer condenses** — keep our folder-card design, shrink the
+   cards, multi-across grid, cap the section height (screenshot-run proof).
+2. **Client-uploaded files appear ONLY in the documents area's unsorted
+   pile** — remove the Uploaded Documents strip from the client-info
+   section (dual-reference run deduplicated it; matches Ben's intent).
+3. **Client Comments moves out of the client-info box** — it breaks the
+   column rhythm; find it a better home (dual-reference run cut it too).

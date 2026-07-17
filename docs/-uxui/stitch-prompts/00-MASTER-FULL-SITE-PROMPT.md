@@ -5,6 +5,15 @@ Stitch builds the whole page set from this single prompt. To change one page,
 swap that page's section and regenerate — never re-paste the whole thing with
 edits bundled.
 
+After the paste (from the proven TAG_MANAGER_OS run, build 75):
+- If Stitch under-builds (only one or two screens), it truncated — split into
+  two pastes: (1) design system + global chrome + pages 1–3, then (2) pages
+  4–7 + the navigation map, into the SAME project.
+- If any link is dead after generation, prompt ONE targeted edit ("wire the
+  app bar, tab bars, and job rows to their target screens; no dead links") —
+  do not regenerate.
+- Every later change: ONE screen at a time.
+
 Sources: sign-in from /login (src/pages/Login.tsx) · job list from /dashboard
 (JobListItem.tsx, job-list/JobSearch.tsx — dense layout, Version A of the
 three-versions file) · job detail from /dashboard job view (JobDetailView.tsx
@@ -18,13 +27,24 @@ Stitch paste; the full per-page prompts remain in this folder.
 
 ---
 
-Design "APR Dashboard" — a professional appraisal firm's operations web app.
-Desktop web, dark mode throughout. It manages commercial appraisal jobs from
-client intake through engagement-letter signing: staff sign in, work a job
-list, open job details, manage firm settings and users; clients get one
-public page to sign their engagement letter (LOE). Generate this full set of
-pages: 1 Sign-in, 2 Job List, 3 Job Detail, 4 Firm & Appraiser Settings,
-5 Users & Access Settings, 6 Document Signing (client-facing), 7 Clients.
+Build ONE connected multi-screen web app called "APR Dashboard" — a
+professional appraisal firm's operations tool. Desktop web, dark mode
+throughout. This is NOT a set of standalone pages: every nav item, tab, and
+primary button navigates to a real screen in this project. It manages
+commercial appraisal jobs from client intake through engagement-letter
+signing: staff sign in, work a job list, open job details, manage firm
+settings and users; clients get one public page to sign their engagement
+letter (LOE). Generate this full set of pages: 1 Sign-in, 2 Job List,
+3 Job Detail, 4 Firm & Appraiser Settings, 5 Users & Access Settings,
+6 Document Signing (client-facing), 7 Clients.
+
+**GLOBAL CHROME (persistent on every staff page — pages 2, 3, 4, 5, 7; NOT
+on Sign-in or Document Signing):** a slim top app bar in a recessed darker
+well (#161b22) with a bottom hairline — left, a small blue square logo mark
+and "APR Dashboard" in off-white; center, a compact global search field;
+right, quiet icons (calendar, bell, moon, gear), the word "Appraiser" in
+slate, and a small round avatar. Pages 3, 4, and 5 additionally share the
+sticky section tab bar described in their sections.
 
 **DESIGN SYSTEM — governs every page:**
 Dense, quiet, utilitarian dark operations dashboard. Layered charcoal
@@ -130,3 +150,25 @@ row shown selected (slightly darker fill + small blue dot) with a right-side
 slide-over panel visible, holding that client's label-to-colon detail fields
 (name, company, email, phone, address) and a small "Jobs" list of two linked
 job numbers with status dots.
+
+**NAVIGATION MAP — wire ALL of these; every target must be a screen that
+exists in this project; NO dead links, NO placeholder navigation:**
+- Sign-in "Sign In" button → Job List.
+- App-bar logo/"APR Dashboard" (every staff page) → Job List. App-bar gear
+  icon → Firm & Appraiser Settings. App-bar avatar → Users & Access.
+- Job List: each job row → Job Detail. "+ New Job" → Job Detail (empty
+  state is fine).
+- Job Detail tab bar: "Client & Property (S1)" → Job Detail; "Firm &
+  Appraiser" → Firm & Appraiser Settings; "Users & Access" → Users & Access.
+  "Send LOE" button → Document Signing.
+- Firm & Appraiser and Users & Access share the same tab bar wiring; their
+  job-section tabs (S1/S2/S3/Calculations) → Job Detail.
+- Users & Access: each team-member row's name → stays on page (detail row
+  expansion is fine); "Invite user" → stays on page.
+- Clients: each client-row name → the selected-row slide-over on the same
+  page; the two linked job numbers in the slide-over → Job Detail.
+- Document Signing "Sign document" → its own post-sign confirmation state.
+
+**OUTPUT:** generate all seven pages as ONE connected prototype with the
+navigation wired, so Play mode clicks through the full flow end to end —
+sign in → job list → a job → its settings tabs → back — with no dead ends.

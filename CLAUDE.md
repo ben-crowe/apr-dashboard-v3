@@ -3,7 +3,7 @@
 ## 🚫 NO LOGIN — THE APP IS WIDE OPEN (read this first, never forget it)
 
 **There is NO login on this app. It is wide open. Nobody — no agent, not Ben — ever logs in.**
-Every route renders directly: `/dashboard`, the job details, the LOE/email flows — open the URL and it's there. Yes, a `/login` route and Supabase-auth code exist in the source; they are NOT enforced. **DO NOT spend a single second logging in, provisioning credentials, saving passwords, or "authenticating as a test account."** If you ever think a screen needs a login: it doesn't — just `agent-browser open` the route and screenshot it.
+Every route renders directly: `/dashboard`, the job details, the LOE/email flows — open the URL and it's there. Yes, a `/login` route and Supabase-auth code exist in the source; they are NOT enforced. **DO NOT spend a single second logging in, provisioning credentials, saving passwords, or "authenticating as a test account."** If you ever think a screen needs a login: it doesn't — just open the route with your browser tool and screenshot it.
 (The only auth-shaped thing that's real is RLS on *database writes* — and even that is OFF on the email tables. Page access is never gated. Never conflate "anon DB write" with "the page needs a login.")
 
 ## ⭐ START / RESUME HERE — READ THE MASTER DASHBOARD FIRST (mandatory)
@@ -134,36 +134,15 @@ CRITICAL: `report_builder_data` table DOES NOT EXIST. Must be created before Rep
 | UX Documentation | `docs/-uxui/` |
 | UX Feature Commits | `docs/-uxui/UX-Feature-Commits.md` |
 
-## Browser Testing — Agent-Browser First
+## Browser / Visual Testing
 
-**MANDATORY: Use agent-browser CLI as the default for all browser testing.**
+**Which browser tool to use is NOT set here — it lives in the browser skills an agent loads** (`/cli-browser-auto`, `/cmux-browser`), which the Main workspace keeps current with whatever is actually working. A tool named in this project file goes stale the moment that tool breaks or is replaced, and then contradicts what agents are deployed with — so tool choice belongs to the skill, not here. Load your browser skill and use the tool it specifies; if it says a tool is down, follow the skill's current alternative.
 
-Load the skill first, then use the CLI:
+**APR-specific facts a skill can't know (these DO belong here):**
 
-```bash
-# Load the skill FIRST
-/cli-browser-auto
-
-# Then use agent-browser
-agent-browser open http://localhost:8086/dashboard   # APR dev port = 8086 (vite.config.ts). HEADLESS only — never --headed, never computer-use. 5173 = KM-Exp, not APR.
-agent-browser snapshot -i
-agent-browser click @e42
-agent-browser screenshot /tmp/qa-check.png
-```
-
-**When to use which tool:**
-
-| Task | Tool | Why |
-|------|------|-----|
-| Visual QA, screenshots | agent-browser | Screenshots work reliably, compact output, less context |
-| Navigation, clicking, scrolling | agent-browser | Simple CLI syntax, @ref-based, fast |
-| Filling React controlled inputs | Playwright MCP | Native input setter handles React state correctly |
-| Arbitrary DOM queries, React state | Playwright MCP | JS evaluate bypasses ref system |
-| Default for any new QA task | agent-browser | Start here, escalate to Playwright only when needed |
-
-agent-browser is the default. Playwright MCP is the escape hatch for raw JS and React controlled input filling.
-
-**Deploying agents must include this in every brief:** "Load `/cli-browser-auto` skill before any browser testing. Use agent-browser, not Playwright MCP."
+- **Dev server port is 8086** (`vite.config.ts`). 5173 is KM-Exp, not APR.
+- **Headless only.** Never a headed browser, never computer-use.
+- **No login, ever.** Every route renders directly — do not authenticate (see the top of this file). Just open the route and screenshot it.
 
 ## GitHub Auth — Agent Self-Service
 

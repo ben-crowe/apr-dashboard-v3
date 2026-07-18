@@ -75,3 +75,9 @@ baseline).
    section (dual-reference run deduplicated it; matches Ben's intent).
 3. **Client Comments moves out of the client-info box** — it breaks the
    column rhythm; find it a better home (dual-reference run cut it too).
+
+## Batch verdicts (Ben, 2026-07-17 — dark full-flow batch, screens 12–19)
+- KEEPER job page: screen 12 (built from Ben's dragged light paired file). Screen 15 (dark rebuild) REJECTED — poor.
+- Previewer (16), Edit Contract (14), Email Compose (17), Asset Studio (18), Studio Document View (19): approved as "looking ok".
+- Delivery model settled: Ben drags nothing for builds — upload reference invisibly, anchor generation to a VISIBLE screen (two selectedScreenIds: visible PNG + invisible code ref) so the result lands where Ben can see it. Results from a session with no visible anchor park off-canvas (screen 13 orphan).
+- Review surface: 00-STITCH-REVIEW.html (sweep folder) — our capture left, Stitch build right; regenerate after each batch.

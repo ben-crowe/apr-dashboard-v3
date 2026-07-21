@@ -65,9 +65,9 @@ const CONN: Record<string, string> = { mail: 'delivers', doc: 'after signing' };
  * also why the extra sequences invent no components: a made-up component would appear in the
  * library as a real one.
  */
-interface Sequence { id: string; name: string; isDefault?: boolean; parts: CompType[] }
+interface Sequence { id: string; name: string; parts: CompType[] }
 const SEQUENCES: Sequence[] = [
-  { id: 'loe',      name: 'Default LOE Deployment', isDefault: true, parts: ['mail', 'doc', 'popup'] },
+  { id: 'loe',      name: 'LOE Deployment', parts: ['mail', 'doc', 'popup'] },
   { id: 'reminder', name: 'Unsigned LOE Reminder',  parts: ['mail', 'doc'] },
   { id: 'delivery', name: 'Report Delivery',        parts: ['mail', 'doc', 'popup'] },
 ];
@@ -471,7 +471,6 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
                 {!railNarrow && (
                   <>
                     <span className="flex-1 font-semibold text-sm truncate text-foreground cursor-pointer" onClick={() => { setSeqId(s.id); setView('map'); }}>{s.name}</span>
-                    {s.isDefault && <span className="text-[10px] font-bold text-[#2c5aa0] dark:text-blue-300 bg-[#2c5aa0]/10 border border-[#2c5aa0]/30 rounded-full px-1.5">DEFAULT</span>}
                   </>
                 )}
               </div>

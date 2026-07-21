@@ -13,73 +13,54 @@ import { ChevronUp, ChevronDown, RotateCcw } from "lucide-react";
  * the production send/sign flow.
  *
  * THE PAGE MODEL (Ben, 2026-07-21 — final): a real sheet of paper, photographed. The document is
- * laid out once at its native width, and the WHOLE page — paper and the text printed on it —
- * scales UNIFORMLY so the page width always matches the pane's width: skinny the pane and the
- * page gets smaller with proportionally smaller text; widen it and everything grows together.
- * Text is never sized independently of its page. The percentage control is a uniform whole-page
- * scale override on top of the width-fit default — stepping it scales page and text together, the
- * same single `zoomLevel` drives both the iframe's own box width and the zoom applied inside it.
- * This is the exact mechanism DocumentPreviewPane already used (and TemplateEditorModal's own
- * preview pane mirrors) — reproduced here verbatim, not shared, per the rule above.
+ * laid out ONCE, at its native width, and never re-laid-out again — every size on screen is that
+ * same frozen layout, painted smaller or larger. Text is never sized independently of its page.
+ *
+ * WHY `transform: scale`, NOT CSS `zoom` (2026-07-21, the acceptance test that caught it): Ben's
+ * standing verification is line-end-word stability — the same word must end the same line at any
+ * pane width, because a real printed page doesn't re-wrap when you shrink a photo of it. `zoom`
+ * looks right in most engines but is a NON-STANDARD, engine-dependent rendering property — this
+ * app's own WKWebView test surface visibly re-wrapped text under it even though the layout width
+ * was fixed, while `transform: scale` cannot re-wrap by construction: it is a pure post-layout
+ * paint operation with zero effect on how the box computed its own layout. The iframe always
+ * renders its content at TRUE NATURAL SIZE (no zoom, ever) and the whole rendered result is scaled
+ * as one flat image via `transform: scale(pageScale)` on a wrapper around it — line ends are
+ * frozen because the layout that produced them never changes, only the paint size does.
  */
 interface StudioDocumentPreviewPaneProps {
-  /** The already-generated document HTML (from generateLOEHTML / a saved instance). */
   html: string;
-  /** Optional controlled zoom. Omit to let the pane own it; null means "fit to the pane". */
+  /** Optional controlled zoom (a whole-page scale, 25–100, capped at the pane's own width-fit
+      ceiling). Omit to let the pane own it; null means "reset to fit". */
   zoom?: number | null;
   onZoomChange?: (z: number | null) => void;
 }
 
 const StudioDocumentPreviewPane: React.FC<StudioDocumentPreviewPaneProps> = ({ html, zoom, onZoomChange }) => {
-  // null = follow the measured fit; a number = the user picked a zoom with the strip.
   const [internalZoom, setInternalZoom] = useState<number | null>(null);
-  const [fitZoom, setFitZoom] = useState(100);
-  // Width-fit is a CEILING, not just the default: the page's rendered width must never exceed the
-  // pane's content width, so a manual zoom can only ever sit at or below fitZoom — clamp on every
-  // read, not just on entry, so a pane that shrinks (drag, explorer expanding) pulls an
-  // already-set zoom back down with it instead of leaving the page wider than its pane.
-  const zoomLevel = Math.min(zoom ?? internalZoom ?? fitZoom, fitZoom);
-  const setZoom = (z: number) => { (onZoomChange ?? setInternalZoom)(Math.min(z, fitZoom)); };
+  const [fitPct, setFitPct] = useState(100);
+  // Width-fit is the default AND the ceiling — the page can never render wider than the pane, so
+  // a manual zoom is always clamped to fitPct, both on read and on write.
+  const pageScale = Math.min(zoom ?? internalZoom ?? fitPct, fitPct) / 100;
+  const setZoom = (z: number) => { (onZoomChange ?? setInternalZoom)(Math.min(z, fitPct)); };
   const [previewUrl, setPreviewUrl] = useState<string>('');
-  const [naturalWidth, setNaturalWidth] = useState(0);
+  const [naturalSize, setNaturalSize] = useState({ w: 0, h: 0 });
   const frameRef = useRef<HTMLIFrameElement>(null);
-  // The fit is measured against the WRAPPER, never the iframe: when the floor below is hit the
-  // iframe is deliberately made wider than the wrapper, so measuring the iframe would feed its
-  // own width back into the calculation and the fit would never settle.
   const wrapRef = useRef<HTMLDivElement>(null);
 
-  // Below this the text stops being readable, so the pane stops shrinking and lets the wrapper
-  // scroll sideways instead — nothing becomes unreachable, it just needs scrolling.
   const MIN_FIT = 25;
   const SIDE_ROOM = 0.9;      // matches the email preview's content-to-box ratio
-  const scaledWidth = Math.ceil(naturalWidth * (zoomLevel / 100));
 
   useEffect(() => {
-    // The blob carries LAYOUT only. Scale is applied afterwards, against a measurement, because a
-    // document authored at a fixed width has to be fitted to whatever width the pane happens to
-    // be — and the pane's width changes (split vs single, drag grabber, the floating preview).
     if (html) {
+      // The iframe is ALWAYS laid out at this true fixed width — never zoomed, never resized to
+      // fit anything. `width` (not `max-width`) so it never shrinks to whatever box happens to be
+      // holding it; the frozen layout is the entire point.
       const laidOutHTML = html.replace(
         '</head>',
         `<style>
-          /* width, not max-width: a max-width is capped by whatever the iframe's OWN box
-             currently is, so measuring "natural" width while the iframe still sits at its
-             previous (narrower) size would read back that stale, too-small number instead of the
-             document's real authored width — corrupting every re-fit after the first. A fixed
-             width always lays out at its true size, independent of the iframe's current box, so
-             the natural-width measurement is trustworthy on every resize, not just the first. */
-          body {
-            width: 850px;
-            margin: 0 auto;
-            padding: 20px;
-          }
-          .document {
-            width: 850px;
-            margin: 0 auto;
-          }
-          @media print {
-            body { zoom: 1; width: 100%; }
-          }
+          body { width: 850px; margin: 0 auto; padding: 20px; }
+          .document { width: 850px; margin: 0 auto; }
+          @media print { body { width: 100%; } }
         </style>
         </head>`
       );
@@ -91,103 +72,75 @@ const StudioDocumentPreviewPane: React.FC<StudioDocumentPreviewPaneProps> = ({ h
     }
   }, [html]);
 
-  // Measure the page at natural size, then scale it down to the pane. `zoom` rather than
-  // `transform: scale` so the page's own layout box shrinks with it — a transform leaves the
-  // original box in place, which is what produced the clipped right edge before.
+  // Measure the page's true, frozen size (once per document — it never changes again) and fit it
+  // to the wrapper. Layout-only: the zoom strip never feeds into this calculation.
   const measureFit = () => {
     const frame = frameRef.current;
     const doc = frame?.contentDocument;
     if (!frame || !doc?.body || !wrapRef.current) return;
-    doc.body.style.setProperty('zoom', '1');
-    const natural = Math.max(doc.body.scrollWidth, doc.documentElement.scrollWidth);
-    // Leave the same breathing room down each side that the email preview has, rather than
-    // running the page wall-to-wall. The email sits at 90% of its available width, so the
-    // document matches it — a letter pressed against both edges reads as cramped next to it.
+    const w = Math.max(doc.body.scrollWidth, doc.documentElement.scrollWidth);
+    const h = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
+    setNaturalSize({ w, h });
     const available = wrapRef.current.clientWidth * SIDE_ROOM;
-    const pct = natural > available && natural > 0
-      ? Math.max(MIN_FIT, Math.floor((available / natural) * 100))
+    const pct = w > available && w > 0
+      ? Math.max(MIN_FIT, Math.floor((available / w) * 100))
       : 100;
-    setFitZoom(pct);
-    setNaturalWidth(natural);
-    doc.body.style.setProperty('zoom', String((zoom ?? internalZoom ?? pct) / 100));
+    setFitPct(pct);
   };
 
-  // Re-fit whenever the pane changes width — observe the WRAPPER (the pane's own geometry) as
-  // the primary signal, not just the iframe: the iframe's box is itself react-state-driven output
-  // of this same calculation, so a resize that only changes the wrapper (drag, rail collapse,
-  // Split/Editor toggle) needs its own independent trigger, not a wait for the iframe to move.
+  // Re-fit whenever the WRAPPER changes width (drag, rail collapse/expand, Split/Editor toggle,
+  // window resize) — the wrapper is the independent geometry; the iframe's own box is frozen.
   useEffect(() => {
-    const frame = frameRef.current;
     const wrap = wrapRef.current;
-    if (!frame || !wrap || typeof ResizeObserver === 'undefined') return;
+    if (!wrap || typeof ResizeObserver === 'undefined') return;
     const ro = new ResizeObserver(() => measureFit());
-    ro.observe(frame);
     ro.observe(wrap);
     return () => ro.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewUrl]);
 
-  // Apply the current zoom (fitted or user-chosen) to the loaded document.
-  useEffect(() => {
-    frameRef.current?.contentDocument?.body?.style.setProperty('zoom', String(zoomLevel / 100));
-  }, [zoomLevel]);
+  const scaledW = Math.ceil(naturalSize.w * pageScale);
+  const scaledH = Math.ceil(naturalSize.h * pageScale);
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      {/* Compact zoom adjuster — sits just above the document it controls */}
       <div className="flex items-center justify-end px-4 pt-1">
         <div className="flex items-center gap-0.5 text-muted-foreground">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setZoom(Math.max(25, zoomLevel - 10))}
-            className="h-5 w-5 p-0 hover:text-foreground"
-            title="Zoom Out"
-          >
+          <Button variant="ghost" size="sm" onClick={() => setZoom(Math.max(MIN_FIT, Math.round(pageScale * 100) - 10))} className="h-5 w-5 p-0 hover:text-foreground" title="Zoom Out">
             <ChevronDown className="h-3.5 w-3.5" />
           </Button>
-          <span className="text-[11px] tabular-nums w-9 text-center select-none">{zoomLevel}%</span>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setZoom(Math.min(200, zoomLevel + 10))}
-            className="h-5 w-5 p-0 hover:text-foreground"
-            title="Zoom In"
-          >
+          <span className="text-[11px] tabular-nums w-9 text-center select-none">{Math.round(pageScale * 100)}%</span>
+          <Button variant="ghost" size="sm" onClick={() => setZoom(Math.round(pageScale * 100) + 10)} className="h-5 w-5 p-0 hover:text-foreground" title="Zoom In">
             <ChevronUp className="h-3.5 w-3.5" />
           </Button>
-          {/* Reset means fit-to-pane. It re-measures as well as clearing any manual override,
-              so it still does something when the zoom is already following the fit. */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => { (onZoomChange ?? setInternalZoom)(null); measureFit(); }}
-            className="h-5 w-5 p-0 hover:text-foreground ml-2"
-            title="Fit to pane"
-          >
+          <Button variant="ghost" size="sm" onClick={() => (onZoomChange ?? setInternalZoom)(null)} className="h-5 w-5 p-0 hover:text-foreground ml-2" title="Fit to pane">
             <RotateCcw className="h-3 w-3" />
           </Button>
         </div>
       </div>
 
-      {/* Preview Frame — the rendered PAGE is always a light page (never themed dark): explicit
-          light backdrop + white iframe, matching the email/popup preview convention (bg-white). */}
+      {/* Preview frame — the page sits centered, its ON-SCREEN size purely a paint-time scale of
+          a layout that never changes. The wrapper scrolls (vertically for a long document,
+          horizontally never — the outer box is always exactly `scaledW/scaledH` wide/tall, so
+          nothing to scroll sideways to). */}
       <div ref={wrapRef} className="flex-1 border border-slate-200 rounded-lg overflow-auto bg-slate-100 my-2">
         {previewUrl ? (
-          <iframe
-            ref={frameRef}
-            src={previewUrl}
-            onLoad={measureFit}
-            className="h-full bg-white block mx-auto"
-            title="LOE Document Preview"
-            sandbox="allow-same-origin"
-            /* Exactly as wide as the SCALED page, centred, so the slate backdrop shows down both
-               sides — the same breathing room the email preview has. Letting it span the whole
-               wrapper made the page white-on-white to the edges, which read as cramped.
-               Only when the readable-size floor is hit does it exceed the wrapper, and then the
-               wrapper scrolls sideways rather than cutting text off. */
-            style={{ border: 'none', minHeight: '100%', width: scaledWidth || '100%' }}
-          />
+          <div
+            className="mx-auto bg-white"
+            style={{ width: scaledW || undefined, height: scaledH || undefined, overflow: 'hidden' }}
+          >
+            <div style={{ width: naturalSize.w || 850, height: naturalSize.h || undefined, transform: `scale(${pageScale})`, transformOrigin: 'top left' }}>
+              <iframe
+                ref={frameRef}
+                src={previewUrl}
+                onLoad={measureFit}
+                className="bg-white block"
+                title="LOE Document Preview"
+                sandbox="allow-same-origin"
+                style={{ border: 'none', width: naturalSize.w || 850, height: naturalSize.h || 1100, display: 'block' }}
+              />
+            </div>
+          </div>
         ) : (
           <div className="flex items-center justify-center h-full text-slate-500">
             Loading preview...

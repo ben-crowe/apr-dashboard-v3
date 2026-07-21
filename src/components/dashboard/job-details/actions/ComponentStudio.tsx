@@ -31,7 +31,9 @@ import { loadAllPopupTemplates, loadActivePopupTemplate, resolvePopupTokens, sav
  *   - Split is render-LEFT / editor-RIGHT, render-dominant (¾:¼), chevron→half, drag grabber, render zoom.
  */
 type CompType = 'doc' | 'mail' | 'popup';
-type View = 'map' | 'seq' | 'lib';
+// 'home' is where the studio opens: a short explanation of the area. Landing straight on a
+// sequence map gave no answer to "what is this screen".
+type View = 'home' | 'map' | 'seq' | 'lib';
 
 interface StudioInstance { id: string; name: string; }
 
@@ -57,7 +59,7 @@ const CONN: Record<string, string> = { mail: 'delivers', doc: 'after signing' };
 const ComponentStudio: React.FC<ComponentStudioProps> = ({
   isOpen, onClose, job, jobDetails, onEditDocument, onEditEmail, onEditPopup,
 }) => {
-  const [view, setView] = useState<View>('map');
+  const [view, setView] = useState<View>('home');
   const [itemType, setItemType] = useState<CompType>('doc');
   const [selectedId, setSelectedId] = useState<string>('');
   // Reading is the default job: a component opens as a FULL-WIDTH render with no editor.
@@ -106,7 +108,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
       if (ps.length === 0) { await loadActivePopupTemplate(); ps = await loadAllPopupTemplates(); }
       setPopupTemplates(ps);
     }).catch(() => setPopupTemplates([]));
-    setView('map');
+    setView('home');
   }, [isOpen]);
 
   // Add a new component instance (email/popup) from its seed, then open it.
@@ -417,6 +419,12 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   const Rail = () => (
     <aside className={`flex-none bg-card border-r flex flex-col overflow-y-auto transition-[width] ${view === 'seq' ? 'w-[60px]' : 'w-[268px]'}`}>
       <div className="p-3.5 pb-2">
+        {/* Way back to the explanation page, so it is not a one-time screen you can never revisit. */}
+        <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer mb-2 ${view === 'home' ? 'bg-muted' : 'hover:bg-muted'} ${view === 'seq' ? 'justify-center' : ''}`}
+             onClick={() => setView('home')} title="How this area works">
+          <Eye className="h-4 w-4 text-muted-foreground" />
+          {view !== 'seq' && <span className="flex-1 text-sm text-muted-foreground">How this area works</span>}
+        </div>
         <div className={`flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-muted-foreground mb-2 ${view === 'seq' ? 'justify-center' : ''}`}>
           <Layers className="h-3 w-3" />{view !== 'seq' && 'Sequences'}
         </div>
@@ -458,6 +466,43 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
         ))}
       </div>
     </aside>
+  );
+
+  // ── home: what this area is ───────────────────────────────────────────────
+  const Home = () => (
+    <div className="flex-1 overflow-auto p-8">
+      <h1 className="text-xl font-bold">How this area works</h1>
+      <p className="text-muted-foreground mt-1 max-w-[720px]">
+        Everything a client receives is built here, once, and reused on every job.
+      </p>
+      <div className="mt-7 grid gap-4 max-w-[720px]">
+        <div className="border rounded-xl p-4 bg-card">
+          <div className="flex items-center gap-2 font-semibold text-sm"><Layers className="h-4 w-4 text-[#2c5aa0]" /> Sequences</div>
+          <p className="text-sm text-muted-foreground mt-1.5">
+            The order a client experiences things — an email delivers the document, the document is signed,
+            a popup confirms it. Open one to see its parts laid out.
+          </p>
+          <button type="button" onClick={() => setView('map')}
+            className="mt-3 inline-flex items-center gap-1 text-xs font-semibold border rounded-md px-2 py-1 hover:text-[#2c5aa0] hover:border-[#2c5aa0]">
+            Open Default LOE Deployment <ArrowRight className="h-3 w-3" />
+          </button>
+        </div>
+        <div className="border rounded-xl p-4 bg-card">
+          <div className="flex items-center gap-2 font-semibold text-sm"><LayoutGrid className="h-4 w-4 text-[#2c5aa0]" /> Component library</div>
+          <p className="text-sm text-muted-foreground mt-1.5">
+            The three kinds of thing a sequence is made from — emails, documents and popups — listed on the
+            left. A sequence does not hold its own copies; it points at these.
+          </p>
+        </div>
+        <div className="border rounded-xl p-4 bg-card">
+          <div className="flex items-center gap-2 font-semibold text-sm"><Eye className="h-4 w-4 text-[#2c5aa0]" /> Previewing and editing</div>
+          <p className="text-sm text-muted-foreground mt-1.5">
+            Anything you open opens as a full-width page to read. Press Edit to change it — then choose
+            whether to keep the preview beside the editor or use the whole width.
+          </p>
+        </div>
+      </div>
+    </div>
   );
 
   // ── sequence map (blocks) ─────────────────────────────────────────────────
@@ -731,7 +776,9 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
           <main className="flex-1 flex flex-col min-w-0">
             {/* stage bar / crumb */}
             <div className="flex items-center gap-3 h-12 px-5 border-b flex-none text-sm">
-              {view === 'map' ? (
+              {view === 'home' ? (
+                <span className="font-semibold">Component Studio</span>
+              ) : view === 'map' ? (
                 <span className="font-semibold">Default LOE Deployment</span>
               ) : (
                 <div className="flex items-center gap-2 text-muted-foreground">
@@ -743,10 +790,10 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
                 </div>
               )}
               <div className="flex-1" />
-              {view !== 'map' && <Button variant="ghost" size="sm" className="h-8 gap-1" onClick={closePanel}><ArrowLeft className="h-4 w-4" /> Back to map</Button>}
+              {view !== 'map' && view !== 'home' && <Button variant="ghost" size="sm" className="h-8 gap-1" onClick={closePanel}><ArrowLeft className="h-4 w-4" /> Back to map</Button>}
             </div>
             <div className="flex-1 flex min-h-0">
-              {view === 'map' ? Map() : Work()}
+              {view === 'home' ? Home() : view === 'map' ? Map() : Work()}
             </div>
           </main>
         </div>

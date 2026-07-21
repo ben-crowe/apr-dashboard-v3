@@ -842,13 +842,36 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
           <span className="font-bold">{nameFor(itemType, selectedId)}</span>
           <div className="flex-1" />
           {itemType === 'doc' && <Button variant="ghost" size="sm" className="h-8 gap-1" onClick={handleDownload}><Download className="h-4 w-4" /> Download</Button>}
-          {mode === 'read' ? (
+          {itemType === 'doc' ? (
+            // Documents: a single always-visible Preview/Split Editor toggle rather than a
+            // separate Edit button — Preview is the single rendered page and the default state;
+            // Split Editor is the fields+page editing view. Done exits back to Preview, same as
+            // clicking Preview itself.
+            <>
+              <div className="flex items-center rounded-md border overflow-hidden">
+                <button type="button" onClick={() => setMode('read')} title="View the rendered document"
+                  className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 ${mode === 'read' ? 'bg-[#2c5aa0] text-white' : 'text-muted-foreground hover:text-[#2c5aa0]'}`}>
+                  <Eye className="h-3 w-3" /> Preview
+                </button>
+                <button type="button" onClick={() => { setEditLayout('split'); setMode('edit'); }} title="Edit fields with live preview"
+                  className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 border-l ${mode === 'edit' ? 'bg-[#2c5aa0] text-white' : 'text-muted-foreground hover:text-[#2c5aa0]'}`}>
+                  <Pencil className="h-3 w-3" /> Split Editor
+                </button>
+              </div>
+              {mode === 'edit' && (
+                <Button variant="ghost" size="sm" className="h-8 gap-1" onClick={() => setMode('read')}>
+                  <Eye className="h-4 w-4" /> Done
+                </Button>
+              )}
+            </>
+          ) : mode === 'read' ? (
             <Button size="sm" className="h-8 gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]" onClick={() => { setEditLayout('split'); setMode('edit'); }}>
               <Pencil className="h-3.5 w-3.5" /> Edit
             </Button>
           ) : (
             <>
-              {/* Layout choice exists only inside edit mode. Split opens even, 50/50. */}
+              {/* Layout choice exists only inside edit mode (email/popup only — documents use the
+                  Preview/Split Editor toggle above). Split opens even, 50/50. */}
               <div className="flex items-center rounded-md border overflow-hidden">
                 <button type="button" onClick={() => setEditLayout('split')}
                   className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 ${editLayout === 'split' ? 'bg-[#2c5aa0] text-white' : 'text-muted-foreground hover:text-[#2c5aa0]'}`}>
@@ -961,7 +984,13 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
             view (railAsOverlay) instead of squeezing this area narrower. */}
         <div className="flex-1 flex min-h-0 relative">
           {Rail()}
-          <main className="flex-1 flex flex-col min-w-0">
+          <main
+            className="flex-1 flex flex-col min-w-0"
+            /* An expanded rail floating over a document Split view is for a quick peek only — it
+               must never sit open covering the work. Clicking anywhere in the work area (never the
+               rail itself, since this handler lives on `main`, a sibling of `<aside>`) closes it. */
+            onClick={() => { if (railAsOverlay) setRailCollapsed(true); }}
+          >
             {/* stage bar / crumb */}
             <div className="flex items-center gap-3 h-12 px-5 border-b flex-none text-sm">
               {view === 'home' ? (

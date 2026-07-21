@@ -68,6 +68,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   const [editLayout, setEditLayout] = useState<'split' | 'editor'>('split'); // split is an even 50/50
   const [screenZoom, setScreenZoom] = useState(100); // zoom for email/popup render (doc uses the pane's own)
   const [spineW, setSpineW] = useState(312);          // sequence-spine width (drag to resize)
+  const [railCollapsed, setRailCollapsed] = useState(false); // explorer rail collapsed to icons
   const [spineCollapsed, setSpineCollapsed] = useState(false); // collapse the spine to an icon strip
 
   const [docTemplates, setDocTemplates] = useState<LOETemplate[]>([]);
@@ -416,36 +417,50 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   };
 
   // ── library rail ──────────────────────────────────────────────────────────
+  // Narrow presentation is used both when the user collapses the rail and when the parked
+  // sequence view takes the left side.
+  const railNarrow = railCollapsed || view === 'seq';
   const Rail = () => (
-    <aside className={`flex-none bg-card border-r flex flex-col overflow-y-auto transition-[width] ${view === 'seq' ? 'w-[60px]' : 'w-[268px]'}`}>
+    <aside className="flex-none bg-card border-r flex flex-col overflow-y-auto transition-[width]"
+           style={{ width: railNarrow ? 54 : 228 }}>
+      {/* Collapse control. The rail had none — only the parked sequence list did — so there was no
+          way to give the canvas the width back. Collapses to an icon strip rather than hiding
+          entirely, which is what this component already does elsewhere and keeps the reopen
+          control in place instead of needing a new one somewhere else. */}
+      <div className={`flex items-center ${railCollapsed ? 'justify-center' : 'justify-end'} px-2 pt-2`}>
+        <button onClick={() => setRailCollapsed(c => !c)} title={railCollapsed ? 'Expand explorer' : 'Collapse explorer'}
+          className="h-6 w-6 flex items-center justify-center rounded-md border bg-card text-muted-foreground hover:text-[#2c5aa0] hover:border-[#2c5aa0]">
+          {railCollapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
+        </button>
+      </div>
       <div className="p-3.5 pb-2">
         {/* Way back to the explanation page, so it is not a one-time screen you can never revisit. */}
-        <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer mb-2 ${view === 'home' ? 'bg-muted' : 'hover:bg-muted'} ${view === 'seq' ? 'justify-center' : ''}`}
+        <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer mb-2 ${view === 'home' ? 'bg-muted' : 'hover:bg-muted'} ${railNarrow ? 'justify-center' : ''}`}
              onClick={() => setView('home')} title="How this area works">
           <Eye className="h-4 w-4 text-muted-foreground" />
-          {view !== 'seq' && <span className="flex-1 text-sm text-muted-foreground">How this area works</span>}
+          {!railNarrow && <span className="flex-1 text-sm text-muted-foreground">How this area works</span>}
         </div>
-        <div className={`flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-muted-foreground mb-2 ${view === 'seq' ? 'justify-center' : ''}`}>
-          <Layers className="h-3 w-3" />{view !== 'seq' && 'Sequences'}
+        <div className={`flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-muted-foreground mb-2 ${railNarrow ? 'justify-center' : ''}`}>
+          <Layers className="h-3 w-3" />{!railNarrow && 'Sequences'}
         </div>
-        <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer bg-[#2c5aa0]/10 ring-1 ring-[#2c5aa0]/30 ${view === 'seq' ? 'justify-center' : ''}`} onClick={closePanel} title="Default LOE Deployment">
+        <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer bg-[#2c5aa0]/10 ring-1 ring-[#2c5aa0]/30 ${railNarrow ? 'justify-center' : ''}`} onClick={closePanel} title="Default LOE Deployment">
           <ChevronRight className="h-4 w-4 text-[#2c5aa0] dark:text-blue-300 rotate-90" />
-          {view !== 'seq' && <><span className="flex-1 font-semibold text-sm truncate text-foreground">Default LOE Deployment</span><span className="text-[10px] font-bold text-[#2c5aa0] dark:text-blue-300 bg-[#2c5aa0]/10 border border-[#2c5aa0]/30 rounded-full px-1.5">DEFAULT</span></>}
+          {!railNarrow && <><span className="flex-1 font-semibold text-sm truncate text-foreground">Default LOE Deployment</span><span className="text-[10px] font-bold text-[#2c5aa0] dark:text-blue-300 bg-[#2c5aa0]/10 border border-[#2c5aa0]/30 rounded-full px-1.5">DEFAULT</span></>}
         </div>
       </div>
       <div className="p-3.5 pt-3 border-t">
-        <div className={`flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-muted-foreground mb-2 ${view === 'seq' ? 'justify-center' : ''}`}>
-          <LayoutGrid className="h-3 w-3" />{view !== 'seq' && 'Component Library'}
+        <div className={`flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-muted-foreground mb-2 ${railNarrow ? 'justify-center' : ''}`}>
+          <LayoutGrid className="h-3 w-3" />{!railNarrow && 'Component Library'}
         </div>
         {ORDER.map(t => (
           <div key={t} className="mb-1">
-            <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-muted font-semibold ${view === 'seq' ? 'justify-center' : ''}`}
-                 onClick={() => view !== 'seq' && setOpen(o => ({ ...o, [t]: !o[t] }))} title={TYPE_META[t].label + 's'}>
+            <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-muted font-semibold ${railNarrow ? 'justify-center' : ''}`}
+                 onClick={() => !railNarrow && setOpen(o => ({ ...o, [t]: !o[t] }))} title={TYPE_META[t].label + 's'}>
               <span className={t === 'doc' ? 'text-[#2c5aa0]' : t === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}>{TYPE_META[t].icon}</span>
-              {view !== 'seq' && <>{TYPE_META[t].label}s<span className="ml-auto text-[11px] text-muted-foreground bg-muted rounded-full px-2">{listFor(t).length}</span>
+              {!railNarrow && <>{TYPE_META[t].label}s<span className="ml-auto text-[11px] text-muted-foreground bg-muted rounded-full px-2">{listFor(t).length}</span>
                 <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${open[t] ? '' : '-rotate-90'}`} /></>}
             </div>
-            {view !== 'seq' && open[t] && (
+            {!railNarrow && open[t] && (
               <div className="pl-[30px] py-0.5">
                 {listFor(t).map(inst => (
                   <div key={inst.id} className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg cursor-pointer hover:bg-muted text-[13px]" onClick={() => openLib(t, inst.id)}>

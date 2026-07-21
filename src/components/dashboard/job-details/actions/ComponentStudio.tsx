@@ -264,6 +264,19 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   // ── open paths ────────────────────────────────────────────────────────────
   const openSeq = (t: CompType, m: 'read' | 'edit' = 'read') => { setItemType(t); setSelectedId(defaultIdFor(t)); setMode(m); setEditLayout('split'); setView('seq'); };
   const openLib = (t: CompType, id: string) => { setItemType(t); setSelectedId(id); setView('lib'); setMode('read'); setEditLayout('split'); };
+
+  // ONE edit destination per component: its group area under the library (Emails / Documents /
+  // Popups). Every Edit route lands here — the explorer group, the Edit on a module card, and the
+  // Edit inside the floating module preview — so there is never a second place a component is
+  // edited depending on how you arrived.
+  const openEdit = (t: CompType, id?: string) => {
+    setPreviewType(null);
+    setItemType(t);
+    setSelectedId(id ?? defaultIdFor(t));
+    setView('lib');
+    setMode('edit');
+    setEditLayout('split');
+  };
   const closePanel = () => setView('map');
 
   const handleEdit = () => {
@@ -394,7 +407,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
                   className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground border rounded-md px-2 py-1 bg-card hover:text-[#2c5aa0] hover:border-[#2c5aa0] transition-colors">
                   <Eye className="h-3 w-3" /> Preview
                 </button>
-                <button type="button" onClick={(e) => { e.stopPropagation(); setPreviewType(null); openSeq(t, 'edit'); }}
+                <button type="button" onClick={(e) => { e.stopPropagation(); openEdit(t); }}
                   className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground border rounded-md px-2 py-1 bg-card hover:text-[#2c5aa0] hover:border-[#2c5aa0] transition-colors">
                   <Pencil className="h-3 w-3" /> Edit
                 </button>
@@ -428,7 +441,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
           <span className="font-bold text-sm truncate">{nameFor(t, defaultIdFor(t))}</span>
           <div className="flex-1" />
           <Button size="sm" className="h-7 gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]"
-                  onClick={() => { setPreviewType(null); openSeq(t, 'edit'); }}>
+                  onClick={() => { openEdit(t); }}>
             <Pencil className="h-3.5 w-3.5" /> Edit
           </Button>
           <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => setPreviewType(null)}><X className="h-4 w-4" /></Button>

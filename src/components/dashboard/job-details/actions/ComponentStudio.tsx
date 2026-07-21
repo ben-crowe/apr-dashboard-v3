@@ -889,12 +889,20 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
           )}
           <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={closePanel}><X className="h-4 w-4" /></Button>
         </div>
-        {/* work area */}
-        <div ref={splitRef} className="flex-1 flex min-h-0 p-4 gap-0">
+        {/* work area — no padding for a document: the studio's own dark background was showing
+            through this gap right next to the pane's light backdrop, reading as yet another
+            "different shade" beside the page (Ben, 2026-07-21). The pane's backdrop now runs flush
+            to the dialog's own edge with nothing behind it to peek through. Email/popup keep the
+            padding — their own card look is unaffected. */}
+        <div ref={splitRef} className={`flex-1 flex min-h-0 gap-0 ${isDoc ? '' : 'p-4'}`}>
           {showRender && (
-            <div className="flex flex-col border rounded-xl overflow-hidden bg-card min-w-0"
+            // For a document, this card carries NO chrome of its own (Ben, 2026-07-21: strip
+            // every background/border/radius/shadow between the pane and the white page itself —
+            // the card's own border+rounding was reading as a second box nested around the page,
+            // on top of the pane's single backdrop color). Email/popup keep the card look.
+            <div className={`flex flex-col min-w-0 ${isDoc ? '' : 'border rounded-xl overflow-hidden bg-card'}`}
                  style={showEditor ? { flex: '0 0 50%' } : { flex: '1 1 100%' }}>
-              <div className="flex items-center gap-2 px-3.5 py-2.5 border-b font-semibold text-[13px] bg-muted/30"><Eye className="h-3.5 w-3.5" /> Rendered</div>
+              <div className={`flex items-center gap-2 px-3.5 py-2.5 font-semibold text-[13px] ${isDoc ? 'text-muted-foreground' : 'border-b bg-muted/30'}`}><Eye className="h-3.5 w-3.5" /> Rendered</div>
               <div className="flex-1 flex flex-col min-h-0 overflow-hidden">{renderLeft()}</div>
             </div>
           )}

@@ -87,6 +87,12 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   const rowRef = useRef<HTMLDivElement>(null);
   const [previewBox, setPreviewBox] = useState<{ left: number; width: number; top: number } | null>(null);
 
+  // Hovering a module shows a small thumbnail so you can tell what a component is without
+  // opening it. Renders ONLY from what is already loaded — no request is made on hover, or
+  // sweeping the row would fire one per card.
+  const [hover, setHover] = useState<{ type: CompType; left: number; top: number } | null>(null);
+  const hoverTimer = useRef<number | null>(null);
+
   const splitRef = useRef<HTMLDivElement>(null);
 
   // Load the three libraries on open.
@@ -244,6 +250,37 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   };
 
   const mergeTokens = itemType === 'mail' ? EMAIL_MERGE_TOKENS : POPUP_MERGE_TOKENS;
+
+  const HOVER_W = 300, HOVER_H = 200;
+
+  // In-memory body for a thumbnail. Documents use the stored template rather than the generated
+  // render: generating is asynchronous and per-job, and a thumbnail exists to answer "which one is
+  // this", which the template answers. Merge fields stay unresolved here by design.
+  const thumbnailHtml = (t: CompType): string => {
+    if (t === 'mail') return emailTemplates.find(e => e.id === defaultIdFor('mail'))?.body_html ?? '';
+    if (t === 'popup') return popupTemplates.find(p => p.id === defaultIdFor('popup'))?.body_html ?? '';
+    return docTemplates.find(d => d.id === defaultIdFor('doc'))?.template_html ?? '';
+  };
+
+  const startHover = (t: CompType, card: HTMLElement) => {
+    if (previewType) return;                      // the opened preview wins; no stacked popups
+    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => {
+      const canvas = rowRef.current?.offsetParent as HTMLElement | null;
+      if (!canvas) return;
+      const c = card.getBoundingClientRect(), box = canvas.getBoundingClientRect();
+      setHover({
+        type: t,
+        left: Math.round(c.left - box.left + canvas.scrollLeft + (c.width - HOVER_W) / 2),
+        top: Math.round(c.bottom - box.top + canvas.scrollTop + 8),
+      });
+    }, 350);                                      // long enough that sweeping across does nothing
+  };
+  const endHover = () => {
+    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
+    setHover(null);
+  };
+  useEffect(() => () => { if (hoverTimer.current) window.clearTimeout(hoverTimer.current); }, []);
 
   // Open the floating preview on a module, or slide it to a neighbour if one is already open.
   const openPreview = (t: CompType) => {
@@ -435,7 +472,9 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
                 open slides the preview to it instead of dismissing. */}
             <div data-module-card={t}
                  className={`w-[236px] flex-none bg-card border rounded-2xl shadow-sm overflow-hidden cursor-pointer hover:-translate-y-0.5 hover:shadow-md transition border-t-4 ${TYPE_META[t].accent} ${previewType === t ? 'ring-2 ring-[#2c5aa0] bg-[#2c5aa0]/5' : ''}`}
-                 onClick={() => openPreview(t)}>
+                 onClick={() => openPreview(t)}
+                 onMouseEnter={(e) => startHover(t, e.currentTarget)}
+                 onMouseLeave={endHover}>
               <div className="p-4">
                 <div className={`flex items-center gap-1.5 text-[11px] font-bold tracking-wide uppercase ${t === 'doc' ? 'text-[#2c5aa0]' : t === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>{TYPE_META[t].icon}{TYPE_META[t].label}</div>
                 <div className="text-[15px] font-bold mt-2">{nameFor(t, defaultIdFor(t))}</div>
@@ -462,6 +501,20 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
         ))}
       </div>
       {previewType && ModulePreview()}
+      {!previewType && hover && (
+        <div data-hover-thumb className="absolute z-30 rounded-xl border bg-card shadow-xl overflow-hidden pointer-events-none"
+             style={{ left: hover.left, top: hover.top, width: HOVER_W, height: HOVER_H }}>
+          <div className={`flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] font-bold uppercase border-b bg-muted/40 ${hover.type === 'doc' ? 'text-[#2c5aa0]' : hover.type === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>
+            {TYPE_META[hover.type].icon}{nameFor(hover.type, defaultIdFor(hover.type))}
+          </div>
+          {/* A scaled-down still. pointer-events off on the wrapper, sandbox with no permissions —
+              it can only be looked at. */}
+          <div className="relative bg-white" style={{ height: HOVER_H - 29, overflow: 'hidden' }}>
+            <iframe srcDoc={thumbnailHtml(hover.type)} title="preview thumbnail" sandbox=""
+                    style={{ border: 'none', width: 900, height: (HOVER_H - 29) * 3, transform: 'scale(0.333)', transformOrigin: 'top left', pointerEvents: 'none' }} />
+          </div>
+        </div>
+      )}
     </div>
   );
 

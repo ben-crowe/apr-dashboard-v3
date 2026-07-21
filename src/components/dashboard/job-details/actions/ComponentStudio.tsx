@@ -146,14 +146,58 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     : itemType === 'popup' ? (popupTemplates.find(p => p.id === selectedId)?.body_html ?? '')
     : docHtml;
 
+  // The editor scales its page to fit the pane, the way the render side does — a document is
+  // authored at ~850px and the editor pane is narrower than that, so at natural width the right
+  // edge of every line was cut off. `zoom` (not `transform: scale`) because zoom re-lays-out the
+  // page, so the caret and click targets stay where the text is drawn; a transform moves the
+  // pixels out from under them and typing lands in the wrong place.
+  // editorZoom null = follow the fit; a number = the user overrode it with the zoom strip.
+  const [editorZoom, setEditorZoom] = useState<number | null>(null);
+  const [editorFit, setEditorFit] = useState(100);
+  const editorZoomPct = editorZoom ?? editorFit;
+
+  const applyEditorZoom = (pct: number) => {
+    const doc = editIframeRef.current?.contentDocument;
+    doc?.body?.style.setProperty('zoom', String(pct / 100));
+  };
+
+  // Measure at zoom 1, then fit. Called after every write and on any pane resize.
+  const measureEditorFit = () => {
+    const frame = editIframeRef.current;
+    const doc = frame?.contentDocument;
+    if (!frame || !doc?.body) return;
+    doc.body.style.setProperty('zoom', '1');
+    const natural = Math.max(doc.body.scrollWidth, doc.documentElement.scrollWidth);
+    const available = frame.clientWidth;
+    const pct = natural > available && natural > 0
+      ? Math.max(25, Math.floor((available / natural) * 100))
+      : 100;
+    setEditorFit(pct);
+    doc.body.style.setProperty('zoom', String((editorZoom ?? pct) / 100));
+  };
+
   useEffect(() => {
     if (view === 'map') return;
     const doc = editIframeRef.current?.contentDocument;
     if (!doc) return;
     const body = (editableBody() || '<p></p>').replace(/<script[\s\S]*?<\/script>/gi, '');
     doc.open(); doc.write(body); doc.close(); doc.designMode = 'on';
+    setEditorZoom(null);          // a freshly loaded component starts fitted
+    measureEditorFit();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view, itemType, selectedId, mode, editLayout, emailTemplates, popupTemplates, docHtml]);
+
+  // Refit when the pane changes width — the Split/Editor toggle and the drag grabber both do that.
+  useEffect(() => {
+    const frame = editIframeRef.current;
+    if (!frame || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(() => measureEditorFit());
+    ro.observe(frame);
+    return () => ro.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, mode, editLayout]);
+
+  useEffect(() => { applyEditorZoom(editorZoomPct); }, [editorZoomPct]);
 
   const insertToken = (token: string) => {
     const doc = editIframeRef.current?.contentDocument;
@@ -452,6 +496,15 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
           <div className="flex flex-col border rounded-xl overflow-hidden bg-card flex-1 min-w-0">
             <div className="flex items-center gap-2 px-3.5 py-2.5 border-b font-semibold text-[13px] bg-muted/30">
               <Pencil className="h-3.5 w-3.5" /> Editor
+              {/* Same zoom strip as the render side. Reset returns to the fitted size. */}
+              <div className="ml-auto flex items-center gap-0.5 text-muted-foreground font-normal">
+                <Button variant="ghost" size="sm" onClick={() => setEditorZoom(Math.max(25, editorZoomPct - 10))} className="h-5 w-5 p-0 hover:text-foreground" title="Zoom Out"><ChevronDown className="h-3.5 w-3.5" /></Button>
+                <span className="text-[11px] tabular-nums w-9 text-center select-none">{editorZoomPct}%</span>
+                <Button variant="ghost" size="sm" onClick={() => setEditorZoom(Math.min(200, editorZoomPct + 10))} className="h-5 w-5 p-0 hover:text-foreground" title="Zoom In"><ChevronUp className="h-3.5 w-3.5" /></Button>
+                {/* Re-measures as well as clearing the override: when the zoom is ALREADY following
+                    the fit, clearing state alone is a no-op and the button would appear dead. */}
+                <Button variant="ghost" size="sm" onClick={() => { setEditorZoom(null); measureEditorFit(); }} className="h-5 w-5 p-0 hover:text-foreground ml-2" title="Fit to pane"><RotateCcw className="h-3 w-3" /></Button>
+              </div>
             </div>
             {/* INLINE editor beside the render for ALL three types (designMode editable surface). */}
             <div className="flex-1 min-h-0 flex flex-col p-3 gap-2">

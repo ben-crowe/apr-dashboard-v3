@@ -7,7 +7,7 @@ import {
   Pencil, X, Layers, LayoutGrid, Download, Loader2, Eye, RotateCcw, Plus, Columns, HelpCircle,
 } from "lucide-react";
 import { toast } from "sonner";
-import DocumentPreviewPane from './DocumentPreviewPane';
+import StudioDocumentPreviewPane from './StudioDocumentPreviewPane';
 import DocumentFieldsEditor from './DocumentFieldsEditor';
 import { downloadPagedPdf } from '@/utils/loe/downloadPagedPdf';
 import { generateLOEHTML } from '@/utils/loe/generateLOE';
@@ -19,8 +19,10 @@ import { loadAllPopupTemplates, loadActivePopupTemplate, resolvePopupTokens, sav
 /**
  * ComponentStudio — the Document/Email/Popup library + sequence map + split previewer/editor
  * (SPEC-component-studio). A SHELL that arranges the proven components; it does NOT rebuild them:
- *   - Document renders through the SHARED DocumentPreviewPane + generateLOEHTML + downloadPagedPdf
- *     (the exact path the existing LOEPreviewModal uses — INV-0, no new render engine).
+ *   - Document renders through StudioDocumentPreviewPane — the studio's OWN fork of the render
+ *     pane (2026-07-21, Ben: the original editor/previewer are protected, read-only reference;
+ *     the studio never shares a file with them) + generateLOEHTML + downloadPagedPdf. Same render
+ *     ENGINE the previewer uses (generateLOEHTML — no new render engine), different presentation.
  *   - Email renders the managed email's body (edit-time tokens resolved).
  *   - Popup renders the managed popup's body (sign-time tokens resolved).
  * Deep EDIT delegates to the existing modal editors via the onEdit* callbacks (full reuse):
@@ -86,6 +88,9 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   const [screenZoom, setScreenZoom] = useState(100); // zoom for email/popup render (doc uses the pane's own)
   const [spineW, setSpineW] = useState(312);          // sequence-spine width (drag to resize)
   const [railCollapsed, setRailCollapsed] = useState(false); // explorer rail collapsed to icons
+  // Remembers the rail's state from BEFORE a document Split view auto-collapsed it, so leaving
+  // Split restores exactly what the user had — null means "not currently auto-collapsed".
+  const [railStateBeforeDocSplit, setRailStateBeforeDocSplit] = useState<boolean | null>(null);
   const [seqId, setSeqId] = useState<string>('loe');                       // which sequence the map shows
   const [seqOpen, setSeqOpen] = useState<Record<string, boolean>>({});     // which names are expanded in the rail
   const currentSeq = SEQUENCES.find(s => s.id === seqId) ?? SEQUENCES[0];
@@ -364,6 +369,26 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     return () => document.removeEventListener('mousedown', onDown);
   }, [previewType]);
 
+  // Document editing needs the width — auto-collapse the explorer rail the moment a document's
+  // Split view opens, and restore whatever state the rail was actually in the moment Split ends
+  // (Done, back to map, switching to Editor-only, switching component type). While collapsed this
+  // way, expanding the rail via its own chevron floats it OVER the content instead of squeezing
+  // the split narrower (see railAsOverlay in Rail()) — the page never shrinks just because the
+  // rail is open.
+  useEffect(() => {
+    const docSplitActive = itemType === 'doc' && mode === 'edit' && editLayout === 'split';
+    if (docSplitActive) {
+      setRailStateBeforeDocSplit(prev => (prev === null ? railCollapsed : prev));
+      setRailCollapsed(true);
+    } else {
+      setRailStateBeforeDocSplit(prev => {
+        if (prev !== null) setRailCollapsed(prev);
+        return null;
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemType, mode, editLayout]);
+
   // ── open paths ────────────────────────────────────────────────────────────
   const openSeq = (t: CompType, m: 'read' | 'edit' = 'read') => { setItemType(t); setSelectedId(defaultIdFor(t)); setMode(m); setEditLayout('split'); setView('seq'); };
   const openLib = (t: CompType, id: string) => { setItemType(t); setSelectedId(id); setView('lib'); setMode('read'); setEditLayout('split'); };
@@ -402,7 +427,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
         return <div className="flex-1 flex items-center justify-center text-muted-foreground"><Loader2 className="h-5 w-5 animate-spin mr-2" /> Rendering document…</div>;
       }
       // Document = the SHARED previewer pane (paper page on the viewer, zoom + paged path).
-      return <DocumentPreviewPane html={docHtml} />;
+      return <StudioDocumentPreviewPane html={docHtml} />;
     }
     // Email + Popup = screen content → a page view scaled to fit its box.
     const id = selectedId;
@@ -530,8 +555,11 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   // Narrow presentation is used both when the user collapses the rail and when the parked
   // sequence view takes the left side.
   const railNarrow = railCollapsed || view === 'seq';
+  // Expanding the rail WHILE a document's Split view auto-collapsed it floats the rail over the
+  // content instead of pushing it — the page must not shrink just because the rail opened.
+  const railAsOverlay = railStateBeforeDocSplit !== null && !railCollapsed;
   const Rail = () => (
-    <aside className="flex-none bg-card border-r flex flex-col overflow-hidden transition-[width]"
+    <aside className={`flex-none bg-card border-r flex flex-col overflow-hidden transition-[width] ${railAsOverlay ? 'absolute inset-y-0 left-0 z-40 shadow-2xl' : ''}`}
            style={{ width: railNarrow ? 54 : 228 }}>
       {/* Collapse control. The rail had none — only the parked sequence list did — so there was no
           way to give the canvas the width back. Collapses to an icon strip rather than hiding
@@ -910,15 +938,16 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      {/* Full-window: no margin, no rounding, no dashboard showing round the edges — the
-          studio is a dense work surface and the floating border was dead space. The X in
-          the top bar still routes back to the job page. */}
+      {/* Contained overlay (Ben, 2026-07-21): the studio nearly fills the app, but a thin uniform
+          strip of dashboard stays visible on all four edges — a true full-window studio read as
+          "left the app". Rounded corners + the Dialog's own dimmed backdrop are back for the same
+          reason. No edge of the studio may ever touch the window edge. */}
       {/* Position/size go in inline style, not classes: the shared DialogContent base already
           sets left-[50%]/top-[50%]/translate + a max width, and class-vs-class overrides there
           depend on stylesheet order. Inline style is deterministic. */}
       <DialogContent
-        className="rounded-none sm:rounded-none border-0 flex flex-col p-0 gap-0 [&>button]:hidden overflow-hidden"
-        style={{ left: 0, top: 0, transform: 'none', width: '100vw', height: '100vh', maxWidth: 'none' }}
+        className="rounded-xl flex flex-col p-0 gap-0 [&>button]:hidden overflow-hidden"
+        style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: 'calc(100vw - 96px)', height: 'calc(100vh - 96px)', maxWidth: 'none' }}
       >
         {/* top bar */}
         <div className="flex items-center gap-4 px-4 h-14 border-b flex-none">
@@ -928,8 +957,9 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
           <div className="flex-1" />
           <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={onClose}><X className="h-4 w-4" /></Button>
         </div>
-        {/* shell */}
-        <div className="flex-1 flex min-h-0">
+        {/* shell — relative so the rail can float over it as an overlay during a document Split
+            view (railAsOverlay) instead of squeezing this area narrower. */}
+        <div className="flex-1 flex min-h-0 relative">
           {Rail()}
           <main className="flex-1 flex flex-col min-w-0">
             {/* stage bar / crumb */}

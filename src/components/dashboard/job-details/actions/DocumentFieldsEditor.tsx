@@ -6,11 +6,15 @@ import { toast } from "sonner";
 import { parseTemplate, reconstructHTML, EditableSection } from "@/utils/loe/templateParser";
 
 /**
- * DocumentFieldsEditor — the sectioned FIELDS panel (labeled box per editable section,
- * numbered-group headers, [field] placeholder guard) extracted from TemplateEditorModal
- * (the "Edit Contract" screen) so it is ONE editor codebase instead of two. Both
- * TemplateEditorModal's Split view and the Component Studio's document Split view render
- * through this component — editing a field here and editing it there are the same code path.
+ * DocumentFieldsEditor — Component Studio's OWN sectioned FIELDS panel (labeled box per
+ * editable section, numbered-group headers, [field] placeholder guard, auto-grow textareas).
+ *
+ * This is a studio-owned DUPLICATE, not a shared component. Ben's standing rule (2026-07-21):
+ * TemplateEditorModal (the "Edit Contract" screen) is protected, read-only reference — it is
+ * never imported by or pointed at studio code, so a studio-only change can never leak into the
+ * production editor. This file's section-box mechanism (parse, reconstruct, auto-resize,
+ * placeholder guard) was learned from TemplateEditorModal's actual behavior and reproduced here
+ * on purpose, not shared with it. TemplateEditorModal is untouched and does not import this file.
  *
  * Ownership split: this component owns section state + reconstruction; the CALLER owns the
  * live preview (it re-renders whatever `onChange` hands back) and the save destination.
@@ -53,6 +57,22 @@ const DocumentFieldsEditor: React.FC<DocumentFieldsEditorProps> = ({ html, onCha
     const minHeight = fontSize * 1.3 + padding;
     textarea.style.height = Math.max(textarea.scrollHeight, minHeight) + 'px';
   };
+
+  // Auto-resize EVERY box to its full content on load and whenever the sections/font size
+  // change — not just on the box the user is actively typing in. Without this, a box only grows
+  // once it's been typed into and every other box sits at its one-line minimum, clipping
+  // whatever text was already there (TemplateEditorModal's exact mechanism, reused verbatim).
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      const textareas = document.querySelectorAll('textarea[data-auto-resize="true"]');
+      textareas.forEach((textarea: HTMLTextAreaElement) => {
+        textarea.style.height = 'auto';
+        const minHeight = fontSize * 1.3;
+        const contentHeight = textarea.scrollHeight;
+        textarea.style.height = Math.max(minHeight, contentHeight) + 'px';
+      });
+    });
+  }, [sections, fontSize]);
 
   const handleSectionChange = (sectionId: string, value: string) => {
     setSections(prev => {
@@ -123,6 +143,7 @@ const DocumentFieldsEditor: React.FC<DocumentFieldsEditorProps> = ({ html, onCha
                       <Textarea
                         value={currentValue}
                         onChange={(e) => { handleSectionChange(section.id, e.target.value); handleTextareaResize(e); }}
+                        data-auto-resize="true"
                         className="w-full p-2 border border-border rounded resize-none bg-card text-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                         rows={1}
                         style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px`, height: 'auto', minHeight: `${fontSize * 1.3 + 16}px` }}

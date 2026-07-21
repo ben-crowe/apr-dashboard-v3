@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { DetailJob, JobDetails } from "@/types/job";
 import {
   FileText, Mail, MonitorCheck, ArrowRight, ArrowLeft, ChevronDown, ChevronUp, ChevronRight, ChevronLeft,
-  Pencil, X, Layers, LayoutGrid, Download, Loader2, Eye, RotateCcw, Plus,
+  Pencil, X, Layers, LayoutGrid, Download, Loader2, Eye, RotateCcw, Plus, Columns,
 } from "lucide-react";
 import { toast } from "sonner";
 import DocumentPreviewPane from './DocumentPreviewPane';
@@ -60,7 +60,10 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   const [view, setView] = useState<View>('map');
   const [itemType, setItemType] = useState<CompType>('doc');
   const [selectedId, setSelectedId] = useState<string>('');
-  const [ratio, setRatio] = useState<'view' | 'edit'>('view');
+  // Reading is the default job: a component opens as a FULL-WIDTH render with no editor.
+  // Edit is opt-in via the Edit button in the panel bar; only then does a layout choice exist.
+  const [mode, setMode] = useState<'read' | 'edit'>('read');
+  const [editLayout, setEditLayout] = useState<'split' | 'editor'>('split'); // split is an even 50/50
   const [screenZoom, setScreenZoom] = useState(100); // zoom for email/popup render (doc uses the pane's own)
   const [spineW, setSpineW] = useState(312);          // sequence-spine width (drag to resize)
   const [spineCollapsed, setSpineCollapsed] = useState(false); // collapse the spine to an icon strip
@@ -150,7 +153,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     const body = (editableBody() || '<p></p>').replace(/<script[\s\S]*?<\/script>/gi, '');
     doc.open(); doc.write(body); doc.close(); doc.designMode = 'on';
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view, itemType, selectedId, ratio, emailTemplates, popupTemplates, docHtml]);
+  }, [view, itemType, selectedId, mode, editLayout, emailTemplates, popupTemplates, docHtml]);
 
   const insertToken = (token: string) => {
     const doc = editIframeRef.current?.contentDocument;
@@ -188,8 +191,8 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   const mergeTokens = itemType === 'mail' ? EMAIL_MERGE_TOKENS : POPUP_MERGE_TOKENS;
 
   // ── open paths ────────────────────────────────────────────────────────────
-  const openSeq = (t: CompType, r: 'view' | 'edit' = 'view') => { setItemType(t); setSelectedId(defaultIdFor(t)); setRatio(r); setView('seq'); };
-  const openLib = (t: CompType, id: string) => { setItemType(t); setSelectedId(id); setView('lib'); setRatio('view'); };
+  const openSeq = (t: CompType, m: 'read' | 'edit' = 'read') => { setItemType(t); setSelectedId(defaultIdFor(t)); setMode(m); setEditLayout('split'); setView('seq'); };
+  const openLib = (t: CompType, id: string) => { setItemType(t); setSelectedId(id); setView('lib'); setMode('read'); setEditLayout('split'); };
   const closePanel = () => setView('map');
 
   const handleEdit = () => {
@@ -312,7 +315,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
                 <div className="text-xs text-muted-foreground mt-0.5">{t === 'doc' ? 'e-signature document' : t === 'mail' ? 'delivers the signing link' : 'post-sign confirmation'}</div>
               </div>
               <div className="flex items-center gap-1.5 border-t px-3 py-2 bg-muted/30">
-                <button type="button" onClick={(e) => { e.stopPropagation(); openSeq(t, 'view'); }}
+                <button type="button" onClick={(e) => { e.stopPropagation(); openSeq(t, 'read'); }}
                   className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground border rounded-md px-2 py-1 bg-card hover:text-[#2c5aa0] hover:border-[#2c5aa0] transition-colors">
                   <Eye className="h-3 w-3" /> Preview
                 </button>
@@ -379,8 +382,11 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     </div>
   );
 
-  // ── the split work area (render left, editor right) ───────────────────────
-  const leftPct = ratio === 'edit' ? '50%' : '72%';
+  // ── the work area ─────────────────────────────────────────────────────────
+  // read  → the render alone, full width (the default; reading is the common job)
+  // edit  → split (an even 50/50, drag to change) or the editor alone, full width
+  const showRender = mode === 'read' || editLayout === 'split';
+  const showEditor = mode === 'edit';
   const startGrab = (e: React.MouseEvent) => {
     e.preventDefault();
     const split = splitRef.current; if (!split) return;
@@ -404,23 +410,48 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
           <span className="font-bold">{nameFor(itemType, selectedId)}</span>
           <div className="flex-1" />
           {itemType === 'doc' && <Button variant="ghost" size="sm" className="h-8 gap-1" onClick={handleDownload}><Download className="h-4 w-4" /> Download</Button>}
+          {mode === 'read' ? (
+            <Button size="sm" className="h-8 gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]" onClick={() => { setEditLayout('split'); setMode('edit'); }}>
+              <Pencil className="h-3.5 w-3.5" /> Edit
+            </Button>
+          ) : (
+            <>
+              {/* Layout choice exists only inside edit mode. Split opens even, 50/50. */}
+              <div className="flex items-center rounded-md border overflow-hidden">
+                <button type="button" onClick={() => setEditLayout('split')}
+                  className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 ${editLayout === 'split' ? 'bg-[#2c5aa0] text-white' : 'text-muted-foreground hover:text-[#2c5aa0]'}`}>
+                  <Columns className="h-3 w-3" /> Split
+                </button>
+                <button type="button" onClick={() => setEditLayout('editor')}
+                  className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 border-l ${editLayout === 'editor' ? 'bg-[#2c5aa0] text-white' : 'text-muted-foreground hover:text-[#2c5aa0]'}`}>
+                  <Pencil className="h-3 w-3" /> Editor
+                </button>
+              </div>
+              <Button variant="ghost" size="sm" className="h-8 gap-1" onClick={() => setMode('read')}>
+                <Eye className="h-4 w-4" /> Done
+              </Button>
+            </>
+          )}
           <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={closePanel}><X className="h-4 w-4" /></Button>
         </div>
-        {/* split */}
+        {/* work area */}
         <div ref={splitRef} className="flex-1 flex min-h-0 p-4 gap-0">
-          <div className="flex flex-col border rounded-xl overflow-hidden bg-card min-w-0" style={{ flex: `0 0 ${leftPct}` }}>
-            <div className="flex items-center gap-2 px-3.5 py-2.5 border-b font-semibold text-[13px] bg-muted/30"><Eye className="h-3.5 w-3.5" /> Rendered</div>
-            <div className="flex-1 flex flex-col min-h-0 overflow-hidden">{renderLeft()}</div>
-          </div>
-          <div className="w-3.5 flex items-center justify-center cursor-col-resize group" onMouseDown={startGrab} title="Drag to resize">
-            <span className="w-[3px] h-9 rounded bg-border group-hover:bg-[#2c5aa0]" />
-          </div>
+          {showRender && (
+            <div className="flex flex-col border rounded-xl overflow-hidden bg-card min-w-0"
+                 style={showEditor ? { flex: '0 0 50%' } : { flex: '1 1 100%' }}>
+              <div className="flex items-center gap-2 px-3.5 py-2.5 border-b font-semibold text-[13px] bg-muted/30"><Eye className="h-3.5 w-3.5" /> Rendered</div>
+              <div className="flex-1 flex flex-col min-h-0 overflow-hidden">{renderLeft()}</div>
+            </div>
+          )}
+          {showRender && showEditor && (
+            <div className="w-3.5 flex items-center justify-center cursor-col-resize group" onMouseDown={startGrab} title="Drag to resize">
+              <span className="w-[3px] h-9 rounded bg-border group-hover:bg-[#2c5aa0]" />
+            </div>
+          )}
+          {showEditor && (
           <div className="flex flex-col border rounded-xl overflow-hidden bg-card flex-1 min-w-0">
             <div className="flex items-center gap-2 px-3.5 py-2.5 border-b font-semibold text-[13px] bg-muted/30">
               <Pencil className="h-3.5 w-3.5" /> Editor
-              <button className="ml-auto inline-flex items-center gap-1 text-[11px] font-semibold text-muted-foreground border rounded-md px-2 py-0.5 hover:text-[#2c5aa0] hover:border-[#2c5aa0]" onClick={() => setRatio(r => r === 'edit' ? 'view' : 'edit')}>
-                {ratio === 'edit' ? <ChevronRight className="h-3 w-3" /> : <ArrowLeft className="h-3 w-3" />}{ratio === 'edit' ? 'Collapse' : 'Expand'}
-              </button>
             </div>
             {/* INLINE editor beside the render for ALL three types (designMode editable surface). */}
             <div className="flex-1 min-h-0 flex flex-col p-3 gap-2">
@@ -448,6 +479,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
               </div>
             </div>
           </div>
+          )}
         </div>
       </div>
     </div>

@@ -487,7 +487,16 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[1280px] w-[95vw] h-[95vh] flex flex-col p-0 gap-0 [&>button]:hidden overflow-hidden">
+      {/* Full-window: no margin, no rounding, no dashboard showing round the edges — the
+          studio is a dense work surface and the floating border was dead space. The X in
+          the top bar still routes back to the job page. */}
+      {/* Position/size go in inline style, not classes: the shared DialogContent base already
+          sets left-[50%]/top-[50%]/translate + a max width, and class-vs-class overrides there
+          depend on stylesheet order. Inline style is deterministic. */}
+      <DialogContent
+        className="rounded-none sm:rounded-none border-0 flex flex-col p-0 gap-0 [&>button]:hidden overflow-hidden"
+        style={{ left: 0, top: 0, transform: 'none', width: '100vw', height: '100vh', maxWidth: 'none' }}
+      >
         {/* top bar */}
         <div className="flex items-center gap-4 px-4 h-14 border-b flex-none">
           <div className="flex items-baseline gap-2"><span className="font-extrabold tracking-wide text-[#2c5aa0]">VALTA</span><span className="text-xs text-muted-foreground">Component Studio</span></div>

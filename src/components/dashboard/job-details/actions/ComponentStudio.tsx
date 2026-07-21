@@ -80,6 +80,12 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   // than replacing the whole view — the modules stay visible so you keep your place.
   const [previewType, setPreviewType] = useState<CompType | null>(null);
   const previewRef = useRef<HTMLDivElement>(null);
+  // The preview is centred on the MODULE ROW, not on the canvas. The canvas carries padding and
+  // sits to the right of the library rail, so centring on it pushes the panel visibly right of
+  // the modules it belongs to. Measured from the row rather than assumed, because the row's width
+  // changes with the rail and with how many modules there are.
+  const rowRef = useRef<HTMLDivElement>(null);
+  const [previewBox, setPreviewBox] = useState<{ left: number; width: number; top: number } | null>(null);
 
   const splitRef = useRef<HTMLDivElement>(null);
 
@@ -246,6 +252,39 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     setPreviewType(t);
   };
 
+  // Measure the module row and centre the preview under it. Re-runs when the preview opens and
+  // whenever the row changes size.
+  useEffect(() => {
+    const row = rowRef.current;
+    if (!previewType || !row) { setPreviewBox(null); return; }
+    const measure = () => {
+      const r = rowRef.current;
+      const canvas = r?.offsetParent as HTMLElement | null;
+      if (!r || !canvas) return;
+      // Centre on the CARDS, not on the row element. The row is a full-width flex container, so
+      // its centre is the canvas centre — which sat well right of the three cards and is exactly
+      // what made the panel look shifted.
+      const cards = [...r.querySelectorAll('[data-module-card]')] as HTMLElement[];
+      if (!cards.length) return;
+      const rects = cards.map(c => c.getBoundingClientRect());
+      const box = canvas.getBoundingClientRect();
+      const cardsLeft = Math.min(...rects.map(x => x.left));
+      const cardsRight = Math.max(...rects.map(x => x.right));
+      const cardsWidth = cardsRight - cardsLeft;
+      const width = Math.round(cardsWidth * 0.6);
+      setPreviewBox({
+        left: Math.round(cardsLeft - box.left + (cardsWidth - width) / 2 + canvas.scrollLeft),
+        width,
+        top: Math.round(Math.max(...rects.map(x => x.bottom)) - box.top + canvas.scrollTop + 12),
+      });
+    };
+    measure();
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(row);
+    return () => ro.disconnect();
+  }, [previewType]);
+
   // Click anywhere outside closes it — EXCEPT on another module card, which slides the preview
   // to that module instead (the card's own click handler runs and re-opens it).
   useEffect(() => {
@@ -389,7 +428,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     <div className="flex-1 overflow-auto p-6 relative">
       <h1 className="text-xl font-bold">Default LOE Deployment</h1>
       <p className="text-muted-foreground mt-1">What the client experiences, in order. Click a block to preview it here; Edit opens it in its own editing area.</p>
-      <div className="flex items-stretch mt-7 pb-4 overflow-x-auto">
+      <div ref={rowRef} className="flex items-stretch mt-7 pb-4 overflow-x-auto">
         {ORDER.map((t, i) => (
           <React.Fragment key={t}>
             {/* data-module-card marks a card as "not outside": clicking one while a preview is
@@ -432,10 +471,15 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     const t = previewType as CompType;
     return (
       <div ref={previewRef}
-           className="absolute left-[20%] w-[60%] bg-card border rounded-2xl shadow-2xl overflow-hidden z-20 flex flex-col"
+           className="absolute bg-card border rounded-2xl shadow-2xl overflow-hidden z-20 flex flex-col"
            /* An explicit HEIGHT, not just a max-height: the body is a flex-1 child, and with only
               a max-height on the parent it resolves to zero and the preview renders empty. */
-           style={{ top: 236, height: 'min(520px, calc(100% - 260px))' }}>
+           style={{
+             left: previewBox?.left ?? 0,
+             width: previewBox?.width ?? '60%',
+             top: previewBox?.top ?? 236,
+             height: `min(520px, calc(100% - ${(previewBox?.top ?? 236) + 24}px))`,
+           }}>
         <div className="flex items-center gap-2 px-4 h-11 border-b bg-muted/30 flex-none">
           <span className={`flex items-center gap-1.5 text-[11px] font-bold uppercase ${t === 'doc' ? 'text-[#2c5aa0]' : t === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>{TYPE_META[t].icon}{TYPE_META[t].label}</span>
           <span className="font-bold text-sm truncate">{nameFor(t, defaultIdFor(t))}</span>

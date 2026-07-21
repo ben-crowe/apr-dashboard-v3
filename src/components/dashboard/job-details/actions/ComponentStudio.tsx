@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { DetailJob, JobDetails } from "@/types/job";
 import {
   FileText, Mail, MonitorCheck, ArrowRight, ArrowLeft, ChevronDown, ChevronUp, ChevronRight, ChevronLeft,
-  Pencil, X, Layers, LayoutGrid, Download, Loader2, Eye, RotateCcw, Plus, Columns,
+  Pencil, X, Layers, LayoutGrid, Download, Loader2, Eye, RotateCcw, Plus, Columns, HelpCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import DocumentPreviewPane from './DocumentPreviewPane';
@@ -440,7 +440,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   // sequence view takes the left side.
   const railNarrow = railCollapsed || view === 'seq';
   const Rail = () => (
-    <aside className="flex-none bg-card border-r flex flex-col overflow-y-auto transition-[width]"
+    <aside className="flex-none bg-card border-r flex flex-col overflow-hidden transition-[width]"
            style={{ width: railNarrow ? 54 : 228 }}>
       {/* Collapse control. The rail had none — only the parked sequence list did — so there was no
           way to give the canvas the width back. Collapses to an icon strip rather than hiding
@@ -452,13 +452,9 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
           {railCollapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
         </button>
       </div>
+      {/* Content scrolls; the help entry at the foot of the rail does not — see below. */}
+      <div className="flex-1 min-h-0 overflow-y-auto">
       <div className="p-3.5 pb-2">
-        {/* Way back to the explanation page, so it is not a one-time screen you can never revisit. */}
-        <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer mb-2 ${view === 'home' ? 'bg-muted' : 'hover:bg-muted'} ${railNarrow ? 'justify-center' : ''}`}
-             onClick={() => setView('home')} title="How this area works">
-          <Eye className="h-4 w-4 text-muted-foreground" />
-          {!railNarrow && <span className="flex-1 text-sm text-muted-foreground">How this area works</span>}
-        </div>
         <div className={`flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-muted-foreground mb-2 ${railNarrow ? 'justify-center' : ''}`}>
           <Layers className="h-3 w-3" />{!railNarrow && 'Sequences'}
         </div>
@@ -526,6 +522,17 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
             )}
           </div>
         ))}
+      </div>
+      </div>
+      {/* Help, anchored at the foot of the rail and set apart from the content groups above —
+          quieter type, its own divider, and outside the scrolling area so it stays put however
+          long the library grows. Still present as an icon when the rail is collapsed. */}
+      <div className="flex-none border-t p-2">
+        <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer ${view === 'home' ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted'} ${railNarrow ? 'justify-center' : ''}`}
+             onClick={() => setView('home')} title="How this area works">
+          <HelpCircle className="h-4 w-4 flex-none" />
+          {!railNarrow && <span className="flex-1 text-[12.5px]">How this area works</span>}
+        </div>
       </div>
     </aside>
   );

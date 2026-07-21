@@ -123,18 +123,32 @@ const StudioDocumentPreviewPane: React.FC<StudioDocumentPreviewPaneProps> = ({ h
           a layout that never changes. The wrapper scrolls (vertically for a long document,
           horizontally never — the outer box is always exactly `scaledW/scaledH` wide/tall, so
           nothing to scroll sideways to). */}
-      <div ref={wrapRef} className="flex-1 border border-slate-200 rounded-lg overflow-auto bg-slate-100 my-2">
+      {/* Same treatment the email preview's scroll box uses (ComponentStudio's ScreenPreview,
+          `flex-1 min-h-0 overflow-auto bg-slate-100 p-4`) — a plain, borderless surface. This
+          pane previously ALSO put its own border+rounded corners on this outer box, on top of the
+          white page's own edges — two nested boxes instead of one continuous backdrop, which is
+          what read as a seam. */}
+      <div ref={wrapRef} className="flex-1 overflow-auto bg-slate-100 p-4">
         {previewUrl ? (
-          <div
-            className="mx-auto bg-white"
-            style={{ width: scaledW || undefined, height: scaledH || undefined, overflow: 'hidden' }}
-          >
-            <div style={{ width: naturalSize.w || 850, height: naturalSize.h || undefined, transform: `scale(${pageScale})`, transformOrigin: 'top left' }}>
+          // ONE background layer, not two: the outer box is purely a SIZING box (no fill of its
+          // own — the pane's own bg-slate-100 shows through it evenly on every side), and the
+          // white page + its drop shadow live on the single inner, transform-scaled box. Two
+          // separately-sized white/background layers is exactly what produced the seam Ben
+          // caught (a visible edge where one layer's box didn't quite line up with the other's).
+          <div className="mx-auto" style={{ width: scaledW || undefined, height: scaledH || undefined }}>
+            <div
+              className="bg-white"
+              style={{
+                width: naturalSize.w || 850, height: naturalSize.h || 1100,
+                transform: `scale(${pageScale})`, transformOrigin: 'top left',
+                boxShadow: '0 18px 40px -12px rgba(15,23,42,0.45), 0 6px 18px -8px rgba(15,23,42,0.30)',
+              }}
+            >
               <iframe
                 ref={frameRef}
                 src={previewUrl}
                 onLoad={measureFit}
-                className="bg-white block"
+                className="block"
                 title="LOE Document Preview"
                 sandbox="allow-same-origin"
                 style={{ border: 'none', width: naturalSize.w || 850, height: naturalSize.h || 1100, display: 'block' }}

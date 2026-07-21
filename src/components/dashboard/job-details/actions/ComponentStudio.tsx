@@ -311,28 +311,61 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     setPreviewType(t);
   };
 
-  // Measure the module row and centre the preview under it. Re-runs when the preview opens and
-  // whenever the row changes size.
+  // Render the sequence's document ONCE when the map opens, so hovering its card can show the
+  // real thing. Generating is a database round trip, so it must not happen per hover — this is one
+  // call on arriving at the map, not one per pointer movement.
+  useEffect(() => {
+    if (view !== 'map' || docHtml || !docTemplates.length) return;
+    const id = defaultIdFor('doc');
+    const tpl = docTemplates.find(d => d.id === id);
+    if (!tpl) return;
+    let cancelled = false;
+    generateLOEHTML(job, jobDetails, tpl.template_html, tpl.id, (tpl as any).version)
+      .then(html => { if (!cancelled) setDocHtml(html); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, docTemplates]);
+
+  // Place the preview under the module row, horizontally TRACKING whichever module is showing.
+  // A panel that never moves while its contents swap gives no clue which module you are looking
+  // at — the slide is the signal. First module: left edges align. Last: right edges align.
+  // Anything between: centred under its own card. Works for a sequence of any length.
+  const shownType = previewType ?? hover?.type ?? null;
   useEffect(() => {
     const row = rowRef.current;
-    if (!previewType || !row) { setPreviewBox(null); return; }
+    if (view !== 'map' || !row) { setPreviewBox(null); return; }
     const measure = () => {
       const r = rowRef.current;
       const canvas = r?.offsetParent as HTMLElement | null;
       if (!r || !canvas) return;
-      // Centre on the CARDS, not on the row element. The row is a full-width flex container, so
-      // its centre is the canvas centre — which sat well right of the three cards and is exactly
-      // what made the panel look shifted.
+      // Measure against the CARDS, not the row element. The row is a full-width flex container,
+      // so its centre is the canvas centre, well right of the cards themselves.
       const cards = [...r.querySelectorAll('[data-module-card]')] as HTMLElement[];
       if (!cards.length) return;
       const rects = cards.map(c => c.getBoundingClientRect());
       const box = canvas.getBoundingClientRect();
       const cardsLeft = Math.min(...rects.map(x => x.left));
       const cardsRight = Math.max(...rects.map(x => x.right));
-      const cardsWidth = cardsRight - cardsLeft;
-      const width = Math.round(cardsWidth * 0.6);
+      const width = Math.round((cardsRight - cardsLeft) * 0.6);
+
+      const idx = shownType ? cards.findIndex(c => c.getAttribute('data-module-card') === shownType) : -1;
+      let leftPx: number;
+      if (idx <= 0 && idx !== -1) {
+        leftPx = rects[0].left;                                   // first module: left edges align
+      } else if (idx === cards.length - 1 && idx !== -1) {
+        leftPx = rects[idx].right - width;                        // last module: right edges align
+      } else if (idx > 0) {
+        const c = rects[idx];
+        leftPx = c.left + (c.width - width) / 2;                  // middle: centred under its card
+      } else {
+        leftPx = cardsLeft + (cardsRight - cardsLeft - width) / 2; // nothing shown: centred on the row
+      }
+      // Never let it run outside the cards' own span.
+      leftPx = Math.min(Math.max(leftPx, cardsLeft), cardsRight - width);
+
       setPreviewBox({
-        left: Math.round(cardsLeft - box.left + (cardsWidth - width) / 2 + canvas.scrollLeft),
+        left: Math.round(leftPx - box.left + canvas.scrollLeft),
         width,
         top: Math.round(Math.max(...rects.map(x => x.bottom)) - box.top + canvas.scrollTop + 12),
       });
@@ -342,7 +375,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     const ro = new ResizeObserver(measure);
     ro.observe(row);
     return () => ro.disconnect();
-  }, [previewType]);
+  }, [view, shownType, currentSeq]);
 
   // Click anywhere outside closes it — EXCEPT on another module card, which slides the preview
   // to that module instead (the card's own click handler runs and re-opens it).
@@ -398,37 +431,97 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   };
 
   // ── render of the selected component (left pane) ──────────────────────────
-  const renderLeft = () => {
-    if (itemType === 'doc') {
+  const renderLeft = (typeOverride?: CompType) => {
+    const kind = typeOverride ?? itemType;
+    if (kind === 'doc') {
       if (isGenerating && !docHtml) {
         return <div className="flex-1 flex items-center justify-center text-muted-foreground"><Loader2 className="h-5 w-5 animate-spin mr-2" /> Rendering document…</div>;
       }
       // Document = the SHARED previewer pane (paper page on the viewer, zoom + paged path).
       return <DocumentPreviewPane html={docHtml} />;
     }
-    // Email + Popup = screen content → a monitor view floating on the viewer backdrop.
-    const html = itemType === 'mail'
-      ? resolveEditTimeTokens(emailTemplates.find(e => e.id === selectedId)?.body_html ?? '', tokenCtx)
-      : resolvePopupTokens(popupTemplates.find(p => p.id === selectedId)?.body_html ?? '', tokenCtx);
+    // Email + Popup = screen content → a monitor view scaled to fit its box. Reads the body from
+    // what is already loaded, keyed by the id for THIS kind, so a hover never has to fetch.
+    const id = typeOverride ? defaultIdFor(kind) : selectedId;
+    const html = kind === 'mail'
+      ? resolveEditTimeTokens(emailTemplates.find(e => e.id === id)?.body_html ?? '', tokenCtx)
+      : resolvePopupTokens(popupTemplates.find(p => p.id === id)?.body_html ?? '', tokenCtx);
+    return <ScreenPreview html={html} kind={kind} />;
+  };
+
+  // The screen preview for an email or a popup: a fixed-size viewing box with the whole thing
+  // scaled to fit inside it, height as well as width.
+  //
+  // It used to be a fixed 640-tall frame in a scrolling box, with CSS `zoom` on an ancestor as the
+  // control. Two separate faults. The box grew past the panel so the mock browser frame was cut off
+  // at the bottom, and `zoom` on an ancestor of an iframe resizes the frame's BOX while the document
+  // inside re-lays out to the new size — so the readout said 45% while the text stayed the same
+  // size. A transform is what actually scales what is drawn, and that is what is used now.
+  const ScreenPreview: React.FC<{ html: string; kind: CompType }> = ({ html, kind }) => {
+    const boxRef = useRef<HTMLDivElement>(null);
+    const frameRef = useRef<HTMLIFrameElement>(null);
+    const [box, setBox] = useState<{ w: number; h: number }>({ w: 0, h: 0 });
+    const INTRINSIC_W = 680;
+    const CHROME_H = 32;                                        // the mock browser bar
+    // The content's REAL height, measured after it loads. Fitting against an assumed height was
+    // the defect: a 640 guess fits the FRAME while taller content keeps running past the bottom.
+    const [contentH, setContentH] = useState(kind === 'popup' ? 560 : 640);
+    const measureContent = () => {
+      const doc = frameRef.current?.contentDocument;
+      if (!doc?.documentElement) return;
+      setContentH(Math.max(doc.documentElement.scrollHeight, doc.body?.scrollHeight ?? 0, 120));
+    };
+    const INTRINSIC_H = contentH + CHROME_H;
+
+    useEffect(() => {
+      const el = boxRef.current;
+      if (!el) return;
+      // clientWidth/Height INCLUDE the box's own padding, and the scaled screen sits inside that
+      // padding — so fitting against the raw numbers overshoots by the padding and clips.
+      const measure = () => {
+        const cs = getComputedStyle(el);
+        const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+        const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+        setBox({ w: Math.max(0, el.clientWidth - padX), h: Math.max(0, el.clientHeight - padY) });
+      };
+      measure();
+      if (typeof ResizeObserver === 'undefined') return;
+      const ro = new ResizeObserver(measure); ro.observe(el);
+      return () => ro.disconnect();
+    }, []);
+
+    // Fit BOTH dimensions — the whole component is meant to be readable in one view by default.
+    const fit = box.w && box.h
+      ? Math.min(box.w / INTRINSIC_W, box.h / INTRINSIC_H)
+      : 1;
+    const applied = fit * (screenZoom / 100);
+
     return (
       <div className="flex-1 flex flex-col min-h-0">
-        {/* compact zoom — parity with the document pane */}
         <div className="flex items-center justify-end px-4 pt-1">
           <div className="flex items-center gap-0.5 text-muted-foreground">
             <Button variant="ghost" size="sm" onClick={() => setScreenZoom(z => Math.max(25, z - 10))} className="h-5 w-5 p-0 hover:text-foreground" title="Zoom Out"><ChevronDown className="h-3.5 w-3.5" /></Button>
-            <span className="text-[11px] tabular-nums w-9 text-center select-none">{screenZoom}%</span>
-            <Button variant="ghost" size="sm" onClick={() => setScreenZoom(z => Math.min(200, z + 10))} className="h-5 w-5 p-0 hover:text-foreground" title="Zoom In"><ChevronUp className="h-3.5 w-3.5" /></Button>
-            <Button variant="ghost" size="sm" onClick={() => setScreenZoom(100)} className="h-5 w-5 p-0 hover:text-foreground ml-2" title="Reset Zoom"><RotateCcw className="h-3 w-3" /></Button>
+            {/* Shows what is ACTUALLY applied, not a setting that the render ignores. */}
+            <span className="text-[11px] tabular-nums w-9 text-center select-none">{Math.round(applied * 100)}%</span>
+            <Button variant="ghost" size="sm" onClick={() => setScreenZoom(z => Math.min(300, z + 10))} className="h-5 w-5 p-0 hover:text-foreground" title="Zoom In"><ChevronUp className="h-3.5 w-3.5" /></Button>
+            <Button variant="ghost" size="sm" onClick={() => setScreenZoom(100)} className="h-5 w-5 p-0 hover:text-foreground ml-2" title="Fit whole screen"><RotateCcw className="h-3 w-3" /></Button>
           </div>
         </div>
-        {/* The rendered SCREEN is always a light page on a light viewer (never themed dark). */}
-        <div className="flex-1 overflow-auto bg-slate-100 p-6">
-          <div className="max-w-[680px] mx-auto bg-white border border-slate-200 rounded-lg shadow-lg overflow-hidden" style={{ zoom: screenZoom / 100 }}>
-            <div className="h-8 bg-slate-100 border-b border-slate-200 flex items-center gap-1.5 px-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-red-300" /><span className="w-2.5 h-2.5 rounded-full bg-yellow-300" /><span className="w-2.5 h-2.5 rounded-full bg-green-300" />
-              <span className="ml-2 flex-1 h-4 bg-white border border-slate-200 rounded" />
+        {/* Fixed box. It does not grow with content — content is scaled to it. */}
+        <div ref={boxRef} className="flex-1 min-h-0 overflow-auto bg-slate-100 p-4">
+          <div style={{ width: INTRINSIC_W * applied, height: INTRINSIC_H * applied, margin: '0 auto' }}>
+            <div className="bg-white border border-slate-200 rounded-lg shadow-lg overflow-hidden"
+                 style={{ width: INTRINSIC_W, height: INTRINSIC_H, transform: `scale(${applied})`, transformOrigin: 'top left' }}>
+              <div className="h-8 bg-slate-100 border-b border-slate-200 flex items-center gap-1.5 px-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-300" /><span className="w-2.5 h-2.5 rounded-full bg-yellow-300" /><span className="w-2.5 h-2.5 rounded-full bg-green-300" />
+                <span className="ml-2 flex-1 h-4 bg-white border border-slate-200 rounded" />
+              </div>
+              {/* The frame is given the content's own height, so nothing is cut off inside it and
+                  the scale below is computed against what is really there. */}
+              <iframe ref={frameRef} srcDoc={html} onLoad={measureContent}
+                      title={`${TYPE_META[kind].label} preview`} sandbox="allow-same-origin"
+                      className="bg-white" style={{ border: 'none', width: INTRINSIC_W, height: contentH }} />
             </div>
-            <iframe srcDoc={html} title={`${TYPE_META[itemType].label} preview`} sandbox="allow-same-origin" className="w-full bg-white" style={{ border: 'none', height: itemType === 'popup' ? 560 : 640 }} />
           </div>
         </div>
       </div>
@@ -614,30 +707,21 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
         ))}
       </div>
       {previewType && ModulePreview()}
-      {!previewType && hover && (
-        <div data-hover-thumb className="absolute z-30 rounded-xl border bg-card shadow-xl overflow-hidden pointer-events-none"
-             style={{ left: hover.left, top: hover.top, width: HOVER_W, height: HOVER_H }}>
-          <div className={`flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] font-bold uppercase border-b bg-muted/40 ${hover.type === 'doc' ? 'text-[#2c5aa0]' : hover.type === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>
-            {TYPE_META[hover.type].icon}{nameFor(hover.type, defaultIdFor(hover.type))}
-          </div>
-          {/* A scaled-down still. pointer-events off on the wrapper, sandbox with no permissions —
-              it can only be looked at. */}
-          <div className="relative bg-white" style={{ height: HOVER_H - 29, overflow: 'hidden' }}>
-            <iframe srcDoc={thumbnailHtml(hover.type)} title="preview thumbnail" sandbox=""
-                    style={{ border: 'none', width: 900, height: (HOVER_H - 29) * 3, transform: 'scale(0.333)', transformOrigin: 'top left', pointerEvents: 'none' }} />
-          </div>
-        </div>
-      )}
+      {/* Hover shows the SAME panel in the SAME place as a click, just transient and untouchable.
+          A small tile under the card was too small to read and sat somewhere else, so hovering and
+          clicking looked like two different features rather than one arriving two ways. */}
+      {!previewType && hover && ModulePreview(hover.type)}
     </div>
   );
 
   // Floating preview of one module. Sits BELOW the module row so the row stays visible and you
   // can click straight across to a neighbour; centred at 60% of the canvas width.
-  const ModulePreview = () => {
-    const t = previewType as CompType;
+  const ModulePreview = (hoverType?: CompType) => {
+    const t = (hoverType ?? previewType) as CompType;
+    const transient = !!hoverType;                 // hover: look only, no controls, no pointer
     return (
-      <div ref={previewRef}
-           className="absolute bg-card border rounded-2xl shadow-2xl overflow-hidden z-20 flex flex-col"
+      <div ref={transient ? undefined : previewRef}
+           className={`absolute bg-card border rounded-2xl shadow-2xl overflow-hidden flex flex-col transition-[left] duration-200 ease-out ${transient ? 'z-30 pointer-events-none' : 'z-20'}`}
            /* An explicit HEIGHT, not just a max-height: the body is a flex-1 child, and with only
               a max-height on the parent it resolves to zero and the preview renders empty. */
            style={{
@@ -650,13 +734,17 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
           <span className={`flex items-center gap-1.5 text-[11px] font-bold uppercase ${t === 'doc' ? 'text-[#2c5aa0]' : t === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>{TYPE_META[t].icon}{TYPE_META[t].label}</span>
           <span className="font-bold text-sm truncate">{nameFor(t, defaultIdFor(t))}</span>
           <div className="flex-1" />
-          <Button size="sm" className="h-7 gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]"
-                  onClick={() => { openEdit(t); }}>
-            <Pencil className="h-3.5 w-3.5" /> Edit
-          </Button>
-          <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => setPreviewType(null)}><X className="h-4 w-4" /></Button>
+          {!transient && (
+            <>
+              <Button size="sm" className="h-7 gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]"
+                      onClick={() => { openEdit(t); }}>
+                <Pencil className="h-3.5 w-3.5" /> Edit
+              </Button>
+              <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => setPreviewType(null)}><X className="h-4 w-4" /></Button>
+            </>
+          )}
         </div>
-        <div className="flex-1 min-h-0 flex flex-col overflow-hidden">{renderLeft()}</div>
+        <div className="flex-1 min-h-0 flex flex-col overflow-hidden">{renderLeft(hoverType)}</div>
       </div>
     );
   };

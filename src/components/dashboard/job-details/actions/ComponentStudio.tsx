@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import DocumentPreviewPane from './DocumentPreviewPane';
+import DocumentFieldsEditor from './DocumentFieldsEditor';
 import { downloadPagedPdf } from '@/utils/loe/downloadPagedPdf';
 import { generateLOEHTML } from '@/utils/loe/generateLOE';
 import { loadAllTemplates, LOETemplate } from '@/utils/loe/saveTemplate';
@@ -240,19 +241,21 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   };
 
   const handleSaveInline = async () => {
-    const doc = editIframeRef.current?.contentDocument;
-    if (!doc) return;
-    const body = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
     if (itemType === 'doc') {
-      // Saves a tailored draft on the job — the SAME path the existing Edit Document uses.
+      // The fields editor keeps `docHtml` reconstructed live as the user types (its onChange),
+      // so the save body IS the current docHtml — no iframe read needed. Same save path the
+      // previewer's Edit Document uses: a tailored draft on this job, not the managed template.
       const tpl = docTemplates.find(d => d.id === selectedId);
       const client = job.clientLastName || job.clientFirstName || 'Client';
       const monthDay = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       const name = `${tpl?.name || 'Document'} — ${client} — ${monthDay}`;
-      const res = await saveJobContract({ jobId: job.id, name, editedHtml: body, templateId: selectedId || null, templateVersion: (tpl as any)?.version ?? null, contractType: tpl?.name ?? null, state: 'draft' });
-      if (res.success) { toast.success('Saved as draft'); setDocHtml(body); } else toast.error(`Save failed: ${res.error}`);
+      const res = await saveJobContract({ jobId: job.id, name, editedHtml: docHtml, templateId: selectedId || null, templateVersion: (tpl as any)?.version ?? null, contractType: tpl?.name ?? null, state: 'draft' });
+      if (res.success) toast.success('Saved as draft'); else toast.error(`Save failed: ${res.error}`);
       return;
     }
+    const doc = editIframeRef.current?.contentDocument;
+    if (!doc) return;
+    const body = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
     if (itemType === 'popup') {
       const tpl = popupTemplates.find(p => p.id === selectedId);
       const res = await savePopupTemplate({ id: selectedId || undefined, name: tpl?.name ?? 'Thank-You', body_html: body, setActive: tpl?.is_active ?? false });
@@ -379,18 +382,10 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   };
   const closePanel = () => setView('map');
 
-  const handleEdit = () => {
-    if (itemType === 'doc') {
-      const tpl = docTemplates.find(d => d.id === selectedId);
-      if (tpl && onEditDocument) onEditDocument(tpl); else toast.message('Document editing opens the previewer/editor.');
-    } else if (itemType === 'mail') {
-      const tpl = emailTemplates.find(e => e.id === selectedId);
-      if (tpl && onEditEmail) onEditEmail(tpl);
-    } else {
-      const tpl = popupTemplates.find(p => p.id === selectedId);
-      if (tpl && onEditPopup) onEditPopup(tpl);
-    }
-  };
+  // NOTE: the old bounce-out to TemplateEditorModal (a floating full-screen layer over the
+  // studio, on an empty background — the broken-looking state Ben screenshotted) is gone.
+  // Editing a document now stays inside the studio via the Fields panel above; there is no
+  // remaining code path that opens TemplateEditorModal layered over the studio.
 
   const handleDownload = () => {
     if (itemType === 'doc' && docHtml) {
@@ -790,8 +785,12 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   // ── the work area ─────────────────────────────────────────────────────────
   // read  → the render alone, full width (the default; reading is the common job)
   // edit  → split (an even 50/50, drag to change) or the editor alone, full width
-  const showRender = mode === 'read' || editLayout === 'split';
-  const showEditor = mode === 'edit';
+  // Documents diverge from email/popup here: their "Editor" view IS just the rendered page
+  // (fields editing only exists in Split), so a doc in edit+editor shows the render alone —
+  // never the freeform iframe. Email/popup keep the original behavior in both layouts.
+  const isDoc = itemType === 'doc';
+  const showRender = mode === 'read' || editLayout === 'split' || (isDoc && mode === 'edit' && editLayout === 'editor');
+  const showEditor = mode === 'edit' && !(isDoc && editLayout === 'editor');
   const startGrab = (e: React.MouseEvent) => {
     e.preventDefault();
     const split = splitRef.current; if (!split) return;
@@ -853,7 +852,26 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
               <span className="w-[3px] h-9 rounded bg-border group-hover:bg-[#2c5aa0]" />
             </div>
           )}
-          {showEditor && (
+          {showEditor && isDoc && (
+          // The document's Split-view right pane: labeled section boxes, not a second copy of
+          // the page. Same component TemplateEditorModal's Edit Contract screen uses — one
+          // editor codebase, not two. Editing a field here updates `docHtml`, which is what the
+          // Rendered pane on the left is already showing, so the page rebuilds live in place.
+          <div className="flex flex-col border rounded-xl overflow-hidden bg-card flex-1 min-w-0">
+            <div className="flex items-center gap-2 px-3.5 py-2.5 border-b font-semibold text-[13px] bg-muted/30">
+              <Pencil className="h-3.5 w-3.5" /> Fields
+            </div>
+            <div className="flex-1 min-h-0 flex flex-col p-3">
+              <DocumentFieldsEditor
+                key={selectedId}
+                html={docHtml}
+                onChange={setDocHtml}
+                onSave={handleSaveInline}
+              />
+            </div>
+          </div>
+          )}
+          {showEditor && !isDoc && (
           <div className="flex flex-col border rounded-xl overflow-hidden bg-card flex-1 min-w-0">
             <div className="flex items-center gap-2 px-3.5 py-2.5 border-b font-semibold text-[13px] bg-muted/30">
               <Pencil className="h-3.5 w-3.5" /> Editor
@@ -867,26 +885,17 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
                 <Button variant="ghost" size="sm" onClick={() => { setEditorZoom(null); measureEditorFit(); }} className="h-5 w-5 p-0 hover:text-foreground ml-2" title="Fit to pane"><RotateCcw className="h-3 w-3" /></Button>
               </div>
             </div>
-            {/* INLINE editor beside the render for ALL three types (designMode editable surface). */}
+            {/* INLINE editor for email/popup (designMode editable surface). */}
             <div className="flex-1 min-h-0 flex flex-col p-3 gap-2">
-              {itemType !== 'doc' ? (
-                <>
-                  <div className="text-[11px] text-muted-foreground">Merge fields (click to insert)</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {mergeTokens.map(tk => (
-                      <button key={tk.token} type="button" onClick={() => insertToken(tk.token)}
-                        className="text-xs px-2 py-1 rounded border font-mono bg-muted text-foreground hover:border-[#2c5aa0] hover:text-[#2c5aa0] transition-colors">
-                        {tk.label}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-muted-foreground">Edit saves a tailored draft on this job.</span>
-                  <button type="button" onClick={handleEdit} className="text-[11px] font-semibold text-muted-foreground hover:text-[#2c5aa0]">Open full editor ↗</button>
-                </div>
-              )}
+              <div className="text-[11px] text-muted-foreground">Merge fields (click to insert)</div>
+              <div className="flex flex-wrap gap-1.5">
+                {mergeTokens.map(tk => (
+                  <button key={tk.token} type="button" onClick={() => insertToken(tk.token)}
+                    className="text-xs px-2 py-1 rounded border font-mono bg-muted text-foreground hover:border-[#2c5aa0] hover:text-[#2c5aa0] transition-colors">
+                    {tk.label}
+                  </button>
+                ))}
+              </div>
               <iframe ref={editIframeRef} title="Inline editor" className="flex-1 min-h-0 w-full rounded-md border bg-white focus-within:border-[#2c5aa0]" />
               <div className="flex justify-end">
                 <Button size="sm" className="gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]" onClick={handleSaveInline}><Pencil className="h-3.5 w-3.5" /> Save</Button>

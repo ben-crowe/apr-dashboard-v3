@@ -56,6 +56,22 @@ const TYPE_META: Record<CompType, { label: string; icon: React.ReactNode; accent
 const ORDER: CompType[] = ['mail', 'doc', 'popup'];
 const CONN: Record<string, string> = { mail: 'delivers', doc: 'after signing' };
 
+/**
+ * The sequences. Only the first is wired to real work; the other two are here so that "sequence"
+ * reads as a category rather than as one thing with a name.
+ *
+ * They are made of component TYPES, not of their own copies — each part resolves to the same
+ * component that sits in the library below, which is the whole point of the arrangement. That is
+ * also why the extra sequences invent no components: a made-up component would appear in the
+ * library as a real one.
+ */
+interface Sequence { id: string; name: string; isDefault?: boolean; parts: CompType[] }
+const SEQUENCES: Sequence[] = [
+  { id: 'loe',      name: 'Default LOE Deployment', isDefault: true, parts: ['mail', 'doc', 'popup'] },
+  { id: 'reminder', name: 'Unsigned LOE Reminder',  parts: ['mail', 'doc'] },
+  { id: 'delivery', name: 'Report Delivery',        parts: ['mail', 'doc', 'popup'] },
+];
+
 const ComponentStudio: React.FC<ComponentStudioProps> = ({
   isOpen, onClose, job, jobDetails, onEditDocument, onEditEmail, onEditPopup,
 }) => {
@@ -69,6 +85,9 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   const [screenZoom, setScreenZoom] = useState(100); // zoom for email/popup render (doc uses the pane's own)
   const [spineW, setSpineW] = useState(312);          // sequence-spine width (drag to resize)
   const [railCollapsed, setRailCollapsed] = useState(false); // explorer rail collapsed to icons
+  const [seqId, setSeqId] = useState<string>('loe');                       // which sequence the map shows
+  const [seqOpen, setSeqOpen] = useState<Record<string, boolean>>({});     // which names are expanded in the rail
+  const currentSeq = SEQUENCES.find(s => s.id === seqId) ?? SEQUENCES[0];
   const [spineCollapsed, setSpineCollapsed] = useState(false); // collapse the spine to an icon strip
 
   const [docTemplates, setDocTemplates] = useState<LOETemplate[]>([]);
@@ -443,10 +462,38 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
         <div className={`flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-muted-foreground mb-2 ${railNarrow ? 'justify-center' : ''}`}>
           <Layers className="h-3 w-3" />{!railNarrow && 'Sequences'}
         </div>
-        <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer bg-[#2c5aa0]/10 ring-1 ring-[#2c5aa0]/30 ${railNarrow ? 'justify-center' : ''}`} onClick={closePanel} title="Default LOE Deployment">
-          <ChevronRight className="h-4 w-4 text-[#2c5aa0] dark:text-blue-300 rotate-90" />
-          {!railNarrow && <><span className="flex-1 font-semibold text-sm truncate text-foreground">Default LOE Deployment</span><span className="text-[10px] font-bold text-[#2c5aa0] dark:text-blue-300 bg-[#2c5aa0]/10 border border-[#2c5aa0]/30 rounded-full px-1.5">DEFAULT</span></>}
-        </div>
+        {SEQUENCES.map(s => {
+          const current = seqId === s.id && view === 'map';
+          return (
+            <div key={s.id} className="mb-0.5">
+              <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg ${current ? 'bg-[#2c5aa0]/10 ring-1 ring-[#2c5aa0]/30' : 'hover:bg-muted'} ${railNarrow ? 'justify-center' : ''}`} title={s.name}>
+                {/* The chevron only expands the list of parts. The NAME is what opens the sequence. */}
+                <button type="button" onClick={() => setSeqOpen(o => ({ ...o, [s.id]: !o[s.id] }))}
+                        title={seqOpen[s.id] ? 'Hide parts' : 'Show parts'} className="flex-none text-[#2c5aa0] dark:text-blue-300">
+                  <ChevronRight className={`h-4 w-4 transition-transform ${seqOpen[s.id] ? 'rotate-90' : ''}`} />
+                </button>
+                {!railNarrow && (
+                  <>
+                    <span className="flex-1 font-semibold text-sm truncate text-foreground cursor-pointer" onClick={() => { setSeqId(s.id); setView('map'); }}>{s.name}</span>
+                    {s.isDefault && <span className="text-[10px] font-bold text-[#2c5aa0] dark:text-blue-300 bg-[#2c5aa0]/10 border border-[#2c5aa0]/30 rounded-full px-1.5">DEFAULT</span>}
+                  </>
+                )}
+              </div>
+              {/* Parts list: a quick read of what the sequence is made of. Deliberately INERT —
+                  no click handler and no hover styling, so nothing promises an interaction. */}
+              {!railNarrow && seqOpen[s.id] && (
+                <div className="pl-[30px] py-0.5">
+                  {s.parts.map((p, i) => (
+                    <div key={`${p}-${i}`} className="flex items-center gap-2 px-2.5 py-1 text-[12.5px] text-muted-foreground select-none">
+                      <span className={`w-1.5 h-1.5 rounded-full flex-none ${TYPE_META[p].dot}`} />
+                      <span className="flex-1 truncate">{nameFor(p, defaultIdFor(p))}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
       <div className="p-3.5 pt-3 border-t">
         <div className={`flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-muted-foreground mb-2 ${railNarrow ? 'justify-center' : ''}`}>
@@ -499,7 +546,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
           </p>
           <button type="button" onClick={() => setView('map')}
             className="mt-3 inline-flex items-center gap-1 text-xs font-semibold border rounded-md px-2 py-1 hover:text-[#2c5aa0] hover:border-[#2c5aa0]">
-            Open Default LOE Deployment <ArrowRight className="h-3 w-3" />
+            Open {SEQUENCES[0].name} <ArrowRight className="h-3 w-3" />
           </button>
         </div>
         <div className="border rounded-xl p-4 bg-card">
@@ -523,10 +570,10 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   // ── sequence map (blocks) ─────────────────────────────────────────────────
   const Map = () => (
     <div className="flex-1 overflow-auto p-6 relative">
-      <h1 className="text-xl font-bold">Default LOE Deployment</h1>
+      <h1 className="text-xl font-bold">{currentSeq.name}</h1>
       <p className="text-muted-foreground mt-1">What the client experiences, in order. Click a block to preview it here; Edit opens it in its own editing area.</p>
       <div ref={rowRef} className="flex items-stretch mt-7 pb-4 overflow-x-auto">
-        {ORDER.map((t, i) => (
+        {currentSeq.parts.map((t, i) => (
           <React.Fragment key={t}>
             {/* data-module-card marks a card as "not outside": clicking one while a preview is
                 open slides the preview to it instead of dismissing. */}
@@ -551,7 +598,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
                 </button>
               </div>
             </div>
-            {i < ORDER.length - 1 && (
+            {i < currentSeq.parts.length - 1 && (
               <div className="w-[74px] flex-none flex flex-col items-center justify-center gap-1.5 text-muted-foreground">
                 <span className="text-[10px] font-bold uppercase tracking-wide">{CONN[t]}</span>
                 <ArrowRight className="h-4 w-4" />
@@ -794,10 +841,10 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
               {view === 'home' ? (
                 <span className="font-semibold">Component Studio</span>
               ) : view === 'map' ? (
-                <span className="font-semibold">Default LOE Deployment</span>
+                <span className="font-semibold">{currentSeq.name}</span>
               ) : (
                 <div className="flex items-center gap-2 text-muted-foreground">
-                  <span className="cursor-pointer hover:text-[#2c5aa0]" onClick={closePanel}>{view === 'lib' ? 'Component Library' : 'Default LOE Deployment'}</span>
+                  <span className="cursor-pointer hover:text-[#2c5aa0]" onClick={closePanel}>{view === 'lib' ? 'Component Library' : currentSeq.name}</span>
                   <span className="text-muted-foreground/50">/</span>
                   <span>{TYPE_META[itemType].label}{view === 'lib' ? 's' : ''}</span>
                   <span className="text-muted-foreground/50">/</span>

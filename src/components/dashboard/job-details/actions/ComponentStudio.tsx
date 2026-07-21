@@ -76,6 +76,11 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   const [docHtml, setDocHtml] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
 
+  // Clicking a module on the sequence map opens a floating preview UNDER the module row, rather
+  // than replacing the whole view — the modules stay visible so you keep your place.
+  const [previewType, setPreviewType] = useState<CompType | null>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+
   const splitRef = useRef<HTMLDivElement>(null);
 
   // Load the three libraries on open.
@@ -126,7 +131,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   // Generate the document render through the SHARED engine when a doc is selected.
   useEffect(() => {
     let cancelled = false;
-    if ((view === 'seq' || view === 'lib') && itemType === 'doc' && selectedId) {
+    if ((view === 'seq' || view === 'lib' || previewType === 'doc') && itemType === 'doc' && selectedId) {
       const tpl = docTemplates.find(d => d.id === selectedId);
       if (!tpl) return;
       setIsGenerating(true);
@@ -136,7 +141,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
         .finally(() => { if (!cancelled) setIsGenerating(false); });
     }
     return () => { cancelled = true; };
-  }, [view, itemType, selectedId, docTemplates, job, jobDetails]);
+  }, [view, itemType, selectedId, docTemplates, job, jobDetails, previewType]);
 
   // Inline editor (email + popup) — the SAME editable-surface mechanism the existing modal
   // editors use (a designMode document seeded with the managed body). Reused inline here.
@@ -233,6 +238,28 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   };
 
   const mergeTokens = itemType === 'mail' ? EMAIL_MERGE_TOKENS : POPUP_MERGE_TOKENS;
+
+  // Open the floating preview on a module, or slide it to a neighbour if one is already open.
+  const openPreview = (t: CompType) => {
+    setItemType(t);
+    setSelectedId(defaultIdFor(t));
+    setPreviewType(t);
+  };
+
+  // Click anywhere outside closes it — EXCEPT on another module card, which slides the preview
+  // to that module instead (the card's own click handler runs and re-opens it).
+  useEffect(() => {
+    if (!previewType) return;
+    const onDown = (e: MouseEvent) => {
+      const el = e.target as HTMLElement | null;
+      if (!el) return;
+      if (previewRef.current?.contains(el)) return;
+      if (el.closest('[data-module-card]')) return;
+      setPreviewType(null);
+    };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, [previewType]);
 
   // ── open paths ────────────────────────────────────────────────────────────
   const openSeq = (t: CompType, m: 'read' | 'edit' = 'read') => { setItemType(t); setSelectedId(defaultIdFor(t)); setMode(m); setEditLayout('split'); setView('seq'); };
@@ -346,24 +373,28 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
 
   // ── sequence map (blocks) ─────────────────────────────────────────────────
   const Map = () => (
-    <div className="flex-1 overflow-auto p-6">
+    <div className="flex-1 overflow-auto p-6 relative">
       <h1 className="text-xl font-bold">Default LOE Deployment</h1>
-      <p className="text-muted-foreground mt-1">What the client experiences, in order. Open a block to preview &amp; edit on the right; the sequence stays as your spine.</p>
+      <p className="text-muted-foreground mt-1">What the client experiences, in order. Click a block to preview it here; Edit opens it in its own editing area.</p>
       <div className="flex items-stretch mt-7 pb-4 overflow-x-auto">
         {ORDER.map((t, i) => (
           <React.Fragment key={t}>
-            <div className={`w-[236px] flex-none bg-card border rounded-2xl shadow-sm overflow-hidden cursor-pointer hover:-translate-y-0.5 hover:shadow-md transition border-t-4 ${TYPE_META[t].accent}`} onClick={() => openSeq(t)}>
+            {/* data-module-card marks a card as "not outside": clicking one while a preview is
+                open slides the preview to it instead of dismissing. */}
+            <div data-module-card={t}
+                 className={`w-[236px] flex-none bg-card border rounded-2xl shadow-sm overflow-hidden cursor-pointer hover:-translate-y-0.5 hover:shadow-md transition border-t-4 ${TYPE_META[t].accent} ${previewType === t ? 'ring-2 ring-[#2c5aa0] bg-[#2c5aa0]/5' : ''}`}
+                 onClick={() => openPreview(t)}>
               <div className="p-4">
                 <div className={`flex items-center gap-1.5 text-[11px] font-bold tracking-wide uppercase ${t === 'doc' ? 'text-[#2c5aa0]' : t === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>{TYPE_META[t].icon}{TYPE_META[t].label}</div>
                 <div className="text-[15px] font-bold mt-2">{nameFor(t, defaultIdFor(t))}</div>
                 <div className="text-xs text-muted-foreground mt-0.5">{t === 'doc' ? 'e-signature document' : t === 'mail' ? 'delivers the signing link' : 'post-sign confirmation'}</div>
               </div>
               <div className="flex items-center gap-1.5 border-t px-3 py-2 bg-muted/30">
-                <button type="button" onClick={(e) => { e.stopPropagation(); openSeq(t, 'read'); }}
+                <button type="button" onClick={(e) => { e.stopPropagation(); openPreview(t); }}
                   className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground border rounded-md px-2 py-1 bg-card hover:text-[#2c5aa0] hover:border-[#2c5aa0] transition-colors">
                   <Eye className="h-3 w-3" /> Preview
                 </button>
-                <button type="button" onClick={(e) => { e.stopPropagation(); openSeq(t, 'edit'); }}
+                <button type="button" onClick={(e) => { e.stopPropagation(); setPreviewType(null); openSeq(t, 'edit'); }}
                   className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground border rounded-md px-2 py-1 bg-card hover:text-[#2c5aa0] hover:border-[#2c5aa0] transition-colors">
                   <Pencil className="h-3 w-3" /> Edit
                 </button>
@@ -378,8 +409,34 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
           </React.Fragment>
         ))}
       </div>
+      {previewType && ModulePreview()}
     </div>
   );
+
+  // Floating preview of one module. Sits BELOW the module row so the row stays visible and you
+  // can click straight across to a neighbour; centred at 60% of the canvas width.
+  const ModulePreview = () => {
+    const t = previewType as CompType;
+    return (
+      <div ref={previewRef}
+           className="absolute left-[20%] w-[60%] bg-card border rounded-2xl shadow-2xl overflow-hidden z-20 flex flex-col"
+           /* An explicit HEIGHT, not just a max-height: the body is a flex-1 child, and with only
+              a max-height on the parent it resolves to zero and the preview renders empty. */
+           style={{ top: 236, height: 'min(520px, calc(100% - 260px))' }}>
+        <div className="flex items-center gap-2 px-4 h-11 border-b bg-muted/30 flex-none">
+          <span className={`flex items-center gap-1.5 text-[11px] font-bold uppercase ${t === 'doc' ? 'text-[#2c5aa0]' : t === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>{TYPE_META[t].icon}{TYPE_META[t].label}</span>
+          <span className="font-bold text-sm truncate">{nameFor(t, defaultIdFor(t))}</span>
+          <div className="flex-1" />
+          <Button size="sm" className="h-7 gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]"
+                  onClick={() => { setPreviewType(null); openSeq(t, 'edit'); }}>
+            <Pencil className="h-3.5 w-3.5" /> Edit
+          </Button>
+          <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => setPreviewType(null)}><X className="h-4 w-4" /></Button>
+        </div>
+        <div className="flex-1 min-h-0 flex flex-col overflow-hidden">{renderLeft()}</div>
+      </div>
+    );
+  };
 
   // ── sequence spine (vertical, while a panel is open from a block) ─────────
   const startSpineGrab = (e: React.MouseEvent) => {

@@ -459,8 +459,6 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     // Only what sits ON it changes. Giving the popup a shorter page made it read as a phone
     // rather than the desktop browser the email shows, which is the opposite of the point.
     const PAGE_W = 680, PAGE_H = 640;
-    // A confirmation box is a modest centred card on that page, not the page itself.
-    const POPUP_W = 300;                     // under half the page width, so it cannot dwarf the chrome
     // The one case the page grows: an email taller than the standard page, because the whole
     // email has to be visible. The popup's page is never anything but the standard.
     const pageH = kind === 'popup' ? PAGE_H : Math.max(contentH, PAGE_H);
@@ -514,30 +512,18 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
         <div ref={boxRef} className="flex-1 min-h-0 overflow-auto bg-slate-100 p-4">
           <div style={{ width: INTRINSIC_W * pageScale, height: INTRINSIC_H * pageScale, margin: '0 auto' }}>
             <PageFrame width={INTRINSIC_W} height={INTRINSIC_H} scale={pageScale}>
-              {/* A POPUP is drawn as what it actually is — a small confirmation box sitting on a
-                  dimmed page, well under half the page's width. At full page width it dwarfed the
-                  browser chrome around it, which is the opposite of what a client sees. An EMAIL
-                  fills its page, because an email IS the page. Both sit on the same frame. */}
-              {kind === 'popup' ? (
-                <div className="relative bg-slate-200 overflow-hidden" style={{ width: PAGE_W, height: pageH }}>
-                  <div className="absolute inset-0 bg-slate-900/25" />
-                  <div className="absolute bg-white rounded-lg shadow-2xl overflow-hidden"
-                       style={{ width: POPUP_W, height: contentH, left: (PAGE_W - POPUP_W) / 2, top: Math.max(16, (pageH - contentH) / 2),
-                                transform: `scale(${contentZoom})`, transformOrigin: 'center center' }}>
-                    <iframe ref={frameRef} srcDoc={html} onLoad={measureContent}
-                            title={`${TYPE_META[kind].label} preview`} sandbox="allow-same-origin"
-                            className="bg-white" style={{ border: 'none', width: POPUP_W, height: contentH }} />
-                  </div>
-                </div>
-              ) : (
-                <div className="overflow-hidden bg-white" style={{ width: PAGE_W, height: pageH }}>
-                  <iframe ref={frameRef} srcDoc={html} onLoad={measureContent}
-                          title={`${TYPE_META[kind].label} preview`} sandbox="allow-same-origin"
-                          className="bg-white"
-                          style={{ border: 'none', width: PAGE_W, height: pageH,
-                                   transform: `scale(${contentZoom})`, transformOrigin: 'top center' }} />
-                </div>
-              )}
+              {/* ONE code path for every page-shaped component. The popup's own HTML already IS
+                  a full web page — its own header, footer and a modest centred card — so it
+                  renders at full page width exactly like the email. Squeezing that page into a
+                  narrow column was what turned it into a phone layout: the page reflowed to its
+                  mobile breakpoint. Nothing about a component type changes the page. */}
+              <div className="overflow-hidden bg-white" style={{ width: PAGE_W, height: pageH }}>
+                <iframe ref={frameRef} srcDoc={html} onLoad={measureContent}
+                        title={`${TYPE_META[kind].label} preview`} sandbox="allow-same-origin"
+                        className="bg-white"
+                        style={{ border: 'none', width: PAGE_W, height: pageH,
+                                 transform: `scale(${contentZoom})`, transformOrigin: 'top center' }} />
+              </div>
             </PageFrame>
           </div>
         </div>

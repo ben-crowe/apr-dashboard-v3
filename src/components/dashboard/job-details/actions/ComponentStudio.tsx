@@ -109,12 +109,6 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   const rowRef = useRef<HTMLDivElement>(null);
   const [previewBox, setPreviewBox] = useState<{ left: number; width: number; top: number } | null>(null);
 
-  // Hovering a module shows a small thumbnail so you can tell what a component is without
-  // opening it. Renders ONLY from what is already loaded — no request is made on hover, or
-  // sweeping the row would fire one per card.
-  const [hover, setHover] = useState<{ type: CompType; left: number; top: number } | null>(null);
-  const hoverTimer = useRef<number | null>(null);
-
   const splitRef = useRef<HTMLDivElement>(null);
 
   // Load the three libraries on open.
@@ -273,37 +267,6 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
 
   const mergeTokens = itemType === 'mail' ? EMAIL_MERGE_TOKENS : POPUP_MERGE_TOKENS;
 
-  const HOVER_W = 300, HOVER_H = 200;
-
-  // In-memory body for a thumbnail. Documents use the stored template rather than the generated
-  // render: generating is asynchronous and per-job, and a thumbnail exists to answer "which one is
-  // this", which the template answers. Merge fields stay unresolved here by design.
-  const thumbnailHtml = (t: CompType): string => {
-    if (t === 'mail') return emailTemplates.find(e => e.id === defaultIdFor('mail'))?.body_html ?? '';
-    if (t === 'popup') return popupTemplates.find(p => p.id === defaultIdFor('popup'))?.body_html ?? '';
-    return docTemplates.find(d => d.id === defaultIdFor('doc'))?.template_html ?? '';
-  };
-
-  const startHover = (t: CompType, card: HTMLElement) => {
-    if (previewType) return;                      // the opened preview wins; no stacked popups
-    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
-    hoverTimer.current = window.setTimeout(() => {
-      const canvas = rowRef.current?.offsetParent as HTMLElement | null;
-      if (!canvas) return;
-      const c = card.getBoundingClientRect(), box = canvas.getBoundingClientRect();
-      setHover({
-        type: t,
-        left: Math.round(c.left - box.left + canvas.scrollLeft + (c.width - HOVER_W) / 2),
-        top: Math.round(c.bottom - box.top + canvas.scrollTop + 8),
-      });
-    }, 350);                                      // long enough that sweeping across does nothing
-  };
-  const endHover = () => {
-    if (hoverTimer.current) window.clearTimeout(hoverTimer.current);
-    setHover(null);
-  };
-  useEffect(() => () => { if (hoverTimer.current) window.clearTimeout(hoverTimer.current); }, []);
-
   // Open the floating preview on a module, or slide it to a neighbour if one is already open.
   const openPreview = (t: CompType) => {
     setItemType(t);
@@ -311,9 +274,9 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     setPreviewType(t);
   };
 
-  // Render the sequence's document ONCE when the map opens, so hovering its card can show the
-  // real thing. Generating is a database round trip, so it must not happen per hover — this is one
-  // call on arriving at the map, not one per pointer movement.
+  // Render the sequence's document ONCE when the map opens, so opening its preview is immediate
+  // rather than showing a spinner. This existed to serve the hover preview; hover is gone, and it
+  // earns its place on its own — one call on arriving at the map, none on opening.
   useEffect(() => {
     if (view !== 'map' || docHtml || !docTemplates.length) return;
     const id = defaultIdFor('doc');
@@ -331,7 +294,11 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   // A panel that never moves while its contents swap gives no clue which module you are looking
   // at — the slide is the signal. First module: left edges align. Last: right edges align.
   // Anything between: centred under its own card. Works for a sequence of any length.
-  const shownType = previewType ?? hover?.type ?? null;
+  const shownType = previewType;
+  // Motion only when sliding from one module to another. Opening must be instant: the panel was
+  // animating from wherever it last sat, which reads as it flying in from the side.
+  const prevShown = useRef<CompType | null>(null);
+  const [slide, setSlide] = useState(false);
   useEffect(() => {
     const row = rowRef.current;
     if (view !== 'map' || !row) { setPreviewBox(null); return; }
@@ -370,6 +337,8 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
         top: Math.round(Math.max(...rects.map(x => x.bottom)) - box.top + canvas.scrollTop + 12),
       });
     };
+    setSlide(prevShown.current !== null && shownType !== null);
+    prevShown.current = shownType;
     measure();
     if (typeof ResizeObserver === 'undefined') return;
     const ro = new ResizeObserver(measure);
@@ -431,8 +400,8 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   };
 
   // ── render of the selected component (left pane) ──────────────────────────
-  const renderLeft = (typeOverride?: CompType) => {
-    const kind = typeOverride ?? itemType;
+  const renderLeft = () => {
+    const kind = itemType;
     if (kind === 'doc') {
       if (isGenerating && !docHtml) {
         return <div className="flex-1 flex items-center justify-center text-muted-foreground"><Loader2 className="h-5 w-5 animate-spin mr-2" /> Rendering document…</div>;
@@ -440,14 +409,35 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
       // Document = the SHARED previewer pane (paper page on the viewer, zoom + paged path).
       return <DocumentPreviewPane html={docHtml} />;
     }
-    // Email + Popup = screen content → a monitor view scaled to fit its box. Reads the body from
-    // what is already loaded, keyed by the id for THIS kind, so a hover never has to fetch.
-    const id = typeOverride ? defaultIdFor(kind) : selectedId;
+    // Email + Popup = screen content → a page view scaled to fit its box.
+    const id = selectedId;
     const html = kind === 'mail'
       ? resolveEditTimeTokens(emailTemplates.find(e => e.id === id)?.body_html ?? '', tokenCtx)
       : resolvePopupTokens(popupTemplates.find(p => p.id === id)?.body_html ?? '', tokenCtx);
     return <ScreenPreview html={html} kind={kind} />;
   };
+
+  /**
+   * The mock browser page — traffic dots, address strip, white page. ONE definition, used by every
+   * component that represents a web page: the email today, the popup on top of it, and anything
+   * website-shaped added later. Two copies of this would drift, and the frame is what makes a
+   * preview read as a real page rather than a floating fragment.
+   */
+  const PageFrame: React.FC<{ width: number; height: number; scale: number; children: React.ReactNode }> =
+    ({ width, height, scale, children }) => (
+      <div className="bg-white border border-slate-200 rounded-lg overflow-hidden"
+           style={{
+             width, height, transform: `scale(${scale})`, transformOrigin: 'top left',
+             // Lifts the page off its backdrop — cast below and to both sides, not just down.
+             boxShadow: '0 18px 40px -12px rgba(15,23,42,0.45), 0 6px 18px -8px rgba(15,23,42,0.30)',
+           }}>
+        <div className="h-8 bg-slate-100 border-b border-slate-200 flex items-center gap-1.5 px-3">
+          <span className="w-2.5 h-2.5 rounded-full bg-red-300" /><span className="w-2.5 h-2.5 rounded-full bg-yellow-300" /><span className="w-2.5 h-2.5 rounded-full bg-green-300" />
+          <span className="ml-2 flex-1 h-4 bg-white border border-slate-200 rounded" />
+        </div>
+        {children}
+      </div>
+    );
 
   // The screen preview for an email or a popup: a fixed-size viewing box with the whole thing
   // scaled to fit inside it, height as well as width.
@@ -461,17 +451,26 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     const boxRef = useRef<HTMLDivElement>(null);
     const frameRef = useRef<HTMLIFrameElement>(null);
     const [box, setBox] = useState<{ w: number; h: number }>({ w: 0, h: 0 });
-    const INTRINSIC_W = 680;
     const CHROME_H = 32;                                        // the mock browser bar
     // The content's REAL height, measured after it loads. Fitting against an assumed height was
     // the defect: a 640 guess fits the FRAME while taller content keeps running past the bottom.
-    const [contentH, setContentH] = useState(kind === 'popup' ? 560 : 640);
+    const [contentH, setContentH] = useState(kind === 'popup' ? 240 : 640);
+    // THE PAGE IS THE SAME FOR EVERY COMPONENT TYPE — same width, same height, same proportions.
+    // Only what sits ON it changes. Giving the popup a shorter page made it read as a phone
+    // rather than the desktop browser the email shows, which is the opposite of the point.
+    const PAGE_W = 680, PAGE_H = 640;
+    // A confirmation box is a modest centred card on that page, not the page itself.
+    const POPUP_W = 300;                     // under half the page width, so it cannot dwarf the chrome
+    // The one case the page grows: an email taller than the standard page, because the whole
+    // email has to be visible. The popup's page is never anything but the standard.
+    const pageH = kind === 'popup' ? PAGE_H : Math.max(contentH, PAGE_H);
+    const INTRINSIC_W = PAGE_W;
     const measureContent = () => {
       const doc = frameRef.current?.contentDocument;
       if (!doc?.documentElement) return;
       setContentH(Math.max(doc.documentElement.scrollHeight, doc.body?.scrollHeight ?? 0, 120));
     };
-    const INTRINSIC_H = contentH + CHROME_H;
+    const INTRINSIC_H = pageH + CHROME_H;
 
     useEffect(() => {
       const el = boxRef.current;
@@ -490,11 +489,15 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
       return () => ro.disconnect();
     }, []);
 
-    // Fit BOTH dimensions — the whole component is meant to be readable in one view by default.
-    const fit = box.w && box.h
+    // TWO SEPARATE SCALES, and keeping them separate is the point.
+    //   pageScale  — fits the whole page into the box. Set by the box, never by the user.
+    //   contentZoom — the user's control. It magnifies what is ON the page.
+    // They were one number before, so the zoom control resized the page itself: the stage moved
+    // when it should have held still and only the writing on it should have changed size.
+    const pageScale = box.w && box.h
       ? Math.min(box.w / INTRINSIC_W, box.h / INTRINSIC_H)
       : 1;
-    const applied = fit * (screenZoom / 100);
+    const contentZoom = screenZoom / 100;
 
     return (
       <div className="flex-1 flex flex-col min-h-0">
@@ -502,26 +505,40 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
           <div className="flex items-center gap-0.5 text-muted-foreground">
             <Button variant="ghost" size="sm" onClick={() => setScreenZoom(z => Math.max(25, z - 10))} className="h-5 w-5 p-0 hover:text-foreground" title="Zoom Out"><ChevronDown className="h-3.5 w-3.5" /></Button>
             {/* Shows what is ACTUALLY applied, not a setting that the render ignores. */}
-            <span className="text-[11px] tabular-nums w-9 text-center select-none">{Math.round(applied * 100)}%</span>
+            <span className="text-[11px] tabular-nums w-9 text-center select-none">{Math.round(contentZoom * 100)}%</span>
             <Button variant="ghost" size="sm" onClick={() => setScreenZoom(z => Math.min(300, z + 10))} className="h-5 w-5 p-0 hover:text-foreground" title="Zoom In"><ChevronUp className="h-3.5 w-3.5" /></Button>
             <Button variant="ghost" size="sm" onClick={() => setScreenZoom(100)} className="h-5 w-5 p-0 hover:text-foreground ml-2" title="Fit whole screen"><RotateCcw className="h-3 w-3" /></Button>
           </div>
         </div>
         {/* Fixed box. It does not grow with content — content is scaled to it. */}
         <div ref={boxRef} className="flex-1 min-h-0 overflow-auto bg-slate-100 p-4">
-          <div style={{ width: INTRINSIC_W * applied, height: INTRINSIC_H * applied, margin: '0 auto' }}>
-            <div className="bg-white border border-slate-200 rounded-lg shadow-lg overflow-hidden"
-                 style={{ width: INTRINSIC_W, height: INTRINSIC_H, transform: `scale(${applied})`, transformOrigin: 'top left' }}>
-              <div className="h-8 bg-slate-100 border-b border-slate-200 flex items-center gap-1.5 px-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-300" /><span className="w-2.5 h-2.5 rounded-full bg-yellow-300" /><span className="w-2.5 h-2.5 rounded-full bg-green-300" />
-                <span className="ml-2 flex-1 h-4 bg-white border border-slate-200 rounded" />
-              </div>
-              {/* The frame is given the content's own height, so nothing is cut off inside it and
-                  the scale below is computed against what is really there. */}
-              <iframe ref={frameRef} srcDoc={html} onLoad={measureContent}
-                      title={`${TYPE_META[kind].label} preview`} sandbox="allow-same-origin"
-                      className="bg-white" style={{ border: 'none', width: INTRINSIC_W, height: contentH }} />
-            </div>
+          <div style={{ width: INTRINSIC_W * pageScale, height: INTRINSIC_H * pageScale, margin: '0 auto' }}>
+            <PageFrame width={INTRINSIC_W} height={INTRINSIC_H} scale={pageScale}>
+              {/* A POPUP is drawn as what it actually is — a small confirmation box sitting on a
+                  dimmed page, well under half the page's width. At full page width it dwarfed the
+                  browser chrome around it, which is the opposite of what a client sees. An EMAIL
+                  fills its page, because an email IS the page. Both sit on the same frame. */}
+              {kind === 'popup' ? (
+                <div className="relative bg-slate-200 overflow-hidden" style={{ width: PAGE_W, height: pageH }}>
+                  <div className="absolute inset-0 bg-slate-900/25" />
+                  <div className="absolute bg-white rounded-lg shadow-2xl overflow-hidden"
+                       style={{ width: POPUP_W, height: contentH, left: (PAGE_W - POPUP_W) / 2, top: Math.max(16, (pageH - contentH) / 2),
+                                transform: `scale(${contentZoom})`, transformOrigin: 'center center' }}>
+                    <iframe ref={frameRef} srcDoc={html} onLoad={measureContent}
+                            title={`${TYPE_META[kind].label} preview`} sandbox="allow-same-origin"
+                            className="bg-white" style={{ border: 'none', width: POPUP_W, height: contentH }} />
+                  </div>
+                </div>
+              ) : (
+                <div className="overflow-hidden bg-white" style={{ width: PAGE_W, height: pageH }}>
+                  <iframe ref={frameRef} srcDoc={html} onLoad={measureContent}
+                          title={`${TYPE_META[kind].label} preview`} sandbox="allow-same-origin"
+                          className="bg-white"
+                          style={{ border: 'none', width: PAGE_W, height: pageH,
+                                   transform: `scale(${contentZoom})`, transformOrigin: 'top center' }} />
+                </div>
+              )}
+            </PageFrame>
           </div>
         </div>
       </div>
@@ -679,8 +696,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
             <div data-module-card={t}
                  className={`w-[236px] flex-none bg-card border rounded-2xl shadow-sm overflow-hidden cursor-pointer hover:-translate-y-0.5 hover:shadow-md transition border-t-4 ${TYPE_META[t].accent} ${previewType === t ? 'ring-2 ring-[#2c5aa0] bg-[#2c5aa0]/5' : ''}`}
                  onClick={() => openPreview(t)}
-                 onMouseEnter={(e) => startHover(t, e.currentTarget)}
-                 onMouseLeave={endHover}>
+                 >
               <div className="p-4">
                 <div className={`flex items-center gap-1.5 text-[11px] font-bold tracking-wide uppercase ${t === 'doc' ? 'text-[#2c5aa0]' : t === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>{TYPE_META[t].icon}{TYPE_META[t].label}</div>
                 <div className="text-[15px] font-bold mt-2">{nameFor(t, defaultIdFor(t))}</div>
@@ -707,21 +723,16 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
         ))}
       </div>
       {previewType && ModulePreview()}
-      {/* Hover shows the SAME panel in the SAME place as a click, just transient and untouchable.
-          A small tile under the card was too small to read and sat somewhere else, so hovering and
-          clicking looked like two different features rather than one arriving two ways. */}
-      {!previewType && hover && ModulePreview(hover.type)}
     </div>
   );
 
   // Floating preview of one module. Sits BELOW the module row so the row stays visible and you
   // can click straight across to a neighbour; centred at 60% of the canvas width.
-  const ModulePreview = (hoverType?: CompType) => {
-    const t = (hoverType ?? previewType) as CompType;
-    const transient = !!hoverType;                 // hover: look only, no controls, no pointer
+  const ModulePreview = () => {
+    const t = previewType as CompType;
     return (
-      <div ref={transient ? undefined : previewRef}
-           className={`absolute bg-card border rounded-2xl shadow-2xl overflow-hidden flex flex-col transition-[left] duration-200 ease-out ${transient ? 'z-30 pointer-events-none' : 'z-20'}`}
+      <div ref={previewRef}
+           className={`absolute bg-card border rounded-2xl shadow-2xl overflow-hidden flex flex-col z-20 ${slide ? 'transition-[left] duration-200 ease-out' : ''}`}
            /* An explicit HEIGHT, not just a max-height: the body is a flex-1 child, and with only
               a max-height on the parent it resolves to zero and the preview renders empty. */
            style={{
@@ -734,17 +745,13 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
           <span className={`flex items-center gap-1.5 text-[11px] font-bold uppercase ${t === 'doc' ? 'text-[#2c5aa0]' : t === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>{TYPE_META[t].icon}{TYPE_META[t].label}</span>
           <span className="font-bold text-sm truncate">{nameFor(t, defaultIdFor(t))}</span>
           <div className="flex-1" />
-          {!transient && (
-            <>
-              <Button size="sm" className="h-7 gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]"
-                      onClick={() => { openEdit(t); }}>
-                <Pencil className="h-3.5 w-3.5" /> Edit
-              </Button>
-              <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => setPreviewType(null)}><X className="h-4 w-4" /></Button>
-            </>
-          )}
+          <Button size="sm" className="h-7 gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]"
+                  onClick={() => { openEdit(t); }}>
+            <Pencil className="h-3.5 w-3.5" /> Edit
+          </Button>
+          <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => setPreviewType(null)}><X className="h-4 w-4" /></Button>
         </div>
-        <div className="flex-1 min-h-0 flex flex-col overflow-hidden">{renderLeft(hoverType)}</div>
+        <div className="flex-1 min-h-0 flex flex-col overflow-hidden">{renderLeft()}</div>
       </div>
     );
   };

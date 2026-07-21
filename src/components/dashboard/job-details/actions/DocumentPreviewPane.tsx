@@ -37,6 +37,7 @@ const DocumentPreviewPane: React.FC<DocumentPreviewPaneProps> = ({ html, zoom, o
   // Below this the text stops being readable, so the pane stops shrinking and lets the wrapper
   // scroll sideways instead — nothing becomes unreachable, it just needs scrolling.
   const MIN_FIT = 25;
+  const SIDE_ROOM = 0.9;      // matches the email preview's content-to-box ratio
   const scaledWidth = Math.ceil(naturalWidth * (zoomLevel / 100));
 
   useEffect(() => {
@@ -79,7 +80,10 @@ const DocumentPreviewPane: React.FC<DocumentPreviewPaneProps> = ({ html, zoom, o
     if (!frame || !doc?.body || !wrapRef.current) return;
     doc.body.style.setProperty('zoom', '1');
     const natural = Math.max(doc.body.scrollWidth, doc.documentElement.scrollWidth);
-    const available = wrapRef.current.clientWidth;
+    // Leave the same breathing room down each side that the email preview has, rather than
+    // running the page wall-to-wall. The email sits at 90% of its available width, so the
+    // document matches it — a letter pressed against both edges reads as cramped next to it.
+    const available = wrapRef.current.clientWidth * SIDE_ROOM;
     const pct = natural > available && natural > 0
       ? Math.max(MIN_FIT, Math.floor((available / natural) * 100))
       : 100;
@@ -149,12 +153,15 @@ const DocumentPreviewPane: React.FC<DocumentPreviewPaneProps> = ({ html, zoom, o
             ref={frameRef}
             src={previewUrl}
             onLoad={measureFit}
-            className="h-full bg-white"
+            className="h-full bg-white block mx-auto"
             title="LOE Document Preview"
             sandbox="allow-same-origin"
-            /* Normally exactly the pane's width. Only when the readable-size floor is hit does it
-               grow past it, and then this wrapper scrolls sideways rather than cutting text off. */
-            style={{ border: 'none', minHeight: '100%', width: scaledWidth ? Math.max(scaledWidth, wrapRef.current?.clientWidth ?? 0) : '100%' }}
+            /* Exactly as wide as the SCALED page, centred, so the slate backdrop shows down both
+               sides — the same breathing room the email preview has. Letting it span the whole
+               wrapper made the page white-on-white to the edges, which read as cramped.
+               Only when the readable-size floor is hit does it exceed the wrapper, and then the
+               wrapper scrolls sideways rather than cutting text off. */
+            style={{ border: 'none', minHeight: '100%', width: scaledWidth || '100%' }}
           />
         ) : (
           <div className="flex items-center justify-center h-full text-slate-500">

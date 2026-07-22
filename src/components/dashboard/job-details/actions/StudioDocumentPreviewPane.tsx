@@ -60,6 +60,16 @@ const StudioDocumentPreviewPane: React.FC<StudioDocumentPreviewPaneProps> = ({ h
         `<style>
           body { width: 850px; margin: 0 auto; padding: 20px; }
           .document { width: 850px; margin: 0 auto; }
+          /* Flatten the document's OWN page chrome (Ben, 2026-07-21 — the half-cut frame under
+             the doc). The generated LOE HTML styles itself as a white .document sheet with its
+             own drop shadow floating on a gray body background — page-on-a-backdrop chrome meant
+             for the previewer, where the iframe IS the whole viewport. Here the iframe is
+             presented as the sheet of paper itself, so that inner chrome rendered as a second,
+             half-cut frame inside the page's edges (gray strip + inner shadow line at the top
+             and sides). Neutralize it: everything inside the iframe is one flat white sheet;
+             the ONE lift shadow lives on the outer wrapper in this component. */
+          html, body { background: #fff !important; }
+          .document { box-shadow: none !important; }
           @media print { body { width: 100%; } }
         </style>
         </head>`

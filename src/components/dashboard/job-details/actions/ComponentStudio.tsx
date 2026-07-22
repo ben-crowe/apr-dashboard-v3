@@ -836,10 +836,11 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     <div className="flex-1 flex min-w-0">
       {view === 'seq' && Spine()}
       <div className="flex-1 flex flex-col min-w-0 bg-background">
-        {/* panel bar */}
-        <div className="flex items-center gap-2.5 h-12 px-4 bg-card border-b flex-none">
-          <span className={`flex items-center gap-1.5 text-[11px] font-bold uppercase ${itemType === 'doc' ? 'text-[#2c5aa0]' : itemType === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>{TYPE_META[itemType].icon}{TYPE_META[itemType].label}</span>
-          <span className="font-bold">{nameFor(itemType, selectedId)}</span>
+        {/* panel bar — same no-wrap rule as the breadcrumb above: the type label stays whole,
+            the component name truncates with an ellipsis + full-name tooltip, nothing stacks. */}
+        <div className="flex items-center gap-2.5 h-12 px-4 bg-card border-b flex-none min-w-0">
+          <span className={`flex items-center gap-1.5 text-[11px] font-bold uppercase whitespace-nowrap flex-none ${itemType === 'doc' ? 'text-[#2c5aa0]' : itemType === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>{TYPE_META[itemType].icon}{TYPE_META[itemType].label}</span>
+          <span className="font-bold truncate" title={nameFor(itemType, selectedId)}>{nameFor(itemType, selectedId)}</span>
           <div className="flex-1" />
           {itemType === 'doc' && <Button variant="ghost" size="sm" className="h-8 gap-1" onClick={handleDownload}><Download className="h-4 w-4" /> Download</Button>}
           {itemType === 'doc' ? (
@@ -980,11 +981,11 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
         className="rounded-xl flex flex-col p-0 gap-0 [&>button]:hidden overflow-hidden"
         style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: 'calc(100vw - 96px)', height: 'calc(100vh - 96px)', maxWidth: 'none' }}
       >
-        {/* top bar */}
-        <div className="flex items-center gap-4 px-4 h-14 border-b flex-none">
-          <div className="flex items-baseline gap-2"><span className="font-extrabold tracking-wide text-[#2c5aa0]">VALTA</span><span className="text-xs text-muted-foreground">Component Studio</span></div>
-          <span className="w-px h-6 bg-border" />
-          <span className="font-semibold text-sm">LOE Sequence Builder</span>
+        {/* top bar — labels never wrap; the title truncates if the studio gets that narrow. */}
+        <div className="flex items-center gap-4 px-4 h-14 border-b flex-none min-w-0">
+          <div className="flex items-baseline gap-2 flex-none whitespace-nowrap"><span className="font-extrabold tracking-wide text-[#2c5aa0]">VALTA</span><span className="text-xs text-muted-foreground">Component Studio</span></div>
+          <span className="w-px h-6 bg-border flex-none" />
+          <span className="font-semibold text-sm truncate">LOE Sequence Builder</span>
           <div className="flex-1" />
           <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={onClose}><X className="h-4 w-4" /></Button>
         </div>
@@ -999,23 +1000,28 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
                rail itself, since this handler lives on `main`, a sibling of `<aside>`) closes it. */
             onClick={() => { if (railAsOverlay) setRailCollapsed(true); }}
           >
-            {/* stage bar / crumb */}
-            <div className="flex items-center gap-3 h-12 px-5 border-b flex-none text-sm">
+            {/* stage bar / crumb — header labels NEVER wrap (Ben, 2026-07-21: 'LOE-07 v2' was
+                stacking into three lines when space tightened). One line always: the fixed
+                segments stay whole (whitespace-nowrap, no shrink), the LAST segment — the
+                component name, the only variable-length piece — truncates with an ellipsis and
+                carries the full name as a tooltip. min-w-0 on the row lets the truncation engage
+                instead of the flexbox refusing to shrink. */}
+            <div className="flex items-center gap-3 h-12 px-5 border-b flex-none text-sm min-w-0">
               {view === 'home' ? (
-                <span className="font-semibold">Component Studio</span>
+                <span className="font-semibold whitespace-nowrap">Component Studio</span>
               ) : view === 'map' ? (
-                <span className="font-semibold">{currentSeq.name}</span>
+                <span className="font-semibold truncate" title={currentSeq.name}>{currentSeq.name}</span>
               ) : (
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <span className="cursor-pointer hover:text-[#2c5aa0]" onClick={closePanel}>{view === 'lib' ? 'Component Library' : currentSeq.name}</span>
-                  <span className="text-muted-foreground/50">/</span>
-                  <span>{TYPE_META[itemType].label}{view === 'lib' ? 's' : ''}</span>
-                  <span className="text-muted-foreground/50">/</span>
-                  <span className="text-foreground font-semibold">{nameFor(itemType, selectedId)}</span>
+                <div className="flex items-center gap-2 text-muted-foreground min-w-0">
+                  <span className="cursor-pointer hover:text-[#2c5aa0] whitespace-nowrap flex-none" onClick={closePanel}>{view === 'lib' ? 'Component Library' : currentSeq.name}</span>
+                  <span className="text-muted-foreground/50 flex-none">/</span>
+                  <span className="whitespace-nowrap flex-none">{TYPE_META[itemType].label}{view === 'lib' ? 's' : ''}</span>
+                  <span className="text-muted-foreground/50 flex-none">/</span>
+                  <span className="text-foreground font-semibold truncate" title={nameFor(itemType, selectedId)}>{nameFor(itemType, selectedId)}</span>
                 </div>
               )}
               <div className="flex-1" />
-              {view !== 'map' && view !== 'home' && <Button variant="ghost" size="sm" className="h-8 gap-1" onClick={closePanel}><ArrowLeft className="h-4 w-4" /> Back to map</Button>}
+              {view !== 'map' && view !== 'home' && <Button variant="ghost" size="sm" className="h-8 gap-1 flex-none whitespace-nowrap" onClick={closePanel}><ArrowLeft className="h-4 w-4" /> Back to map</Button>}
             </div>
             <div className="flex-1 flex min-h-0">
               {view === 'home' ? Home() : view === 'map' ? Map() : Work()}
